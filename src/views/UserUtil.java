@@ -1,6 +1,7 @@
 package views;
 
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.Label;
 import java.awt.Toolkit;
@@ -16,6 +17,8 @@ import java.awt.Color;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import java.awt.Font;
+import java.awt.GridLayout;
+
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -24,6 +27,14 @@ import java.awt.event.KeyEvent;
 
 import static utils.checkDateFormat.checkDate;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import javax.swing.JScrollPane;
+import javax.swing.JList;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.LineBorder;
+import javax.swing.JSeparator;
+import javax.swing.JScrollBar;
 
 public class UserUtil {
 
@@ -33,6 +44,7 @@ public class UserUtil {
 	private JTextField tfDOB;
 	private JTextField tfEmail;
 	private JTextField tfAddress;
+	private JTextField tfSearch;
 
 
 	/**
@@ -292,9 +304,29 @@ public class UserUtil {
 		btnResetPassword.setBackground(new Color(235, 209, 105));
 		btnResetPassword.setBounds(169, 318, 156, 27);
 		UserPanel.add(btnResetPassword);
-		Label OnlineTab = new Label("Label 2");
-		OnlineTab.setBackground(new Color(255, 255, 255));
-		tabbedPane.addTab("Online", OnlineTab);
+		
+		
+		
+		OnlineTab OnlinePanel = new OnlineTab();
+		tabbedPane.addTab("Online", OnlinePanel.createPanel());
+		
+		
+		//listOnline.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		//JPanel listOnline = new JPanel();
+		
+		//JScrollPane scrollPane = new JScrollPane();
+		//listOnline.setBounds(34, 62, 405, 271);
+		//listOnline.add(scrollPane);
+		//JLabel username = new JLabel("alsophanie");
+		//JButton mess = new JButton("Nhắn tin");
+		//JPanel line = new JPanel();
+		//line.add(username);
+		//line.add(mess);
+		
+		//scrollPane.add(line);
+		
+		//OnlinePanel.add(listOnline);
 		Label AllTab = new Label("Label 3");
 		AllTab.setBackground(new Color(255, 255, 255));
 		tabbedPane.addTab("Tất cả", AllTab);
