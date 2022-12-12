@@ -17,9 +17,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.SwingConstants;
-
-import model.Student;
-
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -69,31 +66,19 @@ public class UserUtil {
 		frmChatter = new JFrame();
 		frmChatter.setTitle("Chatter!");
 		frmChatter.setIconImage(Toolkit.getDefaultToolkit().getImage("D:\\DELL\\CNPM\\JavaProgramming\\background.jpg"));
-		frmChatter.setBounds(500, 200, 1000, 500);
+		frmChatter.setBounds(500, 200, 500, 500);
 		frmChatter.setResizable(false);
 		frmChatter.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmChatter.getContentPane().setLayout(null);
 		
 		frmChatter.getContentPane().setBackground(new Color(206,157,217));
 		
-		
-		
-		
-		ImageIcon background=new ImageIcon("background.jpg");
-	    Image img=background.getImage();
-	    Image temp=img.getScaledInstance(500,500,Image.SCALE_SMOOTH);
-	    background=new ImageIcon(temp);
-	    JLabel back=new JLabel(background);
-	    back.setLayout(null);
-	    back.setBounds(500,0,500,500);
-	    
-	    frmChatter.getContentPane().add(back);
 	    
 	    JPanel UserPanel = new JPanel();
 	    
 	    
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(10, 10, 480, 440);
+		tabbedPane.setBounds(10, 10, 470, 440);
 	
 		UserPanel.setBackground(new Color(240, 240, 240));
 		tabbedPane.addTab("User", UserPanel);
