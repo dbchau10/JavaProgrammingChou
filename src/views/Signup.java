@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import com.toedter.calendar.JDateChooser;
 
 public class Signup {
 
@@ -26,7 +27,6 @@ public class Signup {
 	private JPasswordField tfPasswordsu;
 	private JTextField tfEmail;
 	private JTextField tfName;
-	private JTextField tfDOB;
 	private JTextField tfAddress;
 
 	/**
@@ -138,11 +138,6 @@ public class Signup {
 	    panelSignup.add(lblDOB);
 	    lblDOB.setFont(new Font("Arial", Font.BOLD, 13));
 	    
-	    tfDOB = new JTextField();
-	    tfDOB.setBounds(91, 160, 149, 19);
-	    panelSignup.add(tfDOB);
-	    tfDOB.setColumns(10);
-	    
 	    JLabel lblAddress = new JLabel("Địa chỉ");
 	    lblAddress.setBounds(0, 200, 81, 16);
 	    panelSignup.add(lblAddress);
@@ -152,6 +147,10 @@ public class Signup {
 	    tfAddress.setBounds(91, 200, 149, 19);
 	    panelSignup.add(tfAddress);
 	    tfAddress.setColumns(10);
+	    
+	    JDateChooser tfDOB = new JDateChooser();
+	    tfDOB.setBounds(91, 160, 149, 19);
+	    panelSignup.add(tfDOB);
 	    
 	    JButton btnSubmit = new JButton("Đăng kí");
 	    btnSubmit.setBounds(99, 273, 85, 21);
@@ -189,5 +188,4 @@ public class Signup {
 	    	
 	    });
 	}
-
 }
