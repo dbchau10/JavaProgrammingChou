@@ -69,6 +69,10 @@ public class UserUtil {
 	public UserUtil() {
 		initialize();
 	}
+	
+	public void setVis() {
+		frmChatter.setVisible(true);
+	}
 
 	/**
 	 * Initialize the contents of the frame.

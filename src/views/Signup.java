@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -47,6 +49,10 @@ public class Signup {
 	 */
 	public Signup() {
 		initialize();
+	}
+	
+	public void setVis() {
+		frmChatter.setVisible(true);
 	}
 
 	/**
@@ -170,7 +176,18 @@ public class Signup {
 	    btnNewButton.setIcon(retn);
 	    btnNewButton.setBounds(10, 21, 46, 41);
 	    frmChatter.getContentPane().add(btnNewButton);
-		
+	    btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String username = tfUsernamesu.getText();
+				String password = tfPasswordsu.getText();
+				String email = tfEmail.getText();
+				String name = tfName.getText();
+				String dob = tfDOB.getText();
+				String address = tfAddress.getText();
+			}
+	    	
+	    });
 	}
 
 }

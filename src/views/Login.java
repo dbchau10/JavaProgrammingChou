@@ -1,5 +1,6 @@
 package views;
 
+import utils.RandomPasswordGenerator;
 import java.awt.EventQueue;
 
 import javax.swing.ImageIcon;
@@ -14,12 +15,24 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Login {
 
+	
 	private JFrame frmChatter;
 	private JTextField tfUsername;
 	private JPasswordField tfPassword;
+	private Connection conn = null;
+
 
 	/**
 	 * Launch the application.
@@ -27,8 +40,23 @@ public class Login {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				Connection conn = null;
+				final String DB_URL = "jdbc:postgresql://localhost:5432/chatjava";
+				final String USER = "postgres";
+				final String PASS = "192002";
+				final String JBDC_DRIVER = "org.postgresql.Driver";
 				try {
-					Login window = new Login();
+					Class.forName(JBDC_DRIVER);
+					System.out.println("Connecting to database...");
+					conn = DriverManager.getConnection(DB_URL, USER, PASS);
+					System.out.println("Success");
+				}
+				catch (Exception se) {
+					System.out.println("Error: Unable to load driver class.");
+					System.exit(1);
+				}
+				try {
+					Login window = new Login(conn);
 					window.frmChatter.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -40,14 +68,15 @@ public class Login {
 	/**
 	 * Create the application.
 	 */
-	public Login() {
+	public Login(Connection cnt) {
+		conn = cnt;
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize() {		
 		frmChatter = new JFrame();
 		frmChatter.setTitle("Chatter!");
 		frmChatter.setIconImage(Toolkit.getDefaultToolkit().getImage("D:\\DELL\\CNPM\\JavaProgramming\\background.jpg"));
@@ -100,6 +129,56 @@ public class Login {
 		btnLogin.setFont(new Font("Arial", Font.BOLD, 13));
 		btnLogin.setBounds(174, 286, 139, 21);
 		frmChatter.getContentPane().add(btnLogin);
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Statement stmt = null;
+				String username = tfUsername.getText();
+				String password = tfPassword.getText();
+				if(password.equals("") && username.equals("")) {
+	            	 lblUsername.setForeground(Color.red);
+	            	 lblPassword.setForeground(Color.red);
+	             }
+	             else if(password.equals("")) {
+	            	 lblPassword.setForeground(Color.red);
+	             }
+	             else if(username.equals("")) {
+	            	 lblUsername.setForeground(Color.red);
+	             }
+	             else {
+	            	 try {
+		 					stmt = conn.createStatement();
+		 					String sql = "SELECT * from users where user_name='" + username + "'";
+		 					System.out.print(sql);
+		 					ResultSet rs = stmt.executeQuery(sql);
+		 					/*
+		 					if(rs.next() == false) {
+		 						System.out.println("Không có tài khoản tồn tại");
+		 					}
+		 					else {
+		 					*/	
+		 						while(rs.next()) {
+			 						if(!password.equals(rs.getString(3))) {
+			 							System.out.print("Sai");
+			 							
+			 						}
+			 						else {
+			 							System.out.print("Ok");
+			 							frmChatter.dispose();
+			 							UserUtil u = new UserUtil();
+			 							u.setVis();
+			 						}
+			 					}
+		 					//}
+		 					
+		 				} catch (SQLException e1) {
+		 					// TODO Auto-generated catch block
+		 					e1.printStackTrace();
+		 				}
+	             }
+			}
+			
+		});
 		
 		JButton btnSignup = new JButton("Đăng kí");
 		btnSignup.setForeground(new Color(0, 0, 0));
@@ -107,6 +186,13 @@ public class Login {
 		btnSignup.setBackground(new Color(235, 209, 105));
 		btnSignup.setBounds(174, 317, 139, 21);
 		frmChatter.getContentPane().add(btnSignup);
+		btnSignup.addActionListener(new ActionListener() {
+	         public void actionPerformed(ActionEvent e) {
+	        	 frmChatter.dispose();
+	             Signup sn = new Signup();
+	             sn.setVis();
+	          }
+	       });
 		
 		ImageIcon account=new ImageIcon("account2.png");
 	    Image logo=account.getImage();
@@ -123,6 +209,22 @@ public class Login {
 		btnReset.setBackground(new Color(235, 209, 105));
 		btnReset.setBounds(174, 348, 139, 21);
 		frmChatter.getContentPane().add(btnReset);
+		btnReset.addActionListener(new ActionListener() {
+	         public void actionPerformed(ActionEvent e) {
+	        	 String username = tfUsername.getText();
+	        	 if(username.equals("")) {
+	            	 lblUsername.setForeground(Color.red);
+	             }
+	        	 else {
+	        		String newpass;
+	        		RandomPasswordGenerator gn = new RandomPasswordGenerator();
+	        		newpass = gn.getPassword();
+	        		
+	        		 //popup
+	 	        	
+	        	 }
+	          }
+	       });
 	    
 		//JLabel lblNewLabel = new JLabel("Hello World!");
 		//lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
