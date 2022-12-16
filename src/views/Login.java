@@ -164,8 +164,10 @@ public class Login {
 			 						}
 			 						else {
 			 							System.out.print("Ok");
+			 							User you = new User(Integer.parseInt(rs.getString(1)), rs.getString(2), rs.getString(4), rs.getString(5));
+			 							System.out.println(you.getID());
 			 							frmChatter.dispose();
-			 							UserUtil u = new UserUtil();
+			 							UserUtil u = new UserUtil(conn, you);
 			 							u.setVis();
 			 						}
 			 					}
@@ -189,7 +191,7 @@ public class Login {
 		btnSignup.addActionListener(new ActionListener() {
 	         public void actionPerformed(ActionEvent e) {
 	        	 frmChatter.dispose();
-	             Signup sn = new Signup();
+	             Signup sn = new Signup(conn);
 	             sn.setVis();
 	          }
 	       });
