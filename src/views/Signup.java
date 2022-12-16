@@ -7,6 +7,13 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,26 +35,16 @@ public class Signup {
 	private JTextField tfEmail;
 	private JTextField tfName;
 	private JTextField tfAddress;
+	Connection conn = null;
 
 	/**
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Signup window = new Signup();
-					window.frmChatter.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
 	 */
-	public Signup() {
+	public Signup(Connection cnt) {
+		conn = cnt;
 		initialize();
 	}
 	
@@ -175,15 +172,83 @@ public class Signup {
 	    btnNewButton.setIcon(retn);
 	    btnNewButton.setBounds(10, 21, 46, 41);
 	    frmChatter.getContentPane().add(btnNewButton);
-	    btnNewButton.addActionListener(new ActionListener() {
+	    
+	    btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				System.out.print("OK");
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				
 				String username = tfUsernamesu.getText();
 				String password = tfPasswordsu.getText();
 				String email = tfEmail.getText();
 				String name = tfName.getText();
-				String dob = tfDOB.getText();
 				String address = tfAddress.getText();
+				
+				if(password.equals("")) {
+	            	 lblPassword.setForeground(Color.red);
+	             }
+				
+				if(username.equals("")) {
+					lblUsername.setForeground(Color.red);
+				}
+				
+				if (email.equals("")) {
+					lblEmail.setForeground(Color.red);
+				}
+				
+				if(name.equals("")) {
+					lblName.setForeground(Color.red);
+				}
+				
+				if(address.equals("")) {
+					lblAddress.setForeground(Color.red);
+				}
+				
+				if(tfDOB.getDate() !=null) {
+					String dob = dateFormat.format(tfDOB.getDate());
+				}
+				else {
+					lblDOB.setForeground(Color.red);
+				}
+				
+				   DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+				   LocalDateTime now = LocalDateTime.now();  
+				   System.out.println(dtf.format(now));  
+				
+				if(!password.equals("") && tfDOB.getDate() !=null && !address.equals("") && !name.equals("") && !email.equals("") && !name.equals("")) {
+					Statement stmt = null;
+					
+					try {
+						conn.setAutoCommit(false);
+						stmt = conn.createStatement();
+						String check = "Select user_name from users where user_name='" + username + "'";
+						ResultSet rs = stmt.executeQuery(check);
+						conn.commit();
+						
+						if(!rs.next()) {
+							String sql = "INSERT INTO users(user_id, user_name, user_password) VALUES(8, '" + username + "','" + password + "')";
+							System.out.print(sql);
+							stmt.executeUpdate(sql);
+							conn.commit();
+						}
+						else {
+							System.out.print("No");
+						}
+						
+					}
+					catch (SQLException ae){
+						System.out.println("Error: Unable to insert");
+					}
+					finally {
+						try {
+							stmt.close();
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
 			}
 	    	
 	    });

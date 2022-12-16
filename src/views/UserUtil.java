@@ -24,6 +24,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
 
 import static utils.checkDateFormat.checkDate;
 import java.awt.event.ActionEvent;
@@ -37,7 +38,9 @@ import javax.swing.JSeparator;
 import javax.swing.JScrollBar;
 
 public class UserUtil {
-
+	
+	private User you;
+	Connection conn = null;
 	private JFrame frmChatter;
 	private JTextField tfUsername;
 	private JTextField tfFullname;
@@ -50,7 +53,7 @@ public class UserUtil {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -66,7 +69,9 @@ public class UserUtil {
 	/**
 	 * Create the application.
 	 */
-	public UserUtil() {
+	public UserUtil(Connection cnt, User u) {
+		you = u;
+		conn = cnt;
 		initialize();
 	}
 	
@@ -78,6 +83,8 @@ public class UserUtil {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
+		System.out.println(you.getID());
 		
 		frmChatter = new JFrame();
 		frmChatter.setTitle("Chatter!");
@@ -135,14 +142,14 @@ public class UserUtil {
 		tfUsername.setEnabled(false);
 		tfUsername.setEditable(false);
 		tfUsername.setFont(new Font("Arial", Font.PLAIN, 13));
-		tfUsername.setText("alsophanie");
+		tfUsername.setText(you.getUsername());
 		tfUsername.setBounds(169, 88, 156, 19);
 		UserPanel.add(tfUsername);
 		tfUsername.setColumns(10);
 		
 		tfFullname = new JTextField();
 		tfFullname.setEditable(false);
-		tfFullname.setText("Nguyễn Văn A");
+		tfFullname.setText(you.getName());
 		tfFullname.setFont(new Font("Arial", Font.PLAIN, 13));
 		tfFullname.setColumns(10);
 		tfFullname.setBounds(169, 128, 156, 19);
@@ -166,7 +173,7 @@ public class UserUtil {
 		
 		tfAddress = new JTextField();
 		tfAddress.setEditable(false);
-		tfAddress.setText("227 Nguyễn Văn Cừ");
+		tfAddress.setText(you.getAddress());
 		tfAddress.setFont(new Font("Arial", Font.PLAIN, 13));
 		tfAddress.setColumns(10);
 		tfAddress.setBounds(169, 248, 156, 19);
@@ -311,7 +318,7 @@ public class UserUtil {
 		
 		
 		
-		OnlineTab OnlinePanel = new OnlineTab();
+		OnlineTab OnlinePanel = new OnlineTab(conn, you);
 		tabbedPane.addTab("Online", OnlinePanel.createPanel());
 		
 		
