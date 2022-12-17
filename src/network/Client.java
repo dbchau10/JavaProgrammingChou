@@ -112,14 +112,15 @@ public class Client  {
 			sender=new PrintWriter(socket.getOutputStream());
 			
 			
+			//user_name and password instead of name
 			String name = JOptionPane.showInputDialog(null, "Input your name");
-
 			
 			my_name=name;
 				
 			sender.println(my_name);
 			sender.flush();
-
+			//end
+			
 			
 			JFrame jfrm = new JFrame("BTTL10_20127045_20127306");
 			jfrm.getContentPane().setBackground(new Color(250, 187, 22));
@@ -159,12 +160,12 @@ public class Client  {
 			textArea.setEditable(false);
 			jfrm.getContentPane().add(textArea);
 			
+			
+			// thread read from jframe and send to server
 			new Thread(new Thread_Read(sender,jfrm,my_name,textArea)).start();
 			
 			
-			
-			
-
+			// Thread read from server
 			while (true) {
 
 				if (!Run) return;

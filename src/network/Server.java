@@ -14,6 +14,7 @@ public class Server {
 	
 		try (// TODO Auto-generated method stub
 				ServerSocket server = new ServerSocket(port)) {
+//			System.out.println("address"+server.get());
 			System.out.println("Server is listening on port "+port);
 
 			while(true) {

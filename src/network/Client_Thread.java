@@ -23,7 +23,7 @@ class Client_Thread implements Runnable {
 			e.printStackTrace();
 		};
 		
-		
+		// authenication username and password from client 
 		String name=reader.readLine();
 		if (name!=null) {
 			my_name=name;
@@ -32,6 +32,9 @@ class Client_Thread implements Runnable {
 		else {
 			System.out.println("Cannot receive name of Client");
 		}
+		
+		// end
+		
 		
 		try {
         for (Map.Entry me : Server.Name2Socket.entrySet()) {
@@ -82,10 +85,10 @@ class Client_Thread implements Runnable {
 							
 				            PrintWriter sender_User=null;
 							sender_User=new PrintWriter(((Socket) me.getValue()).getOutputStream());
-//							System.out.println("send to all with message before "+message);
+							
+							
 							if (!tag.equals("Q")) sender_User.println(my_name+": "+message);
 							else sender_User.println(message);
-//							System.out.println("send to all with message "+message);
 							
 							sender_User.flush();
 						}
