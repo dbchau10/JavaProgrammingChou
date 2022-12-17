@@ -24,7 +24,16 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static utils.checkDateFormat.checkDate;
 import java.awt.event.ActionEvent;
@@ -34,8 +43,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JList;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.LineBorder;
+
 import javax.swing.JSeparator;
 import javax.swing.JScrollBar;
+import com.toedter.calendar.JDateChooser;
 
 public class UserUtil {
 	
@@ -44,7 +55,6 @@ public class UserUtil {
 	private JFrame frmChatter;
 	private JTextField tfUsername;
 	private JTextField tfFullname;
-	private JTextField tfDOB;
 	private JTextField tfEmail;
 	private JTextField tfAddress;
 	private JTextField tfSearch;
@@ -72,6 +82,7 @@ public class UserUtil {
 	public UserUtil(Connection cnt, User u) {
 		you = u;
 		conn = cnt;
+
 		initialize();
 	}
 	
@@ -155,17 +166,9 @@ public class UserUtil {
 		tfFullname.setBounds(169, 128, 156, 19);
 		UserPanel.add(tfFullname);
 		
-		tfDOB = new JTextField();
-		tfDOB.setEditable(false);
-		tfDOB.setText("01/01/2001");
-		tfDOB.setFont(new Font("Arial", Font.PLAIN, 13));
-		tfDOB.setColumns(10);
-		tfDOB.setBounds(169, 168, 156, 19);
-		UserPanel.add(tfDOB);
-		
 		tfEmail = new JTextField();
 		tfEmail.setEditable(false);
-		tfEmail.setText("xxx@yahoo.com");
+		tfEmail.setText(you.getEmail());
 		tfEmail.setFont(new Font("Arial", Font.PLAIN, 13));
 		tfEmail.setColumns(10);
 		tfEmail.setBounds(169, 208, 156, 19);
@@ -190,7 +193,35 @@ public class UserUtil {
 				{
 					JOptionPane.showMessageDialog(null, "Value invalid. Please try again");
 				}
-				else tfFullname.setEditable(!tfFullname.isEditable());
+				else {
+					if (tfFullname.isEditable())
+					{
+						Statement stm = null;
+
+						try {
+							stm = conn.createStatement();
+		 					String sql = "UPDATE users SET user_hoten='"+tfFullname.getText()+"' where user_name='" + tfUsername.getText() + "'";
+		 					System.out.print(sql);
+		 					conn.setAutoCommit(false);
+		 					stm.executeUpdate(sql);
+		 					conn.commit();
+							
+						} catch(SQLException es)
+						{
+							try {
+								conn.rollback();
+							}
+							catch(SQLException e1) {
+								e1.printStackTrace();
+							}
+						}
+						finally {
+							you.setName(tfFullname.getText());
+						}
+					}
+					tfFullname.setEditable(!tfFullname.isEditable());
+				}
+					
 
 			}
 		});
@@ -205,12 +236,49 @@ public class UserUtil {
 					{
 						JOptionPane.showMessageDialog(null, "Value invalid. Please try again");
 					}
-					else tfFullname.setEditable(!tfFullname.isEditable());
+					else {
+						if (tfFullname.isEditable())
+						{
+							Statement stm = null;
+
+							try {
+								stm = conn.createStatement();
+			 					String sql = "UPDATE users SET user_hoten='"+tfFullname.getText()+"' where user_name='" + tfUsername.getText() + "'";
+			 					System.out.print(sql);
+			 					conn.setAutoCommit(false);
+			 					stm.executeUpdate(sql);
+			 					conn.commit();
+								
+							} catch(SQLException es)
+							{
+								try {
+									conn.rollback();
+								}
+								catch(SQLException e1) {
+									e1.printStackTrace();
+								}
+							}
+							finally {
+								you.setName(tfFullname.getText());
+							}
+						}
+						tfFullname.setEditable(!tfFullname.isEditable());
+					}
 				}
 				
 			}
 		});
 		
+		JDateChooser tfDOB = new JDateChooser();
+		tfDOB.setDateFormatString("yyyy-MM-dd");
+		try {
+			tfDOB.setDate(new SimpleDateFormat("yyyy-MM-dd").parse(you.getDOB()));
+		} catch (ParseException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		tfDOB.setBounds(170, 168, 155, 19);
+		UserPanel.add(tfDOB);
 		
 		JButton btnDOB = new JButton("Sửa");
 		btnDOB.setFont(new Font("Arial", Font.PLAIN, 10));
@@ -220,28 +288,39 @@ public class UserUtil {
 		btnDOB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				if(!checkDate(tfDOB.getText()))
+				if(tfDOB.getDate()==null)
 				{
 					JOptionPane.showMessageDialog(null, "Value invalid. Please try again");
 				}
-				else tfDOB.setEditable(!tfDOB.isEditable());
-
-			}
-		});
-		
-		
-		tfDOB.addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent event) {
-				if (event.getKeyCode()==KeyEvent.VK_ENTER)
+				else 
 				{
-					
-					if(!checkDate(tfDOB.getText()))
-					{
-						JOptionPane.showMessageDialog(null, "Value invalid. Please try again");
-					}
-					else tfDOB.setEditable(!tfDOB.isEditable());
+		
+						Statement stm = null;
+						SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+						String dob = dateFormat.format(tfDOB.getDate());
+
+						try {
+							stm = conn.createStatement();
+		 					String sql = "UPDATE users SET user_ngaysinh='"+dob+"' where user_name='" + tfUsername.getText() + "'";
+		 					System.out.print(sql);
+		 					conn.setAutoCommit(false);
+		 					stm.executeUpdate(sql);
+		 					conn.commit();
+							
+						} catch(SQLException es)
+						{
+							try {
+								conn.rollback();
+							}
+							catch(SQLException e1) {
+								e1.printStackTrace();
+							}
+						}
+						finally {
+							you.setDOB(dob);
+						}
 				}
-				
+
 			}
 		});
 		
@@ -256,7 +335,34 @@ public class UserUtil {
 				{
 					JOptionPane.showMessageDialog(null, "Value invalid. Please try again");
 				}
-				else tfEmail.setEditable(!tfEmail.isEditable());
+				else {
+					if (tfEmail.isEditable())
+					{
+						Statement stm = null;
+
+						try {
+							stm = conn.createStatement();
+		 					String sql = "UPDATE users SET user_email='"+tfEmail.getText()+"' where user_name='" + tfUsername.getText() + "'";
+		 					System.out.print(sql);
+		 					conn.setAutoCommit(false);
+		 					stm.executeUpdate(sql);
+		 					conn.commit();
+							
+						} catch(SQLException es)
+						{
+							try {
+								conn.rollback();
+							}
+							catch(SQLException e1) {
+								e1.printStackTrace();
+							}
+						}
+						finally {
+							you.setEmail(tfEmail.getText());
+						}
+					}
+					tfEmail.setEditable(!tfEmail.isEditable());
+				}
 			}
 		});
 		
@@ -270,7 +376,34 @@ public class UserUtil {
 					{
 						JOptionPane.showMessageDialog(null, "Value invalid. Please try again");
 					}
-					else tfEmail.setEditable(!tfEmail.isEditable());
+					else {
+						if (tfEmail.isEditable())
+						{
+							Statement stm = null;
+
+							try {
+								stm = conn.createStatement();
+			 					String sql = "UPDATE users SET user_email='"+tfEmail.getText()+"' where user_name='" + tfUsername.getText() + "'";
+			 					System.out.print(sql);
+			 					conn.setAutoCommit(false);
+			 					stm.executeUpdate(sql);
+			 					conn.commit();
+								
+							} catch(SQLException es)
+							{
+								try {
+									conn.rollback();
+								}
+								catch(SQLException e1) {
+									e1.printStackTrace();
+								}
+							}
+							finally {
+								you.setEmail(tfEmail.getText());
+							}
+						}
+						tfEmail.setEditable(!tfEmail.isEditable());
+					}
 				}
 				
 			}
@@ -285,7 +418,34 @@ public class UserUtil {
 				{
 					JOptionPane.showMessageDialog(null, "Value invalid. Please try again");
 				}
-				else tfAddress.setEditable(!tfAddress.isEditable());
+				else {
+					if (tfAddress.isEditable())
+					{
+						Statement stm = null;
+
+						try {
+							stm = conn.createStatement();
+		 					String sql = "UPDATE users SET user_diachi='"+tfAddress.getText()+"' where user_name='" + tfUsername.getText() + "'";
+		 					System.out.print(sql);
+		 					conn.setAutoCommit(false);
+		 					stm.executeUpdate(sql);
+		 					conn.commit();
+							
+						} catch(SQLException es)
+						{
+							try {
+								conn.rollback();
+							}
+							catch(SQLException e1) {
+								e1.printStackTrace();
+							}
+						}
+						finally {
+							you.setAddress(tfAddress.getText());
+						}
+					}
+					tfAddress.setEditable(!tfAddress.isEditable());
+				}
 			}
 		});
 		
@@ -299,7 +459,34 @@ public class UserUtil {
 					{
 						JOptionPane.showMessageDialog(null, "Value invalid. Please try again");
 					}
-					else tfAddress.setEditable(!tfAddress.isEditable());
+					else {
+						if (tfAddress.isEditable())
+						{
+							Statement stm = null;
+
+							try {
+								stm = conn.createStatement();
+			 					String sql = "UPDATE users SET user_diachi='"+tfAddress.getText()+"' where user_name='" + tfUsername.getText() + "'";
+			 					System.out.print(sql);
+			 					conn.setAutoCommit(false);
+			 					stm.executeUpdate(sql);
+			 					conn.commit();
+								
+							} catch(SQLException es)
+							{
+								try {
+									conn.rollback();
+								}
+								catch(SQLException e1) {
+									e1.printStackTrace();
+								}
+							}
+							finally {
+								you.setAddress(tfAddress.getText());
+							}
+						}
+						tfAddress.setEditable(!tfAddress.isEditable());
+					}
 				}
 				
 			}
@@ -315,6 +502,8 @@ public class UserUtil {
 		btnResetPassword.setBackground(new Color(235, 209, 105));
 		btnResetPassword.setBounds(169, 318, 156, 27);
 		UserPanel.add(btnResetPassword);
+		
+		
 		
 		
 		

@@ -40,19 +40,23 @@ public class Login {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				
 				Connection conn = null;
-				final String DB_URL = "jdbc:postgresql://localhost:5432/chatjava";
-				final String USER = "postgres";
-				final String PASS = "Baochau14102002";
-				final String JBDC_DRIVER = "org.postgresql.Driver";
+				final String dbServer = "postgresql-100470-0.cloudclusters.net";
+				final String dbName = "Demochat";
+				int dbPort = 10121; // change it to your database server port
+				final String userName = "admin";
+				final String password = "192002Nhuy";
+				//final String JBDC_DRIVER = "org.postgresql.Driver";
+				String url = String.format("jdbc:postgresql://%s:%d/%s?user=%s&password=%s", 
+                          dbServer, dbPort, dbName, userName, password);
 				try {
-					Class.forName(JBDC_DRIVER);
-					System.out.println("Connecting to database...");
-					conn = DriverManager.getConnection(DB_URL, USER, PASS);
+					conn = DriverManager.getConnection(url);
 					System.out.println("Success");
 				}
 				catch (Exception se) {
-					System.out.println("Error: Unable to load driver class.");
+					se.printStackTrace();
+					System.out.print("Cannot connect");
 					System.exit(1);
 				}
 				try {
@@ -167,7 +171,7 @@ public class Login {
 			 						}
 			 						else {
 			 							System.out.print("Ok");
-			 							User you = new User(Integer.parseInt(rs.getString(1)), rs.getString(2), rs.getString(4), rs.getString(5));
+			 							User you = new User(Integer.parseInt(rs.getString(1)), rs.getString(2), rs.getString(4), rs.getString(6),rs.getString(8),rs.getString(5));
 			 							System.out.println(you.getID());
 			 							frmChatter.dispose();
 			 							UserUtil u = new UserUtil(conn, you);
