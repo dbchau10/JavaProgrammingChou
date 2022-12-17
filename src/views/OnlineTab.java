@@ -1,12 +1,15 @@
 package views;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.sql.Connection;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -14,14 +17,19 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
+import components.FriendCom;
+
 public class OnlineTab {
 	JPanel OnlinePanel;
-	OnlineTab(){
+	private User you;
+	Connection conn = null;
+	OnlineTab(Connection cnt, User you){
 		OnlinePanel = new JPanel();
+		this.you = you;
+		this.conn = cnt;
 	}
 	
 	JPanel createPanel() {
-		OnlinePanel.setFocusable(true);
 		OnlinePanel.setBackground(new Color(240, 240, 240));
 		JTextField tfSearch = new JTextField();
 		tfSearch.setBounds(34, 26, 310, 19);
@@ -58,57 +66,45 @@ public class OnlineTab {
 		btnSearch.setFont(new Font("Arial", Font.PLAIN, 10));
 		OnlinePanel.add(btnSearch);
 		
+		
 		JPanel listOnline = new JPanel();
 		listOnline.setBounds(35, 81, 404, 257);
-		OnlinePanel.add(listOnline);
 		listOnline.setLayout(null);
 		
-		JLabel lblUsername1 = new JLabel("alsophanie");
-		lblUsername1.setFont(new Font("Arial", Font.PLAIN, 13));
-		lblUsername1.setBounds(10, 10, 95, 13);
-		listOnline.add(lblUsername1);
+		JScrollPane js = new JScrollPane(listOnline, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		//js.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
-		JButton btnMess1 = new JButton("Nhắn");
-		btnMess1.setFont(new Font("Arial", Font.PLAIN, 10));
-		btnMess1.setBounds(287, 6, 71, 17);
-		listOnline.add(btnMess1);
 		
-		JSeparator separator = new JSeparator();
-		separator.setBounds(10, 33, 353, 2);
-		listOnline.add(separator);
+		for (int i = 0 ; i<50; i++)
+		{
+			FriendCom fr = new FriendCom();
+			listOnline.add(fr.initialize("username"+i,i));
+			JSeparator separator = new JSeparator();
+			separator.setBounds(10, 33, 353, 2);
+			listOnline.add(separator);
+		}
 		
-		JLabel lblUsername2 = new JLabel("alixekka");
-		lblUsername2.setFont(new Font("Arial", Font.PLAIN, 13));
-		lblUsername2.setBounds(10, 46, 95, 13);
-		listOnline.add(lblUsername2);
+		OnlinePanel.add(listOnline);
 		
-		JButton btnMess2 = new JButton("Nhắn");
-		btnMess2.setFont(new Font("Arial", Font.PLAIN, 10));
-		btnMess2.setBounds(287, 45, 71, 17);
-		listOnline.add(btnMess2);
+		//listOnline.add(js);
+		//JSeparator separator = new JSeparator();
+		//separator.setBounds(10, 33, 353, 2);
+		//listOnline.add(separator);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane.setBounds(392, 251, 2, -239);
-		listOnline.add(scrollPane);
 		
-		JScrollBar scrollBar = new JScrollBar();
-		scrollBar.setBounds(377, 8, 17, 233);
-		listOnline.add(scrollBar);
 		
-		JButton btnNewButton = new JButton("Hủy");
-		btnNewButton.setForeground(new Color(255, 255, 255));
-		btnNewButton.setBackground(new Color(241, 84, 7));
-		btnNewButton.setFont(new Font("Arial", Font.PLAIN, 10));
-		btnNewButton.setBounds(206, 6, 71, 17);
-		listOnline.add(btnNewButton);
+		//JScrollPane scrollPane = new JScrollPane();
+		//scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		//scrollPane.setBounds(392, 251, 2, -239);
+		//listOnline.add(scrollPane);
 		
-		JButton btnHy = new JButton("Hủy");
-		btnHy.setForeground(Color.WHITE);
-		btnHy.setFont(new Font("Arial", Font.PLAIN, 10));
-		btnHy.setBackground(new Color(241, 84, 7));
-		btnHy.setBounds(206, 45, 71, 17);
-		listOnline.add(btnHy);
+		//JScrollBar scrollBar = new JScrollBar();
+		//scrollBar.setBounds(377, 8, 17, 233);
+		//listOnline.add(scrollBar);
+		
+		
+		
+		
 		
 		return OnlinePanel;
 	}

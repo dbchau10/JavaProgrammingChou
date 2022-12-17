@@ -24,6 +24,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import com.toedter.calendar.JDateChooser;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Signup {
 
@@ -164,6 +166,13 @@ public class Signup {
 	    
 	    
 	    JButton btnNewButton = new JButton();
+	    btnNewButton.addActionListener(new ActionListener() {
+	         public void actionPerformed(ActionEvent e) {
+	        	 frmChatter.dispose();
+	             Login lg = new Login(conn);
+	             lg.setVis();
+	          }
+	       });;
 	    btnNewButton.setBackground(new Color(206, 157, 207));
 	    ImageIcon retn=new ImageIcon("back.png");
 	    Image button=retn.getImage();

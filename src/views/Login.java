@@ -43,7 +43,7 @@ public class Login {
 				Connection conn = null;
 				final String DB_URL = "jdbc:postgresql://localhost:5432/chatjava";
 				final String USER = "postgres";
-				final String PASS = "192002";
+				final String PASS = "Baochau14102002";
 				final String JBDC_DRIVER = "org.postgresql.Driver";
 				try {
 					Class.forName(JBDC_DRIVER);
@@ -72,7 +72,10 @@ public class Login {
 		conn = cnt;
 		initialize();
 	}
-
+	
+	public void setVis() {
+		frmChatter.setVisible(true);
+	}
 	/**
 	 * Initialize the contents of the frame.
 	 */
