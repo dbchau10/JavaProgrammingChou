@@ -27,6 +27,8 @@ import java.awt.event.KeyEvent;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -47,6 +49,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.JSeparator;
 import javax.swing.JScrollBar;
 import com.toedter.calendar.JDateChooser;
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class UserUtil {
 	
@@ -89,6 +94,26 @@ public class UserUtil {
 	public void setVis() {
 		frmChatter.setVisible(true);
 	}
+	
+	class WindowEventHandler extends WindowAdapter {
+		  public void windowClosing(WindowEvent evt) {
+			  DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"); 
+			  LocalDateTime now = LocalDateTime.now();
+			  try {
+				Statement stmt=null;
+				stmt = conn.createStatement();
+				String getTime = "UPDATE users SET user_ngaycuoidangnhap='"+dtf.format(now)+ "'WHERE user_name='"+ you.getUsername() + "'";
+				stmt.executeUpdate(getTime);
+				conn.commit();
+				String setstatus = "UPDATE users SET user_online=false WHERE user_name='"+ you.getUsername() + "'";
+				stmt.executeUpdate(setstatus);
+				conn.commit();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		  }
+		}
 
 	/**
 	 * Initialize the contents of the frame.
@@ -107,6 +132,7 @@ public class UserUtil {
 		
 		frmChatter.getContentPane().setBackground(new Color(206,157,217));
 		
+		frmChatter.addWindowListener(new WindowEventHandler());
 	    
 	    JPanel UserPanel = new JPanel();
 	    

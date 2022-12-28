@@ -14,6 +14,44 @@ public class FriendFunction {
 		u = you;
 	}
 	
+	int DeleteFriend(String username) {
+		Statement stmt=null;
+		String friendid ="";
+		
+		try {
+			cnt.setAutoCommit(false);
+			stmt = cnt.createStatement();
+			String sql = "SELECT user_id from users where user_name='" + username + "'";
+			ResultSet rs = stmt.executeQuery(sql);
+			cnt.commit();
+			
+			if(rs.next()) {
+				System.out.println(rs.getString(1));
+				friendid = rs.getString(1);
+			}
+			
+			String del="";
+			
+			String delsql = "SELECT from friend_list where user_id1=" + u.getID() +" and user_id2=" +friendid;
+			ResultSet rs1 = stmt.executeQuery(delsql);
+			cnt.commit();
+			if(rs1.next()) {
+				del = "DELETE from friend_list where user_id1=" + u.getID() +" and user_id2=" +friendid;
+			}
+			else {
+				del = "DELETE from friend_list where user_id2=" + u.getID() +" and user_id1=" +friendid;
+			}
+			
+			stmt.executeQuery(del);
+			cnt.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return 1;
+	}
+	
 	int DeleteRequest(String username) {
 		Statement stmt=null;
 		String friendid ="";

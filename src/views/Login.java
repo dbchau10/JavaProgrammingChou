@@ -44,7 +44,7 @@ public class Login {
 			public void run() {
 				
 				Connection conn = null;
-				final String DB_URL = "jdbc:postgresql://localhost:5432/test";
+				/*final String DB_URL = "jdbc:postgresql://localhost:5432/test";
 				final String USER = "postgres";
 				final String PASS = "192002";
 				final String JBDC_DRIVER = "org.postgresql.Driver";
@@ -53,8 +53,8 @@ public class Login {
 					System.out.println("Connecting to database...");
 					conn = DriverManager.getConnection(DB_URL, USER, PASS);
 					System.out.println("Success");
-				}
-				/*final String dbServer = "postgresql-100470-0.cloudclusters.net";
+				}*/
+				final String dbServer = "postgresql-100470-0.cloudclusters.net";
 				final String dbName = "Demochat";
 				int dbPort = 10121; // change it to your database server port
 				final String userName = "admin";
@@ -65,7 +65,7 @@ public class Login {
 				try {
 					conn = DriverManager.getConnection(url);
 					System.out.println("Success");
-				}*/
+				}
 				catch (Exception se) {
 					se.printStackTrace();
 					System.out.print("Cannot connect");
@@ -166,11 +166,13 @@ public class Login {
 	             }
 	             else {
 	            	 try {
+	            		 	conn.setAutoCommit(false);
 		 					stmt = conn.createStatement();
 		 					String sql = "SELECT * from users where user_name='" + username + "'";
 		 					ResultSet rs = stmt.executeQuery(sql);
+		 					conn.commit();
 		 					boolean none = true;
-		 						while(rs.next()) {
+		 						if(rs.next()) {
 		 							none = false;
 			 						if(!password.equals(rs.getString(3))) {
 			 							System.out.print("Sai");
@@ -180,6 +182,9 @@ public class Login {
 		 							}
 			 						else {
 			 							User you = new User(Integer.parseInt(rs.getString(1)), rs.getString(2), rs.getString(4), rs.getString(6),rs.getString(8),rs.getString(5));
+			 							String setstatus = "UPDATE users SET user_online=true WHERE user_name='"+ username + "'";
+			 							stmt.executeUpdate(setstatus);
+			 							conn.commit();
 			 							frmChatter.dispose();
 			 							UserUtil u = new UserUtil(conn, you);
 			 							u.setVis();
@@ -187,7 +192,12 @@ public class Login {
 			 					}
 		 						
 		 						if(none) {
-		 							System.out.print("Khong co tai khoan ton tai");
+		 							JFrame frame = new JFrame("Announcement");
+		 			 	     		Object[] options = {"OK"};
+		 							int n = JOptionPane.showOptionDialog(frame, "Không có tài khoản tồn tại",
+		 					 	     		"Notification", JOptionPane.YES_OPTION,
+		 					 	     		JOptionPane.WARNING_MESSAGE, null, options,
+		 					 	     		options[0]);
 		 						}
 		 						
 		 						
