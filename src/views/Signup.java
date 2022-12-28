@@ -19,6 +19,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -193,6 +194,7 @@ public class Signup {
 				String email = tfEmail.getText();
 				String name = tfName.getText();
 				String address = tfAddress.getText();
+				String dob="";
 				
 				if(password.equals("")) {
 	            	 lblPassword.setForeground(Color.red);
@@ -215,15 +217,17 @@ public class Signup {
 				}
 				
 				if(tfDOB.getDate() !=null) {
-					String dob = dateFormat.format(tfDOB.getDate());
+					dob = dateFormat.format(tfDOB.getDate());
 				}
 				else {
 					lblDOB.setForeground(Color.red);
 				}
 				
 				   DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+				   DateTimeFormatter ntf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 				   LocalDateTime now = LocalDateTime.now();  
-				   System.out.println(dtf.format(now));  
+				   System.out.println(dtf.format(now));
+				   System.out.println(ntf.format(now));
 				
 				if(!password.equals("") && tfDOB.getDate() !=null && !address.equals("") && !name.equals("") && !email.equals("") && !name.equals("")) {
 					Statement stmt = null;
@@ -236,13 +240,27 @@ public class Signup {
 						conn.commit();
 						
 						if(!rs.next()) {
-							String sql = "INSERT INTO users(user_id, user_name, user_password) VALUES(8, '" + username + "','" + password + "')";
+							String sql = "INSERT INTO users(user_id, user_name, user_password, user_hoten, user_diachi, user_ngaysinh, user_gioitinh, user_email, user_ngaytaotk, user_ngaycuoidangnhap, user_khoa, user_online)";
+							sql += "VALUES (DEFAULT,'"+username+"', '"+password+"', '"+name+"', '"+address+"', '"+dob+"', false, '"+email+"', '"+ntf.format(now)+"', '"+dtf.format(now)+"', false, false)";
 							System.out.print(sql);
 							stmt.executeUpdate(sql);
 							conn.commit();
+							JFrame frame = new JFrame("Announcement");
+			 	     		Object[] options = {"OK"};
+							int n = JOptionPane.showOptionDialog(frame, "Tạo tài khoản thành công",
+					 	     		"Notification", JOptionPane.YES_OPTION,
+					 	     		JOptionPane.WARNING_MESSAGE, null, options,
+					 	     		options[0]);
+							
 						}
 						else {
 							System.out.print("No");
+							JFrame frame = new JFrame("Announcement");
+			 	     		Object[] options = {"OK"};
+							int n = JOptionPane.showOptionDialog(frame, "Xin hãy chọn username khác",
+					 	     		"Notification", JOptionPane.YES_OPTION,
+					 	     		JOptionPane.WARNING_MESSAGE, null, options,
+					 	     		options[0]);
 						}
 						
 					}
