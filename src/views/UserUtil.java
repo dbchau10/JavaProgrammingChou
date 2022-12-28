@@ -536,7 +536,8 @@ public class UserUtil {
 		OnlineTab OnlinePanel = new OnlineTab(conn, you);
 		tabbedPane.addTab("Online", OnlinePanel.createPanel());
 		
-		
+		AllTab AllPanel = new AllTab(conn,you);
+		tabbedPane.addTab("Tất cả", AllPanel.createPanel());
 		//listOnline.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		//JPanel listOnline = new JPanel();
@@ -553,9 +554,7 @@ public class UserUtil {
 		//scrollPane.add(line);
 		
 		//OnlinePanel.add(listOnline);
-		Label AllTab = new Label("Label 3");
-		AllTab.setBackground(new Color(255, 255, 255));
-		tabbedPane.addTab("Tất cả", AllTab);
+		
 		Label GroupTab = new Label("Label 4");
 		GroupTab.setBackground(new Color(255, 255, 255));
 		tabbedPane.addTab("Nhóm", GroupTab);
