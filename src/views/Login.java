@@ -44,16 +44,17 @@ public class Login {
 			public void run() {
 				
 				Connection conn = null;
-				/*final String DB_URL = "jdbc:postgresql://localhost:5432/test";
+				final String DB_URL = "jdbc:postgresql://localhost:5432/ChatDatabase";
 				final String USER = "postgres";
-				final String PASS = "192002";
+				final String PASS = "Baochau14102002";
 				final String JBDC_DRIVER = "org.postgresql.Driver";
 				try {
 					Class.forName(JBDC_DRIVER);
 					System.out.println("Connecting to database...");
 					conn = DriverManager.getConnection(DB_URL, USER, PASS);
 					System.out.println("Success");
-				}*/
+				}
+				/*
 				final String dbServer = "postgresql-100470-0.cloudclusters.net";
 				final String dbName = "Demochat";
 				int dbPort = 10121; // change it to your database server port
@@ -65,7 +66,7 @@ public class Login {
 				try {
 					conn = DriverManager.getConnection(url);
 					System.out.println("Success");
-				}
+				}*/
 				catch (Exception se) {
 					se.printStackTrace();
 					System.out.print("Cannot connect");
