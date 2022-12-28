@@ -8,6 +8,11 @@ import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -21,6 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import components.FriendCom;
+
 
 public class AllTab {
 	private JPanel AllPanel;
@@ -75,14 +81,38 @@ public class AllTab {
 		listAll.setLayout(new BoxLayout(listAll,BoxLayout.Y_AXIS));
 		//listOnline.setLayout(null);
 		
-		
+		PreparedStatement stm =null;
+		ResultSet res = null;
+		List<User>FriendList = new ArrayList<>();
+		try {
+			String sql = "SELECT * FROM USERS US LEFT JOIN FRIENDLIST FR ON US.USER_ID = FR.USER_ID1 WHERE FR.USER_ID2 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME=?)";
+			stm = conn.prepareStatement(sql);
+			stm.setString(1, you.getUsername());
+			res = stm.executeQuery();
+			while(res.next()) {
+				
+				Integer id = res.getInt("user_id");
+				String username = res.getString("user_name");
+				String hoten = res.getString("user_hoten");
+				String dob = res.getString("user_ngaysinh");
+				String email = res.getString("user_email");
+				String address = res.getString("user_diachi");
+				User user = new User(id,username,hoten,dob,email,address);
+				System.out.print(user.getUsername());
+				FriendList.add(user);
+				
+			}
+		} catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
 		//js.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		//JPanel friend = new JPanel();
 		//JPanel friend [] = new JPanel[10];
-		for (int i = 0 ; i<50; i++)
+		for (int i = 0 ; i<FriendList.size(); i++)
 		{
 			FriendCom fr = new FriendCom();
-			listAll.add(fr.initialize("username"+i,i));
+			listAll.add(fr.initialize(FriendList.get(i).getUsername(),i));
 			JSeparator separator = new JSeparator();
 			separator.setBounds(10, 33, 353, 2);
 			listAll.add(separator);

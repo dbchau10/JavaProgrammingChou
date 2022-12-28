@@ -159,9 +159,9 @@ public class FriendFunction {
 	public static void main(String[] args) {
 		
 		Connection conn = null;
-		final String DB_URL = "jdbc:postgresql://localhost:5432/test";
+		final String DB_URL = "jdbc:postgresql://localhost:5432/ChatDatabase";
 		final String USER = "postgres";
-		final String PASS = "192002";
+		final String PASS = "Baochau14102002";
 		final String JBDC_DRIVER = "org.postgresql.Driver";
 		try {
 			Class.forName(JBDC_DRIVER);
