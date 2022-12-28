@@ -8,8 +8,6 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.Font;
 import java.awt.Image;
 
@@ -34,27 +32,19 @@ public class Login {
 	private JTextField tfUsername;
 	private JPasswordField tfPassword;
 	private Connection conn = null;
-
+	
+	
 
 	/**
 	 * Launch the application.
 	 */
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				
 				Connection conn = null;
-				final String DB_URL = "jdbc:postgresql://localhost:5432/test";
-				final String USER = "postgres";
-				final String PASS = "192002";
-				final String JBDC_DRIVER = "org.postgresql.Driver";
-				try {
-					Class.forName(JBDC_DRIVER);
-					System.out.println("Connecting to database...");
-					conn = DriverManager.getConnection(DB_URL, USER, PASS);
-					System.out.println("Success");
-				}
-				/*final String dbServer = "postgresql-100470-0.cloudclusters.net";
+				final String dbServer = "postgresql-100470-0.cloudclusters.net";
 				final String dbName = "Demochat";
 				int dbPort = 10121; // change it to your database server port
 				final String userName = "admin";
@@ -65,7 +55,7 @@ public class Login {
 				try {
 					conn = DriverManager.getConnection(url);
 					System.out.println("Success");
-				}*/
+				}
 				catch (Exception se) {
 					se.printStackTrace();
 					System.out.print("Cannot connect");
@@ -92,9 +82,9 @@ public class Login {
 	public void setVis() {
 		frmChatter.setVisible(true);
 	}
-	/*
+	/**
 	 * Initialize the contents of the frame.
-	*/
+	 */
 	private void initialize() {		
 		frmChatter = new JFrame();
 		frmChatter.setTitle("Chatter!");
@@ -168,29 +158,28 @@ public class Login {
 	            	 try {
 		 					stmt = conn.createStatement();
 		 					String sql = "SELECT * from users where user_name='" + username + "'";
+		 					System.out.print(sql);
 		 					ResultSet rs = stmt.executeQuery(sql);
-		 					boolean none = true;
+		 					/*
+		 					if(rs.next() == false) {
+		 						System.out.println("Không có tài khoản tồn tại");
+		 					}
+		 					else {
+		 					*/	
 		 						while(rs.next()) {
-		 							none = false;
 			 						if(!password.equals(rs.getString(3))) {
 			 							System.out.print("Sai");
+			 							
 			 						}
-			 						else if(!rs.getString(11).equals("f")) {
-		 								System.out.print("Khóa");
-		 							}
 			 						else {
+			 							System.out.print("Ok");
 			 							User you = new User(Integer.parseInt(rs.getString(1)), rs.getString(2), rs.getString(4), rs.getString(6),rs.getString(8),rs.getString(5));
+			 							System.out.println(you.getID());
 			 							frmChatter.dispose();
 			 							UserUtil u = new UserUtil(conn, you);
 			 							u.setVis();
 			 						}
 			 					}
-		 						
-		 						if(none) {
-		 							System.out.print("Khong co tai khoan ton tai");
-		 						}
-		 						
-		 						
 		 					//}
 		 					
 		 				} catch (SQLException e1) {
@@ -241,34 +230,6 @@ public class Login {
 	        		String newpass;
 	        		RandomPasswordGenerator gn = new RandomPasswordGenerator();
 	        		newpass = gn.getPassword();
-	        		
-
- 					try {
- 						String email = "";
- 						Statement stmt = null;
- 						conn.setAutoCommit(false);
- 		        		stmt = conn.createStatement();
- 		        		String sql = "SELECT user_email from users where user_name='" + username + "'";
-						ResultSet rs = stmt.executeQuery(sql);
-						while(rs.next()) {
-							email = rs.getString(1);
-						}
-						SendToEmail sender = new SendToEmail(email, newpass);
-						String updatepass = "UPDATE users set user_password = '"+newpass+"' where user_name = '" +username+"'";
-						stmt.executeUpdate(updatepass);
-						conn.commit();
-						JFrame frame = new JFrame("Announcement");
-		 	     		Object[] options = {"OK"};
-						int n = JOptionPane.showOptionDialog(frame, "Mật khẩu mới đã được gửi đến email của bạn",
-				 	     		"Notification", JOptionPane.YES_OPTION,
-				 	     		JOptionPane.WARNING_MESSAGE, null, options,
-				 	     		options[0]);
-						
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-	        		
 	        		
 	        		 //popup
 	 	        	

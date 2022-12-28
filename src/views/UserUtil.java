@@ -507,8 +507,8 @@ public class UserUtil {
 		
 		
 		
-		OnlineTab OnlinePanel = new OnlineTab(conn, you);
-		tabbedPane.addTab("Online", OnlinePanel.createPanel());
+		Online OPanel = new Online(conn, you);
+		tabbedPane.addTab("Online", OPanel.createPanel());
 		
 		
 		//listOnline.setLayout(new GridLayout(1, 0, 0, 0));
