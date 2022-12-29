@@ -5,8 +5,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -74,11 +78,113 @@ public class AllTab {
 		btnSearch.setBounds(354, 25, 85, 21);
 		btnSearch.setFont(new Font("Arial", Font.PLAIN, 10));
 		AllPanel.add(btnSearch);
-		
-		
 		JPanel listAll = new JPanel();
 		listAll.setBounds(35, 81, 404, 257);
 		listAll.setLayout(new BoxLayout(listAll,BoxLayout.Y_AXIS));
+		tfSearch.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent event) {
+				if (event.getKeyCode()==KeyEvent.VK_ENTER)
+				{
+					if(!tfSearch.getText().trim().equals("") && !tfSearch.getText().trim().equals("Nhập tên"))
+					{
+						boolean exist = false;
+						PreparedStatement stm =null;
+						ResultSet res = null;
+						List<User>FriendList = new ArrayList<>();
+						try {
+							String sql = "SELECT * FROM USERS US LEFT JOIN FRIENDLIST FR ON US.USER_ID = FR.USER_ID1 WHERE FR.USER_ID2 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME=?) AND US.USER_NAME LIKE ?";
+							stm = conn.prepareStatement(sql);
+							stm.setString(1, you.getUsername());
+							stm.setString(2,'%'+tfSearch.getText()+'%');
+							res = stm.executeQuery();
+							while(res.next()) {
+								exist=true;
+								Integer id = res.getInt("user_id");
+								String username = res.getString("user_name");
+								String hoten = res.getString("user_hoten");
+								String dob = res.getString("user_ngaysinh");
+								String email = res.getString("user_email");
+								String address = res.getString("user_diachi");
+								User user = new User(id,username,hoten,dob,email,address);
+								System.out.print(user.getUsername());
+								FriendList.add(user);
+								
+							}
+							listAll.removeAll();
+							listAll.revalidate();
+							listAll.repaint();
+							for (int i = 0 ; i<FriendList.size(); i++)
+							{
+								FriendCom fr = new FriendCom();
+								listAll.add(fr.initialize(FriendList.get(i).getUsername()));
+								JSeparator separator = new JSeparator();
+								separator.setBounds(10, 33, 353, 2);
+								
+								listAll.add(separator);
+							}
+							if (exist==false) {
+								
+							}
+						} catch(SQLException ex)
+						{
+							ex.printStackTrace();
+						}
+						
+					}
+				}
+			}
+		});
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(!tfSearch.getText().trim().equals("") && !tfSearch.getText().trim().equals("Nhập tên"))
+				{
+					boolean exist = false;
+					PreparedStatement stm =null;
+					ResultSet res = null;
+					List<User>FriendList = new ArrayList<>();
+					try {
+						String sql = "SELECT * FROM USERS US LEFT JOIN FRIENDLIST FR ON US.USER_ID = FR.USER_ID1 WHERE FR.USER_ID2 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME=?) AND US.USER_NAME LIKE ?";
+						stm = conn.prepareStatement(sql);
+						stm.setString(1, you.getUsername());
+						stm.setString(2,'%'+tfSearch.getText()+'%');
+						res = stm.executeQuery();
+						while(res.next()) {
+							exist=true;
+							Integer id = res.getInt("user_id");
+							String username = res.getString("user_name");
+							String hoten = res.getString("user_hoten");
+							String dob = res.getString("user_ngaysinh");
+							String email = res.getString("user_email");
+							String address = res.getString("user_diachi");
+							User user = new User(id,username,hoten,dob,email,address);
+							System.out.print(user.getUsername());
+							FriendList.add(user);
+							
+						}
+						listAll.removeAll();
+						listAll.revalidate();
+						listAll.repaint();
+						for (int i = 0 ; i<FriendList.size(); i++)
+						{
+							FriendCom fr = new FriendCom();
+							listAll.add(fr.initialize(FriendList.get(i).getUsername()));
+							JSeparator separator = new JSeparator();
+							separator.setBounds(10, 33, 353, 2);
+							
+							listAll.add(separator);
+						}
+						if (exist==false) {
+							
+						}
+					} catch(SQLException ex)
+					{
+						ex.printStackTrace();
+					}
+					
+				}
+			}
+		});
+		
 		//listOnline.setLayout(null);
 		
 		PreparedStatement stm =null;
@@ -106,15 +212,15 @@ public class AllTab {
 		{
 			e.printStackTrace();
 		}
-		//js.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		//JPanel friend = new JPanel();
-		//JPanel friend [] = new JPanel[10];
+		
+
 		for (int i = 0 ; i<FriendList.size(); i++)
 		{
 			FriendCom fr = new FriendCom();
-			listAll.add(fr.initialize(FriendList.get(i).getUsername(),i));
+			listAll.add(fr.initialize(FriendList.get(i).getUsername()));
 			JSeparator separator = new JSeparator();
 			separator.setBounds(10, 33, 353, 2);
+			
 			listAll.add(separator);
 		}
 		
