@@ -26,7 +26,7 @@ public class FriendCom {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-		public JPanel initialize(String username) {
+		public JPanel initialize(String username, String button) {
 		
 		
 		//friend.setBounds(0, 0, 404, 100);
@@ -42,7 +42,7 @@ public class FriendCom {
 		btnMess.setBounds(286, 20, 71, 17);
 		friend.add(btnMess);
 		
-		JButton btnUnfriend = new JButton("Hủy");
+		JButton btnUnfriend = new JButton(button);
 		btnUnfriend.setForeground(new Color(255, 255, 255));
 		btnUnfriend.setBackground(new Color(241, 84, 7));
 		btnUnfriend.setFont(new Font("Arial", Font.PLAIN, 10));

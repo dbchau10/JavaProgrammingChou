@@ -82,7 +82,7 @@ public class OnlineTab {
 		for (int i = 0 ; i<10; i++)
 		{
 			FriendCom fr = new FriendCom();
-			listOnline.add(fr.initialize("username"));
+			listOnline.add(fr.initialize("username","Hủy"));
 			JSeparator separator = new JSeparator();
 			separator.setBounds(10, 33, 353, 2);
 			listOnline.add(separator);

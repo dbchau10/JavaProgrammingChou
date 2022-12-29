@@ -113,17 +113,45 @@ public class AllTab {
 							listAll.removeAll();
 							listAll.revalidate();
 							listAll.repaint();
-							for (int i = 0 ; i<FriendList.size(); i++)
-							{
-								FriendCom fr = new FriendCom();
-								listAll.add(fr.initialize(FriendList.get(i).getUsername()));
-								JSeparator separator = new JSeparator();
-								separator.setBounds(10, 33, 353, 2);
-								
-								listAll.add(separator);
+							FriendCom fr;
+							if (exist==true) {
+								for (int i = 0 ; i<FriendList.size(); i++)
+								{
+									fr = new FriendCom();
+									listAll.add(fr.initialize(FriendList.get(i).getUsername(),"Hủy"));
+									JSeparator separator = new JSeparator();
+									separator.setBounds(10, 33, 353, 2);
+									
+									listAll.add(separator);
+								}
 							}
-							if (exist==false) {
-								
+							else {
+								sql = "SELECT * FROM USERS US WHERE US.USER_NAME LIKE ?";
+								stm = conn.prepareStatement(sql);
+								stm.setString(1,'%'+tfSearch.getText()+'%');
+								res = stm.executeQuery();
+								while(res.next()) {
+									exist=true;
+									Integer id = res.getInt("user_id");
+									String username = res.getString("user_name");
+									String hoten = res.getString("user_hoten");
+									String dob = res.getString("user_ngaysinh");
+									String email = res.getString("user_email");
+									String address = res.getString("user_diachi");
+									User user = new User(id,username,hoten,dob,email,address);
+									System.out.print(user.getUsername());
+									FriendList.add(user);
+									
+								}
+								for (int i = 0 ; i<FriendList.size(); i++)
+								{
+									fr = new FriendCom();
+									listAll.add(fr.initialize(FriendList.get(i).getUsername(),"Kết bạn"));
+									JSeparator separator = new JSeparator();
+									separator.setBounds(10, 33, 353, 2);
+									
+									listAll.add(separator);
+								}
 							}
 						} catch(SQLException ex)
 						{
@@ -167,7 +195,7 @@ public class AllTab {
 						for (int i = 0 ; i<FriendList.size(); i++)
 						{
 							FriendCom fr = new FriendCom();
-							listAll.add(fr.initialize(FriendList.get(i).getUsername()));
+							listAll.add(fr.initialize(FriendList.get(i).getUsername(),"Hủy"));
 							JSeparator separator = new JSeparator();
 							separator.setBounds(10, 33, 353, 2);
 							
@@ -217,7 +245,7 @@ public class AllTab {
 		for (int i = 0 ; i<FriendList.size(); i++)
 		{
 			FriendCom fr = new FriendCom();
-			listAll.add(fr.initialize(FriendList.get(i).getUsername()));
+			listAll.add(fr.initialize(FriendList.get(i).getUsername(),"Hủy"));
 			JSeparator separator = new JSeparator();
 			separator.setBounds(10, 33, 353, 2);
 			
