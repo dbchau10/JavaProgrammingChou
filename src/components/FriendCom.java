@@ -26,23 +26,23 @@ public class FriendCom {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-		public JPanel initialize(String username, int index) {
+		public JPanel initialize(String username, String button) {
 		
 		
-		
+		//friend.setBounds(0, 0, 404, 100);
 		friend.setPreferredSize(new Dimension(404, 50));
 		friend.setLayout(null);
 		
 		JLabel lblUsername = new JLabel(username);
 		lblUsername.setFont(new Font("Arial", Font.PLAIN, 13));
-		lblUsername.setBounds(29, 10, 135, 43);
+		lblUsername.setBounds(29, 10, 140, 43);
 		friend.add(lblUsername);
 		JButton btnMess = new JButton("Nhắn");
 		btnMess.setFont(new Font("Arial", Font.PLAIN, 10));
 		btnMess.setBounds(286, 20, 71, 17);
 		friend.add(btnMess);
 		
-		JButton btnUnfriend = new JButton("Hủy");
+		JButton btnUnfriend = new JButton(button);
 		btnUnfriend.setForeground(new Color(255, 255, 255));
 		btnUnfriend.setBackground(new Color(241, 84, 7));
 		btnUnfriend.setFont(new Font("Arial", Font.PLAIN, 10));
