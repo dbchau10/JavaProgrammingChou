@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 
 import java.awt.Color;
 
@@ -523,6 +524,84 @@ public class UserUtil {
 		btnResetPassword.setFont(new Font("Arial", Font.BOLD, 13));
 		btnResetPassword.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				JFrame changepass = new JFrame("Change pass");
+				JPanel change = new JPanel();
+				
+				JLabel jold=new JLabel("Nhập mật khẩu cũ:");
+				JPasswordField old = new JPasswordField(25);
+				
+				JLabel jnew=new JLabel("Nhập mật khẩu mới:");
+				JPasswordField newp = new JPasswordField(25);
+				
+				JLabel jcheck=new JLabel("Xác nhận mật khẩu mới:");
+				JPasswordField check = new JPasswordField(25);
+				
+				JButton changeb = new JButton("OK");
+				changeb.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						String newpass = newp.getText();
+						String verifyp = check.getText();
+						String oldpass = old.getText();
+						
+						if(newpass.equals("")) {
+			            	 jnew.setForeground(Color.yellow);
+			            }
+						
+						if(oldpass.equals("")) {
+			            	 jold.setForeground(Color.yellow);
+			            }
+						
+						if(verifyp.equals("")) {
+			            	 jcheck.setForeground(Color.yellow);
+			            }
+						
+						if(!newpass.equals("") && !oldpass.equals("") && !verifyp.equals("")) {
+							
+							try {
+								conn.setAutoCommit(false);
+								Statement stmt = null;
+								stmt = conn.createStatement();
+								String sql = "SELECT user_password from users where user_name='" + you.getUsername() + "'";
+			 					ResultSet rs = stmt.executeQuery(sql);
+			 					conn.commit();
+			 					
+			 					if(rs.next()) {
+			 						if(rs.getString(1).equals(oldpass)) {
+			 							if(verifyp.equals(newpass)) {
+			 								String changepassword = "UPDATE users SET user_password='" + newpass +"'";
+				 							stmt.executeUpdate(changepassword);
+				 							conn.commit();
+				 							changepass.dispose();
+			 							}
+			 							else {
+			 								jcheck.setForeground(Color.red);
+			 							}
+			 						}
+			 						else {
+			 							jold.setForeground(Color.red);
+			 						}
+			 					}
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+					}
+				});
+				
+				change.add(jold);
+				change.add(old);
+				change.add(jnew);
+				change.add(newp);
+				change.add(jcheck);
+				change.add(check);
+				change.add(changeb);
+				changepass.add(change);
+				changepass.setSize(300,300);
+				changepass.setLocationRelativeTo(null);
+				changepass.setVisible(true);
 			}
 		});
 		btnResetPassword.setBackground(new Color(235, 209, 105));

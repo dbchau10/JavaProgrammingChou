@@ -32,17 +32,17 @@ public class FriendFunction {
 			
 			String del="";
 			
-			String delsql = "SELECT from friend_list where user_id1=" + u.getID() +" and user_id2=" +friendid;
+			String delsql = "SELECT from friendlist where user_id1=" + u.getID() +" and user_id2=" +friendid;
 			ResultSet rs1 = stmt.executeQuery(delsql);
 			cnt.commit();
 			if(rs1.next()) {
-				del = "DELETE from friend_list where user_id1=" + u.getID() +" and user_id2=" +friendid;
+				del = "DELETE from friendlist where user_id1=" + u.getID() +" and user_id2=" +friendid;
 			}
 			else {
-				del = "DELETE from friend_list where user_id2=" + u.getID() +" and user_id1=" +friendid;
+				del = "DELETE from friendlist where user_id2=" + u.getID() +" and user_id1=" +friendid;
 			}
 			
-			stmt.executeQuery(del);
+			stmt.executeUpdate(del);
 			cnt.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -177,6 +177,6 @@ public class FriendFunction {
 		
 		User test = new User(7);
 		FriendFunction add = new FriendFunction(conn, test);
-		add.AcceptRequest("abc");
+		add.DeleteFriend("abc");
 	}
 }

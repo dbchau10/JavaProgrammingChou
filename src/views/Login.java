@@ -44,9 +44,9 @@ public class Login {
 			public void run() {
 				
 				Connection conn = null;
-				final String DB_URL = "jdbc:postgresql://localhost:5432/ChatDatabase";
+				final String DB_URL = "jdbc:postgresql://localhost:5432/test";
 				final String USER = "postgres";
-				final String PASS = "Baochau14102002";
+				final String PASS = "192002";
 				final String JBDC_DRIVER = "org.postgresql.Driver";
 				try {
 					Class.forName(JBDC_DRIVER);
@@ -55,6 +55,7 @@ public class Login {
 					System.out.println("Success");
 				}
 				/*
+				}/*
 				final String dbServer = "postgresql-100470-0.cloudclusters.net";
 				final String dbName = "Demochat";
 				int dbPort = 10121; // change it to your database server port
@@ -177,9 +178,21 @@ public class Login {
 		 							none = false;
 			 						if(!password.equals(rs.getString(3))) {
 			 							System.out.print("Sai");
+			 							JFrame frame = new JFrame("Announcement");
+			 			 	     		Object[] options = {"OK"};
+			 							int n = JOptionPane.showOptionDialog(frame, "Sai mật khẩu",
+			 					 	     		"Notification", JOptionPane.YES_OPTION,
+			 					 	     		JOptionPane.WARNING_MESSAGE, null, options,
+			 					 	     		options[0]);
 			 						}
 			 						else if(!rs.getString(11).equals("f")) {
 		 								System.out.print("Khóa");
+		 								JFrame frame = new JFrame("Announcement");
+			 			 	     		Object[] options = {"OK"};
+			 							int n = JOptionPane.showOptionDialog(frame, "Tài khoản bị khóa",
+			 					 	     		"Notification", JOptionPane.YES_OPTION,
+			 					 	     		JOptionPane.WARNING_MESSAGE, null, options,
+			 					 	     		options[0]);
 		 							}
 			 						else {
 			 							User you = new User(Integer.parseInt(rs.getString(1)), rs.getString(2), rs.getString(4), rs.getString(6),rs.getString(8),rs.getString(5));
