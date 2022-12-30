@@ -81,7 +81,7 @@ public class OnlineTab {
 		//JPanel friend [] = new JPanel[10];
 		for (int i = 0 ; i<10; i++)
 		{
-			FriendCom fr = new FriendCom();
+			FriendCom fr = new FriendCom(conn,you,you);
 			listOnline.add(fr.initialize("username","Hủy"));
 			JSeparator separator = new JSeparator();
 			separator.setBounds(10, 33, 353, 2);

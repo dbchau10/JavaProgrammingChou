@@ -21,46 +21,46 @@ public class User {
 		diachi = u_address;
 	}
 	
-	int getID(){
+	public int getID(){
 		return id;
 	}
 	
-	String getUsername() {
+	public String getUsername() {
 		return username;
 	}
 	
-	String getName() {
+	public String getName() {
 		return hoten;
 	}
 	
-	void setName(String name)
+	public void setName(String name)
 	{
 		hoten = name;
 	}
 	
-	String getDOB()
+	public String getDOB()
 	{
 		return dob;
 	}
 	
-	void setDOB(String dob) {
+	public void setDOB(String dob) {
 		this.dob = dob;
 	}
 	
-	String getEmail() {
+	public String getEmail() {
 		return email;
 	}
 	
-	void setEmail(String email) {
+	public void setEmail(String email) {
 		this.email = email;
 	}
 	
 	
-	String getAddress() {
+	public String getAddress() {
 		return diachi;
 	}
 	
-	void setAddress(String address) {
+	public void setAddress(String address) {
 		diachi = address;
 	}
 }
