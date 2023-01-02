@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+
+import views.FriendFunction;
 import views.User;
 
 import java.awt.Font;
@@ -70,9 +72,10 @@ public class FriendCom {
 			public void actionPerformed(ActionEvent e) {
 				if (btn.getText()=="Hủy")
 				{
-					PreparedStatement stm = null;
+					FriendFunction del = new FriendFunction(conn, you);
+					del.DeleteFriend(other.getUsername());
 
-					try {
+					/*try {
 						String sql = new String("DELETE FROM friendlist WHERE user_id1=? and user_id2=?");
 						conn.setAutoCommit(false);
 						stm = conn.prepareStatement(sql);
@@ -90,6 +93,7 @@ public class FriendCom {
 						conn.commit();
 						
 						
+						
 					} catch(SQLException ex)
 					{
 						try {
@@ -101,7 +105,7 @@ public class FriendCom {
 					}
 					finally {
 						redispatchToParent(e);
-					}
+					}*/
 				}
 			}
 		});

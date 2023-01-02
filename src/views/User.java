@@ -8,7 +8,7 @@ public class User {
 	private String email;
 	private String dob;
 	
-	User(int u_id){
+	public User(int u_id){
 		id=u_id;
 	}
 	

@@ -570,7 +570,7 @@ public class UserUtil {
 			 					if(rs.next()) {
 			 						if(rs.getString(1).equals(oldpass)) {
 			 							if(verifyp.equals(newpass)) {
-			 								String changepassword = "UPDATE users SET user_password='" + newpass +"'";
+			 								String changepassword = "UPDATE users SET user_password='" + newpass +"' where user_name='" + you.getUsername() + "'";
 				 							stmt.executeUpdate(changepassword);
 				 							conn.commit();
 				 							changepass.dispose();
