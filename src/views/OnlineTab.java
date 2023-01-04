@@ -8,6 +8,11 @@ import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -74,19 +79,12 @@ public class OnlineTab {
 		listOnline.setBounds(35, 81, 404, 257);
 		listOnline.setLayout(new BoxLayout(listOnline,BoxLayout.Y_AXIS));
 		//listOnline.setLayout(null);
-		
-		
 		//js.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		//JPanel friend = new JPanel();
 		//JPanel friend [] = new JPanel[10];
-		for (int i = 0 ; i<10; i++)
-		{
-			FriendCom fr = new FriendCom(conn,you,you);
-			listOnline.add(fr.initialize("username","Hủy"));
-			JSeparator separator = new JSeparator();
-			separator.setBounds(10, 33, 353, 2);
-			listOnline.add(separator);
-		}
+		new Thread(new Thread_OnlineTab(conn, you,listOnline)).start();
+		
+		// list online
 		
 		JScrollPane js = new JScrollPane(listOnline, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		//js.setPreferredSize(new Dimension(404,257));
@@ -94,26 +92,9 @@ public class OnlineTab {
 		//JScrollPane js = new JScrollPane(listOnline);
 		OnlinePanel.add(js);
 		
-		//listOnline.add(js);
-		//JSeparator separator = new JSeparator();
-		//separator.setBounds(10, 33, 353, 2);
-		//listOnline.add(separator);
-		
-		
-		
-		//JScrollPane scrollPane = new JScrollPane();
-		//scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		//scrollPane.setBounds(392, 251, 2, -239);
-		//listOnline.add(scrollPane);
-		
-		//JScrollBar scrollBar = new JScrollBar();
-		//scrollBar.setBounds(377, 8, 17, 233);
-		//listOnline.add(scrollBar);
-		
-		
-		
-		
 		
 		return OnlinePanel;
 	}
+	
+	
 }
