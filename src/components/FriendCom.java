@@ -11,7 +11,9 @@ import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import views.AllTab;
+<<<<<<<HEAD
+import views.AllTab;=======
+import views.FriendFunction;>>>>>>>f0d78ba0e618f82c9a855a70e7f7166862b34360
 import views.User;
 
 import java.awt.Font;
@@ -35,14 +37,14 @@ public class FriendCom {
 	private User you;
 	private Connection conn = null;
 	private User other;
-	
-	public FriendCom(Connection conn,User you, User other) {
+
+	public FriendCom(Connection conn, User you, User other) {
 		friend = new JPanel();
 		friend.setVisible(true);
 		this.conn = conn;
 		this.you = you;
 		this.other = other;
-	
+
 	}
 
 	/**
@@ -74,11 +76,10 @@ public class FriendCom {
 			public void actionPerformed(ActionEvent e) {
 				if (btn.getText()=="Hủy")
 				{
-					
-					
-					PreparedStatement stm = null;
+					FriendFunction del = new FriendFunction(conn, you);
+					del.DeleteFriend(other.getUsername());
 
-					try {
+					/*try {
 						String sql = new String("DELETE FROM friendlist WHERE user_id1=? and user_id2=?");
 						conn.setAutoCommit(false);
 						stm = conn.prepareStatement(sql);
@@ -96,6 +97,7 @@ public class FriendCom {
 						conn.commit();
 						
 						
+						
 					} catch(SQLException ex)
 					{
 						try {
@@ -105,6 +107,7 @@ public class FriendCom {
 							e1.printStackTrace();
 						}
 					}
+					*/
 					finally {
 						ResultSet res = null;
 						List<User>FriendList = new ArrayList<>();
@@ -151,8 +154,9 @@ public class FriendCom {
 		return friend;
 		
 	}
-		private void redispatchToParent(ActionEvent e){
-	        Component source = (Component) e.getSource();
-	        source.getParent().dispatchEvent(e);
-	    }
+
+	private void redispatchToParent(ActionEvent e) {
+		Component source = (Component) e.getSource();
+		source.getParent().dispatchEvent(e);
+	}
 }

@@ -9,12 +9,12 @@ import java.sql.Statement;
 public class FriendFunction {
 	Connection cnt;
 	User u;
-	FriendFunction(Connection conn, User you){
+	public FriendFunction(Connection conn, User you){
 		cnt = conn;
 		u = you;
 	}
 	
-	int DeleteFriend(String username) {
+	public int DeleteFriend(String username) {
 		Statement stmt=null;
 		String friendid ="";
 		
@@ -32,7 +32,7 @@ public class FriendFunction {
 			
 			String del="";
 			
-			String delsql = "SELECT from friendlist where user_id1=" + u.getID() +" and user_id2=" +friendid;
+			String delsql = "SELECT * from friendlist where user_id1=" + u.getID() +" and user_id2=" +friendid;
 			ResultSet rs1 = stmt.executeQuery(delsql);
 			cnt.commit();
 			if(rs1.next()) {
@@ -52,7 +52,7 @@ public class FriendFunction {
 		return 1;
 	}
 	
-	int DeleteRequest(String username) {
+	public int DeleteRequest(String username) {
 		Statement stmt=null;
 		String friendid ="";
 		
@@ -82,7 +82,7 @@ public class FriendFunction {
 		return 1;
 	}
 	
-	int AcceptRequest(String username) {
+	public int AcceptRequest(String username) {
 		Statement stmt=null;
 		String friendid ="";
 		
@@ -115,7 +115,7 @@ public class FriendFunction {
 		return 1;
 	}
 	
-	int FriendRequest(String username){
+	public int FriendRequest(String username){
 		Statement stmt=null;
 		String wannabe = "";
 		try {
@@ -161,7 +161,7 @@ public class FriendFunction {
 		Connection conn = null;
 		final String DB_URL = "jdbc:postgresql://localhost:5432/ChatDatabase";
 		final String USER = "postgres";
-		final String PASS = "Baochau14102002";
+		final String PASS = "192002";
 		final String JBDC_DRIVER = "org.postgresql.Driver";
 		try {
 			Class.forName(JBDC_DRIVER);
@@ -177,6 +177,6 @@ public class FriendFunction {
 		
 		User test = new User(7);
 		FriendFunction add = new FriendFunction(conn, test);
-		add.DeleteFriend("abc");
+		add.FriendRequest("abc");
 	}
 }

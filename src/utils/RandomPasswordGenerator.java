@@ -33,4 +33,29 @@ public class RandomPasswordGenerator {
         String password = new String(pass);
         return password;
     }
+    
+    public String getNewDRChatID() {
+    	char[] id = new char[5];
+    	id[0] = 'D';
+    	id[1] = LOWERCASE[rand.nextInt(LOWERCASE.length)];
+    	id[2] = UPPERCASE[rand.nextInt(UPPERCASE.length)];
+    	id[3] = LOWERCASE[rand.nextInt(LOWERCASE.length)];
+    	id[4] = NUMBERS[rand.nextInt(NUMBERS.length)];
+    	
+    	String drchat = new String(id);
+    	return drchat;
+    }
+    
+    public String getNewGRChatID() {
+    	char[] id = new char[5];
+    	id[0] = 'G';
+    	id[1] = LOWERCASE[rand.nextInt(LOWERCASE.length)];
+    	id[2] = UPPERCASE[rand.nextInt(UPPERCASE.length)];
+    	id[3] = LOWERCASE[rand.nextInt(LOWERCASE.length)];
+    	id[4] = NUMBERS[rand.nextInt(NUMBERS.length)];
+    	
+    	String grchat = new String(id);
+    	return grchat;
+    }
+    
 }
