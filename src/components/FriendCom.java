@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+
+import views.AllTab;
 import views.User;
 
 import java.awt.Font;
@@ -33,12 +35,14 @@ public class FriendCom {
 	private User you;
 	private Connection conn = null;
 	private User other;
+	
 	public FriendCom(Connection conn,User you, User other) {
 		friend = new JPanel();
 		friend.setVisible(true);
 		this.conn = conn;
 		this.you = you;
 		this.other = other;
+	
 	}
 
 	/**
@@ -70,6 +74,8 @@ public class FriendCom {
 			public void actionPerformed(ActionEvent e) {
 				if (btn.getText()=="Hủy")
 				{
+					
+					
 					PreparedStatement stm = null;
 
 					try {
@@ -100,7 +106,44 @@ public class FriendCom {
 						}
 					}
 					finally {
-						redispatchToParent(e);
+						ResultSet res = null;
+						List<User>FriendList = new ArrayList<>();
+						try {
+							String sql = "SELECT * FROM USERS US LEFT JOIN FRIENDLIST FR ON US.USER_ID = FR.USER_ID1 WHERE FR.USER_ID2 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME=?)";
+							stm = conn.prepareStatement(sql);
+							stm.setString(1, you.getUsername());
+							res = stm.executeQuery();
+							while(res.next()) {
+								
+								Integer id = res.getInt("user_id");
+								String username = res.getString("user_name");
+								String hoten = res.getString("user_hoten");
+								String dob = res.getString("user_ngaysinh");
+								String email = res.getString("user_email");
+								String address = res.getString("user_diachi");
+								User user = new User(id,username,hoten,dob,email,address);
+								System.out.print(user.getUsername());
+								FriendList.add(user);
+								
+							}
+						} catch(SQLException ex)
+						{
+							ex.printStackTrace();
+						}
+						
+						AllTab.listAll.removeAll();
+						AllTab.listAll.revalidate();
+						AllTab.listAll.repaint();
+						
+						for (int i = 0 ; i<FriendList.size(); i++)
+						{
+							FriendCom fr = new FriendCom(conn,you,FriendList.get(i));
+							AllTab.listAll.add(fr.initialize(FriendList.get(i).getUsername(),"Hủy"));
+							JSeparator separator = new JSeparator();
+							separator.setBounds(10, 33, 353, 2);
+							
+							AllTab.listAll.add(separator);
+						}
 					}
 				}
 			}

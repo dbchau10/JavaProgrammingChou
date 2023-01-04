@@ -36,6 +36,7 @@ public class AllTab {
 	private JPanel AllPanel;
 	private User you;
 	private Connection conn = null;
+	public static JPanel listAll = new JPanel();
 	AllTab(Connection cnt, User you){
 		AllPanel = new JPanel();
 		this.you = you;
@@ -78,7 +79,7 @@ public class AllTab {
 		btnSearch.setBounds(354, 25, 85, 21);
 		btnSearch.setFont(new Font("Arial", Font.PLAIN, 10));
 		AllPanel.add(btnSearch);
-		JPanel listAll = new JPanel();
+		
 		listAll.setBounds(35, 81, 404, 257);
 		listAll.setLayout(new BoxLayout(listAll,BoxLayout.Y_AXIS));
 		tfSearch.addKeyListener(new KeyAdapter() {

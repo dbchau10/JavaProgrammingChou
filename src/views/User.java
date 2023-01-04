@@ -12,7 +12,7 @@ public class User {
 		id=u_id;
 	}
 	
-	User(int u_id, String u_username, String u_name, String u_dob, String u_email,String u_address){
+	public User(int u_id, String u_username, String u_name, String u_dob, String u_email,String u_address){
 		id=u_id;
 		username=u_username;
 		hoten = u_name;
