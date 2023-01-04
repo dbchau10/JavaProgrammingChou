@@ -148,6 +148,11 @@ public class FriendCom {
 						AllTab.listAll.add(separator);
 					}
 
+				} else if  (btn.getText() == "Kết bạn") {
+					FriendFunction add = new FriendFunction(conn, you);
+					add.FriendRequest(other.getUsername());
+					
+					btn.setText("Pending");
 				}
 			}
 		});

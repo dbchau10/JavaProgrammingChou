@@ -127,6 +127,44 @@ public class AllTab {
 								}
 							}
 							else {
+								
+								sql = "SELECT * FROM USERS US LEFT JOIN FRIEND_WAITLINE FR ON US.USER_ID = FR.USER_ID1 WHERE FR.USER_ID2 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME=?) AND US.USER_NAME LIKE ?";
+								stm = conn.prepareStatement(sql);
+								stm.setString(1, you.getUsername());
+								stm.setString(2,'%'+tfSearch.getText()+'%');
+								res = stm.executeQuery();
+								boolean check=false;
+								while(res.next()) {
+									check=true;
+									Integer id = res.getInt("user_id");
+									String username = res.getString("user_name");
+									String hoten = res.getString("user_hoten");
+									String dob = res.getString("user_ngaysinh");
+									String email = res.getString("user_email");
+									String address = res.getString("user_diachi");
+									User user = new User(id,username,hoten,dob,email,address);
+									System.out.print(user.getUsername());
+									FriendList.add(user);
+									
+								}
+								
+								if (check==true)
+								{
+								for (int i = 0 ; i<FriendList.size(); i++)
+								{
+									fr = new FriendCom(conn,you,FriendList.get(i));
+									listAll.add(fr.initialize(FriendList.get(i).getUsername(),"Pending"));
+									JSeparator separator = new JSeparator();
+									separator.setBounds(10, 33, 353, 2);
+									
+									listAll.add(separator);
+								}
+								
+								} 
+								else
+								{
+								
+								
 								sql = "SELECT * FROM USERS US WHERE US.USER_NAME LIKE ?";
 								stm = conn.prepareStatement(sql);
 								stm.setString(1,'%'+tfSearch.getText()+'%');
@@ -152,6 +190,7 @@ public class AllTab {
 									separator.setBounds(10, 33, 353, 2);
 									
 									listAll.add(separator);
+								}
 								}
 							}
 						} catch(SQLException ex)
@@ -206,6 +245,44 @@ public class AllTab {
 							}
 						}
 						else {
+							
+							sql = "SELECT * FROM USERS US LEFT JOIN FRIEND_WAITLINE FR ON US.USER_ID = FR.USER_ID1 WHERE FR.USER_ID2 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME=?) AND US.USER_NAME = ?";
+							stm = conn.prepareStatement(sql);
+							stm.setString(1, you.getUsername());
+							stm.setString(2,tfSearch.getText());
+							res = stm.executeQuery();
+							boolean check=false;
+							while(res.next()) {
+								check=true;
+								Integer id = res.getInt("user_id");
+								String username = res.getString("user_name");
+								String hoten = res.getString("user_hoten");
+								String dob = res.getString("user_ngaysinh");
+								String email = res.getString("user_email");
+								String address = res.getString("user_diachi");
+								User user = new User(id,username,hoten,dob,email,address);
+								System.out.print(user.getUsername());
+								FriendList.add(user);
+								
+							}
+							
+							if (check==true)
+							{
+							for (int i = 0 ; i<FriendList.size(); i++)
+							{
+								fr = new FriendCom(conn,you,FriendList.get(i));
+								listAll.add(fr.initialize(FriendList.get(i).getUsername(),"Pending"));
+								JSeparator separator = new JSeparator();
+								separator.setBounds(10, 33, 353, 2);
+								
+								listAll.add(separator);
+							}
+							
+							} 
+							else
+							{
+							
+							
 							sql = "SELECT * FROM USERS US WHERE US.USER_NAME LIKE ?";
 							stm = conn.prepareStatement(sql);
 							stm.setString(1,'%'+tfSearch.getText()+'%');
@@ -231,6 +308,7 @@ public class AllTab {
 								separator.setBounds(10, 33, 353, 2);
 								
 								listAll.add(separator);
+							}
 							}
 						}
 					} catch(SQLException ex)

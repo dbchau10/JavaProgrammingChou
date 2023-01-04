@@ -617,6 +617,9 @@ public class UserUtil {
 		
 		AllTab AllPanel = new AllTab(conn,you);
 		tabbedPane.addTab("Tất cả", AllPanel.createPanel());
+		
+		PendingTab PendingPanel = new PendingTab(conn,you);
+		tabbedPane.addTab("Pending", PendingPanel.createPanel());
 		//listOnline.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		//JPanel listOnline = new JPanel();

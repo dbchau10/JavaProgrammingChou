@@ -31,11 +31,11 @@ import javax.swing.ScrollPaneConstants;
 
 import components.FriendCom;
 
-public class OnlineTab {
+public class PendingTab {
 	private JPanel OnlinePanel;
 	private User you;
 	private Connection conn = null;
-	OnlineTab(Connection cnt, User you){
+	PendingTab(Connection cnt, User you){
 		OnlinePanel = new JPanel();
 		this.you = you;
 		this.conn = cnt;
@@ -79,18 +79,18 @@ public class OnlineTab {
 		OnlinePanel.add(btnSearch);
 		
 		
-		JPanel listOnline = new JPanel();
-		listOnline.setBounds(35, 81, 404, 257);
-		listOnline.setLayout(new BoxLayout(listOnline,BoxLayout.Y_AXIS));
+		JPanel listPending = new JPanel();
+		listPending.setBounds(35, 81, 404, 257);
+		listPending.setLayout(new BoxLayout(listPending,BoxLayout.Y_AXIS));
 		//listOnline.setLayout(null);
 		//js.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		//JPanel friend = new JPanel();
 		//JPanel friend [] = new JPanel[10];
-		new Thread(new Thread_OnlineTab(conn, you,listOnline)).start();
+		new Thread(new Thread_PendingTab(conn, you,listPending)).start();
 		
 		// list online
 		
-		JScrollPane js = new JScrollPane(listOnline, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		JScrollPane js = new JScrollPane(listPending, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		//js.setPreferredSize(new Dimension(404,257));
 		js.setBounds(25, 81, 430, 257);
 		//JScrollPane js = new JScrollPane(listOnline);
@@ -125,19 +125,19 @@ public class OnlineTab {
 								FriendList.add(user);
 								
 							}
-							listOnline.removeAll();
-							listOnline.revalidate();
-							listOnline.repaint();
+							listPending.removeAll();
+							listPending.revalidate();
+							listPending.repaint();
 							FriendCom fr;
 							if (exist==true) {
 								for (int i = 0 ; i<FriendList.size(); i++)
 								{
 									fr = new FriendCom(conn,you,FriendList.get(i));
-									listOnline.add(fr.initialize(FriendList.get(i).getUsername(),"Hủy"));
+									listPending.add(fr.initialize(FriendList.get(i).getUsername(),"Hủy"));
 									JSeparator separator = new JSeparator();
 									separator.setBounds(10, 33, 353, 2);
 									
-									listOnline.add(separator);
+									listPending.add(separator);
 								}
 							}
 							else {
@@ -161,11 +161,11 @@ public class OnlineTab {
 								for (int i = 0 ; i<FriendList.size(); i++)
 								{
 									fr = new FriendCom(conn,you,FriendList.get(i));
-									listOnline.add(fr.initialize(FriendList.get(i).getUsername(),"Kết bạn"));
+									listPending.add(fr.initialize(FriendList.get(i).getUsername(),"Kết bạn"));
 									JSeparator separator = new JSeparator();
 									separator.setBounds(10, 33, 353, 2);
 									
-									listOnline.add(separator);
+									listPending.add(separator);
 								}
 							}
 						} catch(SQLException ex)
@@ -204,19 +204,19 @@ public class OnlineTab {
 							FriendList.add(user);
 							
 						}
-						listOnline.removeAll();
-						listOnline.revalidate();
-						listOnline.repaint();
+						listPending.removeAll();
+						listPending.revalidate();
+						listPending.repaint();
 						FriendCom fr;
 						if (exist==true) {
 							for (int i = 0 ; i<FriendList.size(); i++)
 							{
 								fr = new FriendCom(conn,you,FriendList.get(i));
-								listOnline.add(fr.initialize(FriendList.get(i).getUsername(),"Hủy"));
+								listPending.add(fr.initialize(FriendList.get(i).getUsername(),"Hủy"));
 								JSeparator separator = new JSeparator();
 								separator.setBounds(10, 33, 353, 2);
 								
-								listOnline.add(separator);
+								listPending.add(separator);
 							}
 						}
 						else {
@@ -241,11 +241,11 @@ public class OnlineTab {
 							for (int i = 0 ; i<FriendList.size(); i++)
 							{
 								fr = new FriendCom(conn,you,FriendList.get(i));
-								listOnline.add(fr.initialize(FriendList.get(i).getUsername(),"Kết bạn"));
+								listPending.add(fr.initialize(FriendList.get(i).getUsername(),"Kết bạn"));
 								JSeparator separator = new JSeparator();
 								separator.setBounds(10, 33, 353, 2);
 								
-								listOnline.add(separator);
+								listPending.add(separator);
 							}
 						}
 					} catch(SQLException ex)
