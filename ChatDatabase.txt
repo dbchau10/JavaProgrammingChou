@@ -69,8 +69,9 @@ CREATE TABLE GROUP_CHATMESSAGE(
 	PRIMARY KEY(GRCHAT_ID, MESSAGE_DATE, USER_ID)
 );
 
-alter table group_chat add group_ngaytao TIMESTAMP
-alter table group_member alter column user_admin boolean
+alter table group_chat add group_ngaytao TIMESTAMP;
+alter table group_member alter column user_admin type boolean
+USING user_admin::boolean;
 
 
 ALTER TABLE FRIENDLIST
