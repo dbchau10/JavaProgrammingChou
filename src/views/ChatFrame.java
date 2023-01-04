@@ -14,8 +14,12 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
@@ -70,7 +74,7 @@ public class ChatFrame {
 		frmChatter.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		frmChatter.getContentPane().setBackground(new Color(206,157,217));
-		frmChatter.getContentPane().setLayout(null);
+		frmChatter.setLayout(null);
 		
 		frmChatter.setFocusable(true);
 		
@@ -92,7 +96,7 @@ public class ChatFrame {
 		JScrollPane sp = new JScrollPane(table);
 		//sp.setPreferredSize(new Dimension(500,500));
 		sp.setBounds(10,10,465,415);
-		frmChatter.getContentPane().add(sp);
+		frmChatter.add(sp);
 		txtNhn = new JTextField();
 		txtNhn.addFocusListener(new FocusAdapter() {
 			@Override
@@ -119,15 +123,28 @@ public class ChatFrame {
 		txtNhn.setText("Nhập tin nhắn...");
 		txtNhn.setFont(new Font("Arial", Font.ITALIC, 12));
 		txtNhn.setBounds(10, 432, 371, 21);
-		frmChatter.getContentPane().add(txtNhn);
+		frmChatter.add(txtNhn);
 		txtNhn.setColumns(10);
 		
 		JButton sendBtn = new JButton("Nhắn");
 		sendBtn.setBackground(new Color(235, 209, 105));
 		sendBtn.setFont(new Font("Arial", Font.BOLD, 12));
 		sendBtn.setBounds(391, 432, 85, 22);
-		frmChatter.getContentPane().add(sendBtn);
+		frmChatter.add(sendBtn);
+		//thuc hien khi nhan send
+		sendBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		
+		txtNhn.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent event) {
+				if (event.getKeyCode()==KeyEvent.VK_ENTER)
+				{
+				}
+			}
+		});
 		
 	}
 }
