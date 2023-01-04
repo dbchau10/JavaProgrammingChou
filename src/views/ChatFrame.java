@@ -21,6 +21,7 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.Connection;
 
 public class ChatFrame {
 
@@ -31,21 +32,20 @@ public class ChatFrame {
 	private BufferedReader reader=null;
 	private PrintWriter sender=null;
 	private String my_name=null;
+	private User you;
+	Connection conn = null;
+
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ChatFrame window = new ChatFrame();
-					window.frmChatter.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	
+	public ChatFrame(Connection cnt, User u) {
+		you = u;
+		conn = cnt;
+
+		initialize();
 	}
+	
 
 	/**
 	 * Create the application.
@@ -53,8 +53,9 @@ public class ChatFrame {
 	public void connect() {
 		
 	}
-	public ChatFrame() {
-		initialize();
+	
+	public void setVis() {
+		frmChatter.setVisible(true);
 	}
 
 	/**

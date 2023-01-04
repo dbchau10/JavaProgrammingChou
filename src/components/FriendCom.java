@@ -155,8 +155,8 @@ public class FriendCom {
 		
 		btnMess.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-	             ChatFrame ch = new ChatFrame(conn);
-	             ch.setVisible(true);
+	             ChatFrame ch = new ChatFrame(conn,you);
+	             ch.setVis();
 				
 			}
 		});
