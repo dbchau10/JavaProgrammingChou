@@ -13,7 +13,9 @@ import javax.swing.border.EmptyBorder;
 
 
 import views.AllTab;
+import views.ChatFrame;
 import views.FriendFunction;
+import views.Signup;
 import views.User;
 
 import java.awt.Font;
@@ -149,12 +151,19 @@ public class FriendCom {
 				}
 			}
 		});
+		
+		
+		btnMess.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+	             ChatFrame ch = new ChatFrame(conn);
+	             ch.setVisible(true);
+				
+			}
+		});
+		
 		return friend;
-
-	}
-
-	private void redispatchToParent(ActionEvent e) {
-		Component source = (Component) e.getSource();
-		source.getParent().dispatchEvent(e);
+		
+		
+		
 	}
 }

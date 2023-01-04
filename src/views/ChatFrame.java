@@ -1,24 +1,36 @@
 package views;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 public class ChatFrame {
 
 	private JFrame frmChatter;
 	private JTextField txtNhn;
-
+	DefaultTableModel chat;
+	private Socket socket=null;
+	private BufferedReader reader=null;
+	private PrintWriter sender=null;
+	private String my_name=null;
 	/**
 	 * Launch the application.
 	 */
@@ -38,6 +50,9 @@ public class ChatFrame {
 	/**
 	 * Create the application.
 	 */
+	public void connect() {
+		
+	}
 	public ChatFrame() {
 		initialize();
 	}
@@ -57,6 +72,26 @@ public class ChatFrame {
 		frmChatter.getContentPane().setLayout(null);
 		
 		frmChatter.setFocusable(true);
+		
+		JTable table = new JTable();
+		
+		 table.setModel(new javax.swing.table.DefaultTableModel(
+		            new Object [][] {
+		            	{"hello"},{"hi"}
+		            },
+		            new String [] {
+		            		"message"
+		            }
+		        ));
+		 
+		 table.setShowGrid(false);
+
+		chat = (DefaultTableModel) table.getModel();
+		
+		JScrollPane sp = new JScrollPane(table);
+		//sp.setPreferredSize(new Dimension(500,500));
+		sp.setBounds(10,10,465,415);
+		frmChatter.getContentPane().add(sp);
 		txtNhn = new JTextField();
 		txtNhn.addFocusListener(new FocusAdapter() {
 			@Override
@@ -91,5 +126,7 @@ public class ChatFrame {
 		sendBtn.setFont(new Font("Arial", Font.BOLD, 12));
 		sendBtn.setBounds(391, 432, 85, 22);
 		frmChatter.getContentPane().add(sendBtn);
+		
+		
 	}
 }
