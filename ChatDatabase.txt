@@ -70,6 +70,8 @@ CREATE TABLE GROUP_CHATMESSAGE(
 );
 
 alter table group_chat add group_ngaytao TIMESTAMP
+alter table group_member alter column user_admin boolean
+
 
 ALTER TABLE FRIENDLIST
 ADD
