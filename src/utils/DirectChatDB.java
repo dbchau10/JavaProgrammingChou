@@ -15,7 +15,7 @@ import utils.ChatMessage;
 public class DirectChatDB {
 	Connection cnt;
 	User u;
-	Vector<ChatMessage> messagehis = new Vector<ChatMessage>();
+	static Vector<ChatMessage> messagehis = new Vector<ChatMessage>();
 	public DirectChatDB(Connection conn, User you){
 		cnt = conn;
 		u = you;
@@ -72,7 +72,7 @@ public class DirectChatDB {
 		Statement stmt=null;
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
-		ChatMessage result = new ChatMessage(id, dtf.format(now), u.getID(), msg);
+		ChatMessage result = new ChatMessage(id, dtf.format(now), u.getID(), msg, u.getName());
 		try {
 			cnt.setAutoCommit(false);
 			stmt = cnt.createStatement();
@@ -83,7 +83,6 @@ public class DirectChatDB {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		result.printChatMessage();
 		return result;
 	}
 	
@@ -107,10 +106,10 @@ public class DirectChatDB {
 		try {
 			cnt.setAutoCommit(false);
 			stmt = cnt.createStatement();
-			String sql = "SELECT * FROM direct_chatmessage where drchat_id ='" + id + "' except SELECT drchat_id, message_date, user_id, message_inf FROM erased_direct_chatmessage where deleted_user_id=" + u.getID() + " and drchat_id ='" + id + "'";
+			String sql = "select * from ChatHistorydr('"+id+"',"+ u.getID()+")";
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {
-				ChatMessage chathis = new ChatMessage(rs.getString(1), rs.getString(2), Integer.parseInt(rs.getString(3)), rs.getString(4));
+				ChatMessage chathis = new ChatMessage(rs.getString(1), rs.getString(2), Integer.parseInt(rs.getString(3)), rs.getString(4), rs.getString(5));
 				messagehis.add(chathis);
 			}
 		} catch (SQLException e) {
@@ -145,7 +144,7 @@ public class DirectChatDB {
 		User test = new User(2);
 		DirectChatDB add = new DirectChatDB(conn, test);
 		String id = add.GetDRChatID(7);
-		add.SaveMessage("hi", id);
+		//add.SaveMessage("pp", id);
 		
 		add.GetMessage(id);
 	}
