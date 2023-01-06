@@ -12,6 +12,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import network.Client;
+
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -23,6 +26,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Connection;
@@ -31,25 +35,27 @@ public class ChatFrame {
 
 	private JFrame frmChatter;
 	private JTextField txtNhn;
-	DefaultTableModel chat;
-	private Socket socket=null;
-	private BufferedReader reader=null;
-	private PrintWriter sender=null;
-	private String my_name=null;
+	public DefaultTableModel chat;
+	private String my_name,friend_name;
 	private User you;
 	Connection conn = null;
 
 	/**
 	 * Launch the application.
+	 * @throws IOException 
 	 */
 	
-	public ChatFrame(Connection cnt, User u) {
+	public ChatFrame(Connection cnt, User u) throws IOException {
 		you = u;
 		conn = cnt;
 
 		initialize();
 	}
-	
+	public ChatFrame(String my_name,String friend_name) throws IOException {
+		this.my_name=my_name;
+		this.friend_name=friend_name;
+		initialize();
+	}
 
 	/**
 	 * Create the application.
@@ -64,8 +70,9 @@ public class ChatFrame {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @throws IOException 
 	 */
-	private void initialize() {
+	private void initialize() throws IOException {
 		frmChatter = new JFrame();
 		frmChatter.setTitle("Chatter!");
 		frmChatter.setIconImage(Toolkit.getDefaultToolkit().getImage("D:\\DELL\\CNPM\\JavaProgramming\\background.jpg"));
@@ -77,6 +84,7 @@ public class ChatFrame {
 		frmChatter.setLayout(null);
 		
 		frmChatter.setFocusable(true);
+		frmChatter.setVisible(true);
 		
 		JTable table = new JTable();
 		
@@ -132,19 +140,18 @@ public class ChatFrame {
 		sendBtn.setBounds(391, 432, 85, 22);
 		frmChatter.add(sendBtn);
 		//thuc hien khi nhan send
-		sendBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
+		new Client(my_name).chat_direct(friend_name, txtNhn, sendBtn, chat);
 		
-		txtNhn.addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent event) {
-				if (event.getKeyCode()==KeyEvent.VK_ENTER)
-				{
-				}
-			}
-		});
 		
+	}
+	
+	public static void main(String[] args) {
+		try {
+			new ChatFrame("khoi","tan");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//new ChatFrame("khoi","thao");
 	}
 }
