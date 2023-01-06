@@ -140,10 +140,20 @@ public class FriendFunction {
 			cnt.commit();
 			
 			if(check.next()) {
+				check.close();
 				System.out.println("Already sent");
 				return -1;
 			}
-
+			
+			String checksent = "SELECT * from friend_waitline where user_id2=" + wannabe +" and user_id1=" +u.getID();
+			check = stmt.executeQuery(checksent);
+			cnt.commit();
+			if(check.next()) {
+				check.close();
+				System.out.println("Person is in your waitline");
+				return -2;
+			}
+			
 			String reqsql = "INSERT INTO friend_waitline values(" + wannabe + "," + u.getID()+")";
 			System.out.println(reqsql);
 			stmt.executeUpdate(reqsql);
@@ -159,7 +169,7 @@ public class FriendFunction {
 	public static void main(String[] args) {
 		
 		Connection conn = null;
-		final String DB_URL = "jdbc:postgresql://localhost:5432/ChatDatabase";
+		final String DB_URL = "jdbc:postgresql://localhost:5432/test";
 		final String USER = "postgres";
 		final String PASS = "192002";
 		final String JBDC_DRIVER = "org.postgresql.Driver";
@@ -175,7 +185,7 @@ public class FriendFunction {
 			System.exit(1);
 		}
 		
-		User test = new User(7);
+		User test = new User(6);
 		FriendFunction add = new FriendFunction(conn, test);
 		add.FriendRequest("abc");
 	}
