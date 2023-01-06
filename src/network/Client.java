@@ -1,99 +1,124 @@
 package network;
 
 import java.net.*;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JFrame;
-import javax.swing.JTextArea;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+import views.ChatFrame;
+import views.User;
 
 import java.io.*;
-
+import java.util.*; 
+import javax.net.ssl.*;
 import static java.lang.Thread.currentThread;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 
 
-import java.net.*;
-import javax.net.ssl.*;
-import java.io.*;
-import java.util.*; 
-
-
-
-class Thread_Read implements Runnable {
-	private JFrame jfrm;
-	private PrintWriter sender;
-	public static JTextField idInput;
-	private String my_name;
-	private JTextArea textArea;
-	Thread_Read (PrintWriter send,JFrame jf,String name, JTextArea mess) throws IOException{
-		sender=send;
-		jfrm=jf;
-		my_name=name;
-		textArea=mess;
-	}
-    public Thread_Read(JTextArea textArea2) {
-		// TODO Auto-generated constructor stub
-	}
-	public void run()
-    {
-		idInput = new JTextField();
-		idInput.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		idInput.setBounds(34, 386, 639, 20);
-		jfrm.getContentPane().add(idInput);
-		idInput.setColumns(10);
-		if (!Client.Run) return;
-		idInput.addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent e) {
-				if (!Client.Run) return;
-//				if(!idInput.getText() .equals(""))System.out.println(idInput.getText());
-		        if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-		        	String text = idInput.getText();
-		            if (text.equals("Quit")) {
-						sender.println("Q"); // send "Q"
-						sender.flush();
-						jfrm.setVisible(false);
-						
-						Client.Run=false;
-						currentThread().interrupt();
-						return;
-						
-						
-//						break;
-					}
-					else if (text!=null) {
-						String tag="M";
-						textArea.append(my_name+": "+text+ "\n");
-						System.out.println(my_name+": "+text);
-						sender.println(tag+" "+text);
-						sender.flush();
-						idInput.setText("");
-					}
-		        }
-			}
-		});
-    }
-}
+//class Thread_Read implements Runnable {
+////	public static PrintWriter sender;
+////	Thread_Read (PrintWriter send,JFrame jf,String name, JTextArea mess) throws IOException{
+////		sender=send;
+////		jfrm=jf;
+////		my_name=name;
+////		textArea=mess;
+////	}
+////    public Thread_Read(JTextArea textArea2) {
+////		// TODO Auto-generated constructor stub
+////	}
+//	public void run()
+//    {			
+//		if (!Client.Run) return;
+//		idInput.addKeyListener(new KeyAdapter() {
+//			public void keyPressed(KeyEvent e) {
+//				if (!Client.Run) return;
+////				if(!idInput.getText() .equals(""))System.out.println(idInput.getText());
+//		        if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+//		        	String text = idInput.getText();
+//		            if (text.equals("Quit")) {
+//						Client.sender.println("Q"); // send "Q"
+//						Client.sender.flush();
+//						jfrm.setVisible(false);
+//						
+//						Client.Run=false;
+//						currentThread().interrupt();
+//						return;
+//						
+//						
+////						break;
+//					}
+//					else if (text!=null) {
+//						String tag="M";
+//						textArea.append(my_name+": "+text+ "\n");
+//						System.out.println(my_name+": "+text);
+//						sender.println(tag+" "+text);
+//						sender.flush();
+//						idInput.setText("");
+//					}
+//		        }
+//			}
+//		});
+//    }
+//}
 
 
 public class Client  {
 	private Socket socket=null;
 	private BufferedReader reader=null;
 	private PrintWriter sender=null;
-	private String my_name=null;
-	public JTextArea textArea;
-	public static boolean Run=true;
-	Client(){
+	private boolean Run=true;
+	private String my_name,friend_name;
+//
+//	private JTextField txtNhn;
+//	private DefaultTableModel chat;
+//	private JButton sendBtn;
+	public void chat_direct(String friend_name,JTextField txtNhn,
+			JButton sendBtn,DefaultTableModel chat) throws IOException {
+		sendBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					send_message(friend_name,txtNhn,chat);
+			}
+		});
+		
+		txtNhn.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent event) {
+				if (event.getKeyCode()==KeyEvent.VK_ENTER)
+				{
+					send_message(friend_name,txtNhn,chat);
+				}
+			}
+		});
+		// Thread read from server
+		while (true) {
+
+			if (!Run) return;
+			
+			String message=null;
+			while(reader.ready()) {
+				message=reader.readLine();
+				//String[] result_message=parse_message(message);
+				//if (result_message[0].equals("MD")) {
+					//String message_rv=result_message[1]+":"+result_message[2];
+				chat.addRow(new Object[] {message});
+				//}
+				
+//				textArea.append(message+"\n");
+				System.out.println(message);
+				if (message!=null) {
+					System.out.println(message);
+				}
+			}
+		}
+	}
+	public Client(String my_name){
+		this.my_name=my_name;
+//		this.friend_name=friend_name;
+//		this.txtNhn=txtNhn;
+//		this.sendBtn=sendBtn;
+//		this.chat=chat;
+		
+		
 		String local_address="192.168.56.1";
 		try {
 			InetAddress myhost= InetAddress.getLocalHost();
@@ -106,117 +131,50 @@ public class Client  {
 		
 		try {
 			
-			socket= new Socket(local_address,3005);
+			socket= new Socket(local_address,3000);
 			System.out.println("connect sucess");
 			reader=new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			sender=new PrintWriter(socket.getOutputStream());
-			
-			
-			//user_name and password instead of name
-			String name = JOptionPane.showInputDialog(null, "Input your name");
-			
-			my_name=name;
-				
+			//user_name and password instead of name				
 			sender.println(my_name);
 			sender.flush();
 			//end
-			
-			
-			JFrame jfrm = new JFrame("BTTL10_20127045_20127306");
-			jfrm.getContentPane().setBackground(new Color(250, 187, 22));
-			jfrm.setResizable(false);
-			jfrm.getContentPane().setEnabled(true);
-			jfrm.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-			jfrm.setBounds(100, 100, 720, 480);
-
-			jfrm.setVisible(true);
-			jfrm.getContentPane().setLayout(null);
-
-			
-			JLabel idLabel = new JLabel("Input your message (Type 'Quit' to exit) or (Enter to send message)");
-			idLabel.setForeground(new Color(0, 0, 128));
-			idLabel.setBounds(34, 355, 639, 21);
-			idLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-			idLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
-			jfrm.getContentPane().add(idLabel);
-			
-			JLabel lblNewLabel = new JLabel("CHAT UI");
-			lblNewLabel.setForeground(new Color(0, 0, 128));
-			lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
-			lblNewLabel.setBounds(237, 20, 218, 32);
-			jfrm.getContentPane().add(lblNewLabel);
-			
-			JLabel lblNewLabel_1 = new JLabel("User: "+my_name);
-			lblNewLabel_1.setForeground(new Color(255, 255, 255));
-			lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 16));
-			lblNewLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblNewLabel_1.setBounds(509, 20, 154, 27);
-			jfrm.getContentPane().add(lblNewLabel_1);
-			
-			JTextArea textArea = new JTextArea("");
-			textArea.setBounds(34, 62, 639, 276);
-			textArea.setFont(new Font("Tahoma", Font.PLAIN, 13));
-			textArea.setEditable(false);
-			jfrm.getContentPane().add(textArea);
-			
-			
 			// thread read from jframe and send to server
-			new Thread(new Thread_Read(sender,jfrm,my_name,textArea)).start();
+			//new Thread(new Thread_Read(sender,jfrm,my_name,textArea)).start();
 			
-			
-			// Thread read from server
-			while (true) {
-
-				if (!Run) return;
-				
-				String message=null;
-				while(reader.ready()) {
-
-					message=reader.readLine();
-					
-
-					textArea.append(message+"\n");
-					System.out.println(message);
-					if (message!=null) {
-						System.out.println(message);
-					}
-				}
-			
-				
-
-
-				
-
-				
-			}
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		
-		finally {
-			try {
-				
-				socket.close();
-				reader.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			sender.close();
-		}
+//		finally {
+//			try {
+//				
+//				socket.close();
+//				reader.close();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			
+//			sender.close();
+//		}
 	}
-	private Container getContentPane() {
-		// TODO Auto-generated method stub
-		return null;
+	public void send_message(String friend_name,JTextField txtNhn,DefaultTableModel chat) {
+		chat.addRow(new Object[] {my_name+":"+txtNhn.getText()});
+		sender.println("MD`"+friend_name+"`"+txtNhn.getText());
+		sender.flush();
+	}
+	public String[] parse_message(String message) {
+		
+		return message.split("`");
 	}
 	public static void main(String[] args){
+		//new Client("khoi");
 		// TODO Auto-generated method stub
-		
-		new Client();
-		
+//		for (String s:parse_message("md`vo khoi`ngu nguoi`cc`")) {
+//			System.out.println(s);
+//		}
 	}
 
 }
