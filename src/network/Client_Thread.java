@@ -12,7 +12,10 @@ class Client_Thread implements Runnable {
 	private Socket socket=null;
 	BufferedReader reader;
 	PrintWriter sender;
-	
+	public String[] parse_message(String message) {
+		
+		return message.split("`");
+	}
 	Client_Thread (Socket thisSocket) throws IOException{
 		socket=thisSocket;
 		try {
@@ -24,33 +27,32 @@ class Client_Thread implements Runnable {
 		};
 		
 		// authenication username and password from client 
-		String name=reader.readLine();
-		if (name!=null) {
-			my_name=name;
-			System.out.println("Start chat for "+my_name);
+		while (!reader.ready()) {
 		}
-		else {
-			System.out.println("Cannot receive name of Client");
+		if (reader.ready()) {
+			my_name=reader.readLine();
+		
 		}
+		System.out.println("Start chat for "+my_name);
 		
 		// end
 		
 		
-		try {
-        for (Map.Entry me : Server.Name2Socket.entrySet()) {
-            System.out.println("Key: "+me.getKey());
-            
-            PrintWriter sender_User=null;
-			
-			sender_User=new PrintWriter(((Socket) me.getValue()).getOutputStream());
-			
-			sender_User.println(my_name+" has joined");
-			sender_User.flush();
-         }
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//        for (Map.Entry me : Server.Name2Socket.entrySet()) {
+//            System.out.println("Key: "+me.getKey());
+//            
+//            PrintWriter sender_User=null;
+//			
+//			sender_User=new PrintWriter(((Socket) me.getValue()).getOutputStream());
+//			
+//			sender_User.println(my_name+" has joined");
+//			sender_User.flush();
+//         }
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		Server.Name2Socket.put(my_name, socket);
 //		
@@ -62,47 +64,35 @@ class Client_Thread implements Runnable {
     {
     	try {
 	    	while (true) {
-				
-	    		String raw_text=null,message=null,tag=null;
-				raw_text = reader.readLine();
-				if (raw_text!=null) {
-					tag=raw_text.substring(0,1);
-			
-					if (tag.equals("M")) { // Me message
-						System.out.println("raw text "+raw_text);
-						message=raw_text.substring(2,raw_text.length());
-					}
-					else if (tag.equals("Q")) { // Qi Quit
-						message=my_name+" has left";
-					}
-				}
-
-				if (message!=null) {
+	    		if (reader.ready()) {
+	    			String mess=reader.readLine();
+	    			String[] result_message=parse_message(mess);
+					if (result_message[0].equals("MD")) { // Me message
+						String message_rv=my_name+":"+result_message[2];
+						PrintWriter sender_User=new PrintWriter(
+								Server.Name2Socket.get(result_message[1]).getOutputStream());
+						if (sender_User!=null) {
+						sender_User.println(message_rv);
+						sender_User.flush();
+						System.out.println("send from "+my_name+" to "+result_message[1]+" message "+result_message[2]);
 					
-					for (Map.Entry me : Server.Name2Socket.entrySet()) {
-						if (!(my_name.equals(me.getKey()))){
-							System.out.println("send from "+my_name+" to "+me.getKey());
-							
-				            PrintWriter sender_User=null;
-							sender_User=new PrintWriter(((Socket) me.getValue()).getOutputStream());
-							
-							
-							if (!tag.equals("Q")) sender_User.println(my_name+": "+message);
-							else sender_User.println(message);
-							
-							sender_User.flush();
 						}
-			         }
-				}
-				if (tag.equals("Q")) {
-					Server.Name2Socket.remove(my_name);
-					currentThread().interrupt();
-					return;
-				}
-
-
-	    	}
-		} 
+					}
+					else if (result_message[0].equals("MG")) { // Qi Quit
+						String message_rv=my_name+":"+result_message[2];
+						for (Map.Entry me : Server.Name2Socket.entrySet()) {
+							if (!(my_name.equals(me.getKey()))){
+								System.out.println("send from "+my_name+" to "+me.getKey());
+									PrintWriter sender_User=new PrintWriter(((Socket) me.getValue()).getOutputStream());
+									
+									sender_User.println(message_rv);
+									sender_User.flush();
+								}
+							}
+				         }
+					}
+	    		}
+    	}
     	catch (IOException e) {
 		// TODO Auto-generated catch blocka
 		e.printStackTrace();
