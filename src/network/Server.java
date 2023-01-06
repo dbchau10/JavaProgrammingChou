@@ -9,7 +9,7 @@ public class Server {
 	public static int Cnt = 0;
 	public static Vector<Socket> user_online= new Vector<Socket>();
 	public static HashMap<String, Socket> Name2Socket=new HashMap<String, Socket>();
-	private static int port=3005;
+	private static int port=3000;
 	public static void main(String[] args) throws IOException {
 	
 		try (// TODO Auto-generated method stub
