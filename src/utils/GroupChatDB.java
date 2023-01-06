@@ -31,6 +31,7 @@ public class GroupChatDB {
 			ResultSet rs = stmt.executeQuery(sql);
 			cnt.commit();
 			while(rs.next()) {
+				System.out.println(rs.getString(1));
 				GroupChat a = new GroupChat(rs.getString(1), rs.getString(2), rs.getString(3));
 				group.add(a);
 			}
@@ -42,10 +43,10 @@ public class GroupChatDB {
 		return group;
 	}
 	
-	public Vector<Integer> getMember(String GRChatID){
+	public Vector<Integer> getMember(GroupChat gr){
 		Vector<Integer> mem = new Vector<Integer>();
 		Statement stmt = null;
-		String sql = "SELECT user_id from group_member where grchat_id='" + GRChatID + "'";
+		String sql = "SELECT user_id from group_member where grchat_id='" + gr.getID() + "'";
 		try {
 			cnt.setAutoCommit(false);
 			stmt = cnt.createStatement();
@@ -61,7 +62,7 @@ public class GroupChatDB {
 		return mem;
 	}
 	
-	public void addMember(String GRChatID, String username) {
+	public void addMember(GroupChat gr, String username) {
 		Statement stmt=null;
 		String sql = "SELECT user_id from users where user_name='" + username +"'";
 		boolean exsist = false;
@@ -72,8 +73,9 @@ public class GroupChatDB {
 			cnt.commit();
 			if(rs.next()) {
 				exsist = true;
-				String addsql = "INSERT INTO group_member VALUES('" + GRChatID + "'," + rs.getString(1) + ",false)";
+				String addsql = "INSERT INTO group_member VALUES('" + gr.getID() + "'," + rs.getString(1) + ",false)";
 				stmt.executeUpdate(addsql);
+				cnt.commit();
 			}
 			if(exsist = false) {
 				System.out.println("Ko ton tai");
@@ -92,6 +94,7 @@ public class GroupChatDB {
 			cnt.setAutoCommit(false);
 			stmt = cnt.createStatement();
 			stmt.executeUpdate(sql);
+			cnt.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -99,8 +102,8 @@ public class GroupChatDB {
 		
 	}
 	
-	public boolean adminStatus(String GRChatID) {
-		String check = "SELECT user_admin from group_member where grchat_id='" + GRChatID + "' and user_id=" + u.getID();
+	public boolean adminStatus(GroupChat gr) {
+		String check = "SELECT user_admin from group_member where grchat_id='" + gr.getID() + "' and user_id=" + u.getID();
 		Statement stmt = null;
 		
 		try {
@@ -121,8 +124,12 @@ public class GroupChatDB {
 		return true;
 	}
 	
-	public void deleteMember(String GRChatID, String username) {
+	public void giveAdmin(GroupChat gr, String username) {
 		Statement stmt=null;
+		if (!adminStatus(gr)) {
+			System.out.println("Ko phai admin");
+			return;
+		}
 		String sql = "SELECT user_id from users where user_name='" + username +"'";
 		try {
 			cnt.setAutoCommit(false);
@@ -131,8 +138,33 @@ public class GroupChatDB {
 			cnt.commit();
 			if(rs.next()) {
 				String id = rs.getString(1);
-				String delsql = "DELETE from group_member where user_id=" + id;
+				String upsql = "UPDATE group_member SET user_admin=true where user_id=" + id + " and grchat_id='" + gr.getID() +"'";
+				stmt.executeUpdate(upsql);
+				cnt.commit();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteMember(GroupChat gr, String username) {
+		Statement stmt=null;
+		if (!adminStatus(gr)) {
+			System.out.println("Ko phai admin");
+			return;
+		}
+		String sql = "SELECT user_id from users where user_name='" + username +"'";
+		try {
+			cnt.setAutoCommit(false);
+			stmt = cnt.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			cnt.commit();
+			if(rs.next()) {
+				String id = rs.getString(1);
+				String delsql = "DELETE from group_member where user_id=" + id + "and grchat_id='" + gr.getID() +"'";
 				stmt.executeUpdate(delsql);
+				cnt.commit();
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -189,15 +221,15 @@ public class GroupChatDB {
 		return GRChatID;
 	}
 	
-	public ChatMessage SaveMessage(String msg, String id) {
+	public ChatMessage SaveMessage(String msg, GroupChat gr) {
 		Statement stmt=null;
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
-		ChatMessage result = new ChatMessage(id, dtf.format(now), u.getID(), msg, u.getName());
+		ChatMessage result = new ChatMessage(gr.getID(), dtf.format(now), u.getID(), msg, u.getName());
 		try {
 			cnt.setAutoCommit(false);
 			stmt = cnt.createStatement();
-			String sql = "INSERT INTO group_chatmessage VALUES('" + id+ "','"+dtf.format(now)+"',"+u.getID()+",'"+msg+"')" ;
+			String sql = "INSERT INTO group_chatmessage VALUES('" + gr.getID()+ "','"+dtf.format(now)+"',"+u.getID()+",'"+msg+"')" ;
 			stmt.executeUpdate(sql);
 			cnt.commit();
 		} catch (SQLException e) {
@@ -222,6 +254,27 @@ public class GroupChatDB {
 		
 	}
 	
+	public void GetMessage(GroupChat gr) {
+		Statement stmt=null;
+		try {
+			cnt.setAutoCommit(false);
+			stmt = cnt.createStatement();
+			String sql = "select * from ChatHistorygr('"+gr.getID()+"',"+ u.getID()+")";
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				ChatMessage chathis = new ChatMessage(rs.getString(1), rs.getString(2), Integer.parseInt(rs.getString(3)), rs.getString(4), rs.getString(5));
+				messagehis.add(chathis);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for (int i =0; i<messagehis.size(); i++) {
+			messagehis.elementAt(i).printChatMessage();
+		}
+	}
+	
 	public static void main(String[] args) {
 		Connection conn = null;
 		final String DB_URL = "jdbc:postgresql://localhost:5432/test";
@@ -240,11 +293,29 @@ public class GroupChatDB {
 			System.exit(1);
 		}
 		
+		/*Statement stmt=null;
+		try {
+			conn.setAutoCommit(false);
+			stmt = conn.createStatement();
+			String sql = "SELECT * from getfriendlist(2)";
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				System.out.println(rs.getString(1));
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 		User test = new User(2);
 		GroupChatDB add = new GroupChatDB(conn, test);
 		//Vector<Integer> us = new Vector<Integer>();
 		//us.add(3);
 		//us.add(4);
-		add.getGroupJoin();
+		Vector<GroupChat> all = new Vector<GroupChat>();
+		all = add.getGroupJoin();
+		add.GetMessage(all.get(0));
+		/*ChatMessage cm = null;
+		cm = add.SaveMessage("hoho", all.get(0).getID());
+		add.DeleteMessage(cm);*/
 	}
 }

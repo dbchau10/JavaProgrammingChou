@@ -231,4 +231,27 @@ JOIN users on foo.user_id = users.user_id;
 end; $$
 
 LANGUAGE 'plpgsql';
-	
+
+create function ChatHistorygr(id1 varchar(5), us_id int )
+returns table
+(
+	dr_id varchar(5), 
+	msg_date timestamp, 
+	usid int, 
+	msg_inf text,
+	usname varchar(255)
+)
+as $$
+begin
+return query select foo.*,users.user_name from 
+(SELECT grchat_id, message_date, user_id, message_inf 
+FROM group_chatmessage 
+WHERE grchat_id=id1
+except 
+SELECT grchat_id, message_date, user_id, message_inf 
+FROM erased_group_chatmessage where deleted_user_id=us_id and grchat_id=id1
+) as foo
+left join users on foo.user_id = users.user_id;
+end; $$
+
+LANGUAGE 'plpgsql';	

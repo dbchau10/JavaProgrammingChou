@@ -109,7 +109,10 @@ public class UserUtil {
 				String setstatus = "UPDATE users SET user_online=false WHERE user_name='"+ you.getUsername() + "'";
 				stmt.executeUpdate(setstatus);
 				conn.commit();
-			} catch (SQLException e) {
+				String updatelsdn = "update users set user_lichsudangnhap = user_lichsudangnhap || '{"+dtf.format(now)+"}' where user_id =" + you.getID();
+				stmt.executeUpdate(updatelsdn);
+				conn.commit();
+			  } catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
