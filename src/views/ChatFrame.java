@@ -68,10 +68,6 @@ public class ChatFrame {
 		
 	}
 	
-	public void setVis() {
-		frmChatter.setVisible(true);
-	}
-
 	/**
 	 * Initialize the contents of the frame.
 	 * @throws IOException 
@@ -166,7 +162,7 @@ public class ChatFrame {
 		sendBtn.setBounds(391, 432, 85, 22);
 		frmChatter.getContentPane().add(sendBtn);
 		//thuc hien khi nhan send
-		//new Client(my_name).chat_direct(friend_name, txtNhn, sendBtn, chat);
+		new Client(my_name).chat_direct(friend_name, txtNhn, sendBtn, chat);
 		
 		
 		frmChatter.setVisible(true);
@@ -177,13 +173,5 @@ public class ChatFrame {
 		
 	}
 	
-	public static void main(String[] args) {
-		try {
-			new ChatFrame("khoi","tan");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//new ChatFrame("khoi","thao");
-	}
+	
 }
