@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 
+import javax.swing.table.DefaultTableModel;
+
 import views.User;
 import utils.ChatMessage;
 
@@ -30,7 +32,7 @@ public class DirectChatDB {
 		try {
 			cnt.setAutoCommit(false);
 			stmt = cnt.createStatement();
-			String sqlfindid = "SELECT user_id from user where user_name=" + friendname;
+			String sqlfindid = "SELECT user_id from users where user_name=" + friendname;
 			ResultSet rsid = stmt.executeQuery(sqlfindid);
 			cnt.commit();
 			if(rsid.next()) {
@@ -114,7 +116,7 @@ public class DirectChatDB {
 		
 	}
 	
-	public void GetMessage(String id) {
+	public void GetMessage(String id,DefaultTableModel chat) {
 		Statement stmt=null;
 		try {
 			cnt.setAutoCommit(false);
@@ -123,6 +125,7 @@ public class DirectChatDB {
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {
 				ChatMessage chathis = new ChatMessage(rs.getString(1), rs.getString(2), Integer.parseInt(rs.getString(3)), rs.getString(4), rs.getString(5));
+				chat.addRow(new Object[] {chathis.name+":"+chathis.message_inf});
 				messagehis.add(chathis);
 			}
 		} catch (SQLException e) {

@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import network.Client;
+import utils.DirectChatDB;
 
 import javax.swing.JButton;
 import java.awt.Font;
@@ -43,7 +44,7 @@ public class ChatFrame {
 	private User you;
 	Connection conn = null;
 	private JTextField tfSearch;
-
+	private String id_dialogue;
 	/**
 	 * Launch the application.
 	 * @throws IOException 
@@ -163,6 +164,11 @@ public class ChatFrame {
 		sendBtn.setBounds(391, 432, 85, 22);
 		frmChatter.getContentPane().add(sendBtn);
 		//thuc hien khi nhan send
+		DirectChatDB dcdb=new DirectChatDB(conn,you);
+		id_dialogue=dcdb.GetDRChatID(friend_name);
+		dcdb.GetMessage(id_dialogue,chat);
+		
+		
 		new Client(my_name).chat_direct(friend_name, txtNhn, sendBtn, chat);
 		
 		
@@ -170,5 +176,13 @@ public class ChatFrame {
 		frmChatter.setFocusable(true);
 	}
 	
-	
+	public static void main(String[] args) {
+		try {
+			new ChatFrame("khoi","tan");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//new ChatFrame("khoi","thao");
+	}
 }
