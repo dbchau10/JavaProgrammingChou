@@ -45,7 +45,7 @@ public class DirectChatDB {
 		System.out.println(friendid);
 		try {
 			stmt = cnt.createStatement();
-			String sql = "SELECT drchat_id from direct_chat where user_id=" + u.getID() +" and user_id2 ='"+friendid+"'" ;
+			String sql = "SELECT drchat_id from direct_chat where user_id1=" + u.getID() +" and user_id2 ='"+friendid+"'" ;
 			sql+= "UNION SELECT drchat_id from direct_chat where user_id2=" + u.getID() +" and user_id1 ='"+friendid+"'" ;
 			ResultSet rs = stmt.executeQuery(sql);
 			cnt.commit();

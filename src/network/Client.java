@@ -80,15 +80,24 @@ public class Client  {
 		this.chat_direct=chat;
 		sendBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+					if (!txtNhn.getText().equals(""))
+					{
 					send_message(friend_name,txtNhn,chat);
+					txtNhn.setText("");
+					}
 			}
 		});
 		
 		txtNhn.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent event) {
+				
 				if (event.getKeyCode()==KeyEvent.VK_ENTER)
 				{
+					if (!txtNhn.getText().equals(""))
+					{
 					send_message(friend_name,txtNhn,chat);
+					txtNhn.setText("");
+					}
 				}
 			}
 		});
