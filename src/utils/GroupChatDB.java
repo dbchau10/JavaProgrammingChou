@@ -308,16 +308,5 @@ public class GroupChatDB {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
-		User test = new User(2);
-		GroupChatDB add = new GroupChatDB(conn, test);
-		//Vector<Integer> us = new Vector<Integer>();
-		//us.add(3);
-		//us.add(4);
-		Vector<GroupChat> all = new Vector<GroupChat>();
-		all = add.getGroupJoin();
-		add.GetMessage(all.get(0));
-		/*ChatMessage cm = null;
-		cm = add.SaveMessage("hoho", all.get(0).getID());
-		add.DeleteMessage(cm);*/
 	}
 }

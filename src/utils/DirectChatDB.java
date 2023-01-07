@@ -17,6 +17,7 @@ import utils.ChatMessage;
 public class DirectChatDB {
 	Connection cnt;
 	User u;
+	int num=0;
 	static Vector<ChatMessage> messagehis = new Vector<ChatMessage>();
 	public DirectChatDB(Connection conn, User you){
 		cnt = conn;
@@ -78,11 +79,12 @@ public class DirectChatDB {
 		return DRChatID;
 	}
 	
-	public ChatMessage SaveMessage(String msg, String id) {
+	public void SaveMessage(String msg, String id) {
 		Statement stmt=null;
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
-		ChatMessage result = new ChatMessage(id, dtf.format(now), u.getID(), msg, u.getName());
+		ChatMessage result = new ChatMessage(num, id, dtf.format(now), u.getID(), msg, u.getName());
+		num+=1;
 		try {
 			cnt.setAutoCommit(false);
 			stmt = cnt.createStatement();
@@ -93,7 +95,31 @@ public class DirectChatDB {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return result;
+		System.out.println(num);
+		messagehis.add(result);
+	}
+	
+	public void changeNumRow(int pos) {
+		num=num-1;
+		System.out.println(pos);
+		System.out.println(messagehis.size());
+		for(int i=pos; i<=num; i++) {
+			messagehis.get(i).setNum(i);
+		}
+		
+		messagehis.remove(pos-2);
+	}
+	
+	public ChatMessage getChooseMessage(int num) {
+		System.out.println(num);
+		ChatMessage choosen = null;
+		for(int i=0; i<messagehis.size(); i++) {
+			if(num == messagehis.get(i).getNum()) {
+				choosen = messagehis.get(i);
+				return choosen;
+			}
+		}
+		return choosen;
 	}
 	
 	public void DeleteMessage(ChatMessage del) {
@@ -102,6 +128,7 @@ public class DirectChatDB {
 			cnt.setAutoCommit(false);
 			stmt = cnt.createStatement();
 			String sql = "INSERT INTO erased_direct_chatmessage VALUES('" + del.getID() + "','" + del.getMessage_date() +"','" + del.getUser_id() +"','" + del.message_inf +"','" + u.getID() +"')";
+			System.out.println(sql);
 			stmt.executeUpdate(sql);
 			cnt.commit();
 		} catch (SQLException e) {
@@ -119,7 +146,8 @@ public class DirectChatDB {
 			String sql = "select * from ChatHistorydr('"+id+"',"+ u.getID()+")";
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {
-				ChatMessage chathis = new ChatMessage(rs.getString(1), rs.getString(2), Integer.parseInt(rs.getString(3)), rs.getString(4), rs.getString(5));
+				num+=1;
+				ChatMessage chathis = new ChatMessage(num,rs.getString(1), rs.getString(2), Integer.parseInt(rs.getString(3)), rs.getString(4), rs.getString(5));
 				chat.addRow(new Object[] {chathis.name+":"+chathis.message_inf});
 				messagehis.add(chathis);
 			}
@@ -152,11 +180,6 @@ public class DirectChatDB {
 			System.exit(1);
 		}
 		
-		User test = new User(2);
-		DirectChatDB add = new DirectChatDB(conn, test);
-		//String id = add.GetDRChatID(7);
-		//add.SaveMessage("pp", id);
 		
-		//add.GetMessage(id);
 	}
 }

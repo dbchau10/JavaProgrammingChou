@@ -8,8 +8,9 @@ public class User {
 	private String email;
 	private String dob;
 	
-	public User(int u_id){
+	public User(int u_id,String u_username){
 		id=u_id;
+		this.username=u_username;
 	}
 	
 	public User(int u_id, String u_username, String u_name, String u_dob, String u_email,String u_address){

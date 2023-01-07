@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import network.Client;
+import utils.ChatMessage;
 import utils.DirectChatDB;
 
 import javax.swing.JButton;
@@ -114,6 +115,7 @@ public class ChatFrame {
 		            },
 		            new String [] {
 		            		friend_name
+		            		"message", "num"
 		            }
 		        ));
 		 
@@ -124,6 +126,11 @@ public class ChatFrame {
 		JScrollPane sp = new JScrollPane(table);
 		//sp.setPreferredSize(new Dimension(500,500));
 		sp.setBounds(10,72,465,353);
+		table.getColumnModel().getColumn(1).setMinWidth(0);
+		table.getColumnModel().getColumn(1).setMaxWidth(0);
+		table.getColumnModel().getColumn(1).setWidth(0);
+		
+		sp.setBounds(10,79,465,346);
 		frmChatter.getContentPane().add(sp);
 		txtNhn = new JTextField();
 		txtNhn.addFocusListener(new FocusAdapter() {
@@ -164,8 +171,31 @@ public class ChatFrame {
 		id_dialogue=dcdb.GetDRChatID(friend_name);
 		dcdb.GetMessage(id_dialogue,chat);
 		
+		JButton btn_del = new JButton("delete");
+		btn_del.setBounds(10, 10, 89, 23);
+		btn_del.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int pos=table.getSelectedRow();
+				if (pos != -1) {
+					ChatMessage cm = null;
+					cm = dcdb.getChooseMessage(pos-1);
+					cm.printChatMessage();
+					dcdb.DeleteMessage(cm);
+					
+					dcdb.changeNumRow(pos);
+					
+					chat.removeRow(pos);
+				}
+			}
+		});
+		frmChatter.add(btn_del);
+		frmChatter.setVisible(true);
+		frmChatter.setFocusable(true);
 		
-		new Client(my_name).chat_direct(friend_name, txtNhn, sendBtn, chat);
+		new Client(my_name).chat_direct(friend_name, txtNhn, sendBtn, chat,id_dialogue,dcdb);
+		
+		
+		
 		
 		JButton btnDelete = new JButton("Xóa");
 		btnDelete.addActionListener(new ActionListener() {
@@ -218,8 +248,9 @@ public class ChatFrame {
 			System.out.print("Cannot connect");
 			System.exit(1);
 		}
-		User test = new User(2);
-		
+//		User test = new User(7,"chacha");
+		User test = new User(2,"abc");
+		//System.out.println(test.getUsername()+"????S");
 		try {
 			new ChatFrame(conn,test,"chacha");
 		} catch (IOException e) {

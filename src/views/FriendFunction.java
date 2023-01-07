@@ -184,9 +184,5 @@ public class FriendFunction {
 			System.out.print("Cannot connect");
 			System.exit(1);
 		}
-		
-		User test = new User(6);
-		FriendFunction add = new FriendFunction(conn, test);
-		add.FriendRequest("abc");
 	}
 }

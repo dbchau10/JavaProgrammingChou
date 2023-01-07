@@ -1,9 +1,12 @@
 package network;
 
 import java.net.*;
+import java.sql.Connection;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import utils.DirectChatDB;
 import views.ChatFrame;
 import views.User;
 
@@ -71,12 +74,16 @@ public class Client  {
 	private String my_name,friend_name;
 	private DefaultTableModel chat_direct;
 	private DefaultTableModel chat_group;
+//	private Connection conn = null;
+//	private String id_DC;
 //
 //	private JTextField txtNhn;
 //	private DefaultTableModel chat;
 //	private JButton sendBtn;
 	public void chat_direct(String friend_name,JTextField txtNhn,
-			JButton sendBtn,DefaultTableModel chat) throws IOException {
+			JButton sendBtn,DefaultTableModel chat,String id_dialogue,DirectChatDB dcdb) throws IOException {
+		//this.conn=conn;
+		//this.id_DC=id_dialogue;
 		this.chat_direct=chat;
 		sendBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -85,6 +92,7 @@ public class Client  {
 					send_message(friend_name,txtNhn,chat);
 					txtNhn.setText("");
 					}
+					dcdb.SaveMessage(txtNhn.getText(), id_dialogue);
 			}
 		});
 		
@@ -98,6 +106,7 @@ public class Client  {
 					send_message(friend_name,txtNhn,chat);
 					txtNhn.setText("");
 					}
+					dcdb.SaveMessage(txtNhn.getText(), id_dialogue);
 				}
 			}
 		});
@@ -117,6 +126,7 @@ public class Client  {
 					//String message_rv=result_message[1]+":"+result_message[2];
 				if (result_message[0].equals("MD")) {
 					this.chat_direct.addRow(new Object[] {result_message[1]});
+					
 				}
 				else this.chat_group.addRow(new Object[] {result_message[1]});
 				//}
@@ -149,7 +159,7 @@ public class Client  {
 		
 		try {
 			
-			socket= new Socket(local_address,3000);
+			socket= new Socket(local_address,Server.port);
 			System.out.println("connect sucess");
 			reader=new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			sender=new PrintWriter(socket.getOutputStream());
