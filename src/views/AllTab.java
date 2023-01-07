@@ -88,12 +88,7 @@ public class AllTab {
 				{
 					
 					if(!tfSearch.getText().trim().equals("") && !tfSearch.getText().trim().equals("Nhập tên"))
-					{	try {
-							conn.setAutoCommit(false);
-						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+					{	
 					
 						boolean exist = false;
 						PreparedStatement stm =null;
@@ -142,7 +137,7 @@ public class AllTab {
 					
 							else {		
 								boolean check=false;
-							
+								conn.
 								sql = "SELECT * FROM USERS US LEFT JOIN FRIEND_WAITLINE FR ON US.USER_ID = FR.USER_ID1 WHERE FR.USER_ID2 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME=?) AND US.USER_NAME = ?";
 								sql+="UNION SELECT * FROM USERS US LEFT JOIN FRIEND_WAITLINE FR ON US.USER_ID = FR.USER_ID2 WHERE FR.USER_ID1 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME=?) AND US.USER_NAME = ?";
 								stm = conn.prepareStatement(sql);
@@ -218,12 +213,8 @@ public class AllTab {
 							}
 				}catch (SQLException se)
 						{
-					try {
-						conn.rollback();
-					}catch(SQLException e)
-					{
-						e.printStackTrace();
-					}
+					
+						se.printStackTrace();
 						}
 					}
 				}
@@ -235,7 +226,7 @@ public class AllTab {
 				{
 					if(!tfSearch.getText().trim().equals("") && !tfSearch.getText().trim().equals("Nhập tên"))
 					{	try {
-							conn.setAutoCommit(false);
+							conn.setAutoCommit(true);
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();

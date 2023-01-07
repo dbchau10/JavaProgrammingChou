@@ -30,6 +30,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Connection;
+import javax.swing.JSeparator;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 public class ChatFrame {
 
@@ -39,6 +42,7 @@ public class ChatFrame {
 	private String my_name,friend_name;
 	private User you;
 	Connection conn = null;
+	private JTextField tfSearch;
 
 	/**
 	 * Launch the application.
@@ -81,10 +85,33 @@ public class ChatFrame {
 		frmChatter.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		frmChatter.getContentPane().setBackground(new Color(206,157,217));
-		frmChatter.setLayout(null);
+		frmChatter.getContentPane().setLayout(null);
 		
 		frmChatter.setFocusable(true);
 		frmChatter.setVisible(true);
+		
+		tfSearch = new JTextField();
+		tfSearch.setBounds(221, 19, 144, 19);
+		frmChatter.getContentPane().add(tfSearch);
+		tfSearch.setColumns(10);
+		
+		JButton btnSearch = new JButton("Tìm kiếm");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnSearch.setBounds(376, 18, 85, 21);
+		frmChatter.getContentPane().add(btnSearch);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(10, 68, 471, 1);
+		frmChatter.getContentPane().add(separator);
+		
+		JLabel chatter = new JLabel("abc");
+		chatter.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+		chatter.setHorizontalAlignment(SwingConstants.CENTER);
+		chatter.setBounds(211, 44, 58, 19);
+		frmChatter.getContentPane().add(chatter);
 		
 		JTable table = new JTable();
 		
@@ -103,8 +130,8 @@ public class ChatFrame {
 		
 		JScrollPane sp = new JScrollPane(table);
 		//sp.setPreferredSize(new Dimension(500,500));
-		sp.setBounds(10,10,465,415);
-		frmChatter.add(sp);
+		sp.setBounds(10,79,465,346);
+		frmChatter.getContentPane().add(sp);
 		txtNhn = new JTextField();
 		txtNhn.addFocusListener(new FocusAdapter() {
 			@Override
@@ -131,16 +158,20 @@ public class ChatFrame {
 		txtNhn.setText("Nhập tin nhắn...");
 		txtNhn.setFont(new Font("Arial", Font.ITALIC, 12));
 		txtNhn.setBounds(10, 432, 371, 21);
-		frmChatter.add(txtNhn);
+		frmChatter.getContentPane().add(txtNhn);
 		txtNhn.setColumns(10);
 		
 		JButton sendBtn = new JButton("Nhắn");
 		sendBtn.setBackground(new Color(235, 209, 105));
 		sendBtn.setFont(new Font("Arial", Font.BOLD, 12));
 		sendBtn.setBounds(391, 432, 85, 22);
-		frmChatter.add(sendBtn);
+		frmChatter.getContentPane().add(sendBtn);
 		//thuc hien khi nhan send
 		new Client(my_name).chat_direct(friend_name, txtNhn, sendBtn, chat);
+		
+		
+		
+		
 		
 		
 	}
