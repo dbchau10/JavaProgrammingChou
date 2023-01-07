@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -89,15 +90,70 @@ public class AllTab {
 					
 					if(!tfSearch.getText().trim().equals("") && !tfSearch.getText().trim().equals("Nhập tên"))
 					{	
+						String findusername = tfSearch.getText();
 					
 						boolean exist = false;
 						PreparedStatement stm =null;
 						ResultSet res = null;
 						List<User>FriendList = new ArrayList<>();
 						
+						String findid = "SELECT * FROM users where username='" + findusername + "'";
+						Vector<String> fid = new Vector<String>();
+						try {
+							stm = conn.prepareStatement(findid);
+							res = stm.executeQuery();
+							while(res.next()) {
+								exist = true;
+								fid.add(res.getString(1));
+							}
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						if(exist) {
+							
+							for(int i = 0; i<fid.size(); i++) {
+								String friendsql = "SELECT us_id from getfriendlist(" + you.getID() + ") where us_id=" + fid.get(i);
+								try {
+									stm = conn.prepareStatement(friendsql);
+									res = stm.executeQuery();
+									if(res.next()) {
+										
+									}
+								} catch (SQLException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+							
+							for(int i = 0; i<fid.size(); i++) {
+								String waitlinesql = "SELECT user_id2 from friend_waitline where user_id1=" + fid.get(i);
+								try {
+									stm = conn.prepareStatement(waitlinesql);
+									res = stm.executeQuery();
+									if(res.next()) {
+										
+									}
+								} catch (SQLException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								
+								
+							}
+							
+							
+						}
+						else {
+							
+						}
 						try {
 							String sql = "SELECT * FROM USERS US LEFT JOIN FRIENDLIST FR ON US.USER_ID = FR.USER_ID1 WHERE FR.USER_ID2 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME=?) AND US.USER_NAME LIKE ?";
 							sql+= "UNION SELECT * FROM USERS US LEFT JOIN FRIENDLIST FR ON US.USER_ID = FR.USER_ID2 WHERE FR.USER_ID1 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME=?) AND US.USER_NAME LIKE ?";
+							
+							//String sql = "SELECT * FROM getfriendlist(" + you.getID() + ")";
+							
 							stm = conn.prepareStatement(sql);
 							stm.setString(1, you.getUsername());
 							stm.setString(2,'%'+tfSearch.getText()+'%');
@@ -137,7 +193,7 @@ public class AllTab {
 					
 							else {		
 								boolean check=false;
-								conn.
+								conn.beginRequest();
 								sql = "SELECT * FROM USERS US LEFT JOIN FRIEND_WAITLINE FR ON US.USER_ID = FR.USER_ID1 WHERE FR.USER_ID2 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME=?) AND US.USER_NAME = ?";
 								sql+="UNION SELECT * FROM USERS US LEFT JOIN FRIEND_WAITLINE FR ON US.USER_ID = FR.USER_ID2 WHERE FR.USER_ID1 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME=?) AND US.USER_NAME = ?";
 								stm = conn.prepareStatement(sql);

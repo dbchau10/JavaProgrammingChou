@@ -87,9 +87,8 @@ public class ChatFrame {
 		frmChatter.getContentPane().setBackground(new Color(206,157,217));
 		frmChatter.getContentPane().setLayout(null);
 		
-		frmChatter.setFocusable(true);
-		frmChatter.setVisible(true);
-		
+		//frmChatter.setFocusable(true);
+				
 		tfSearch = new JTextField();
 		tfSearch.setBounds(221, 19, 144, 19);
 		frmChatter.getContentPane().add(tfSearch);
@@ -107,7 +106,7 @@ public class ChatFrame {
 		separator.setBounds(10, 68, 471, 1);
 		frmChatter.getContentPane().add(separator);
 		
-		JLabel chatter = new JLabel("abc");
+		JLabel chatter = new JLabel(friend_name);
 		chatter.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 		chatter.setHorizontalAlignment(SwingConstants.CENTER);
 		chatter.setBounds(211, 44, 58, 19);
@@ -167,10 +166,12 @@ public class ChatFrame {
 		sendBtn.setBounds(391, 432, 85, 22);
 		frmChatter.getContentPane().add(sendBtn);
 		//thuc hien khi nhan send
-		new Client(my_name).chat_direct(friend_name, txtNhn, sendBtn, chat);
+		//new Client(my_name).chat_direct(friend_name, txtNhn, sendBtn, chat);
 		
 		
-		
+		frmChatter.setVisible(true);
+		frmChatter.setFocusable(true);
+
 		
 		
 		
