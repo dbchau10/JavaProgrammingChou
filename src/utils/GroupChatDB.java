@@ -155,6 +155,7 @@ public class GroupChatDB {
 			return;
 		}
 		String sql = "SELECT user_id from users where user_name='" + username +"'";
+		System.out.println(sql);
 		try {
 			cnt.setAutoCommit(false);
 			stmt = cnt.createStatement();
@@ -162,7 +163,8 @@ public class GroupChatDB {
 			cnt.commit();
 			if(rs.next()) {
 				String id = rs.getString(1);
-				String delsql = "DELETE from group_member where user_id=" + id + "and grchat_id='" + gr.getID() +"'";
+				String delsql = "DELETE from group_member where user_id=" + id + " and grchat_id='" + gr.getID() +"'";
+				System.out.println(delsql);
 				stmt.executeUpdate(delsql);
 				cnt.commit();
 			}
