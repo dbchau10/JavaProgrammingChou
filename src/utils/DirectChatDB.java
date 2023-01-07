@@ -24,15 +24,15 @@ public class DirectChatDB {
 	}
 	
 	public String GetDRChatID(String friendname) {
-		
 		String DRChatID="";
 		String friendid="";
-		
+
 		Statement stmt=null;
 		try {
 			cnt.setAutoCommit(false);
+			String sqlfindid = "SELECT * from users where user_name='" + friendname + "'";
+			System.out.println(sqlfindid);
 			stmt = cnt.createStatement();
-			String sqlfindid = "SELECT user_id from users where user_name=" + friendname;
 			ResultSet rsid = stmt.executeQuery(sqlfindid);
 			cnt.commit();
 			if(rsid.next()) {
@@ -42,6 +42,7 @@ public class DirectChatDB {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		System.out.println(friendid);
 		try {
 			stmt = cnt.createStatement();
 			String sql1 = "SELECT drchat_id from direct_chat where user_id1=" + u.getID() +" and user_id2=" +friendid;

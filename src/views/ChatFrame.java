@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Connection;
+import java.sql.DriverManager;
+
 import javax.swing.JSeparator;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -177,8 +179,27 @@ public class ChatFrame {
 	}
 	
 	public static void main(String[] args) {
+		
+		Connection conn = null;
+		final String DB_URL = "jdbc:postgresql://localhost:5432/test";
+		final String USER = "postgres";
+		final String PASS = "192002";
+		final String JBDC_DRIVER = "org.postgresql.Driver";
 		try {
-			new ChatFrame("khoi","tan");
+			Class.forName(JBDC_DRIVER);
+			System.out.println("Connecting to database...");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			System.out.println("Success");
+		}
+		catch (Exception se) {
+			se.printStackTrace();
+			System.out.print("Cannot connect");
+			System.exit(1);
+		}
+		User test = new User(2);
+		
+		try {
+			new ChatFrame(conn,test,"chacha");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
