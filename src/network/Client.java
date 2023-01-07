@@ -90,9 +90,11 @@ public class Client  {
 					if (!txtNhn.getText().equals(""))
 					{
 					send_message(friend_name,txtNhn,chat);
+					
+					dcdb.SaveMessage(txtNhn.getText(), id_dialogue);
 					txtNhn.setText("");
 					}
-					dcdb.SaveMessage(txtNhn.getText(), id_dialogue);
+					
 			}
 		});
 		
@@ -104,9 +106,10 @@ public class Client  {
 					if (!txtNhn.getText().equals(""))
 					{
 					send_message(friend_name,txtNhn,chat);
+					dcdb.SaveMessage(txtNhn.getText(), id_dialogue);
 					txtNhn.setText("");
 					}
-					dcdb.SaveMessage(txtNhn.getText(), id_dialogue);
+					
 				}
 			}
 		});
@@ -121,6 +124,7 @@ public class Client  {
 			String message=null;
 			while(reader.ready()) {
 				message=reader.readLine();
+				System.out.println(message+"???????");
 				String[] result_message=parse_message(message);
 				//if (result_message[0].equals("MD")) {
 					//String message_rv=result_message[1]+":"+result_message[2];

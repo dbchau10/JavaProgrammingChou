@@ -87,7 +87,7 @@ public class ChatFrame {
 		frmChatter.setIconImage(Toolkit.getDefaultToolkit().getImage("D:\\DELL\\CNPM\\JavaProgramming\\background.jpg"));
 		frmChatter.setBounds(500, 200, 500, 500);
 		frmChatter.setResizable(false);
-		frmChatter.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmChatter.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		frmChatter.getContentPane().setBackground(new Color(206,157,217));
 		frmChatter.getContentPane().setLayout(null);
@@ -111,11 +111,9 @@ public class ChatFrame {
 		
 		 table.setModel(new javax.swing.table.DefaultTableModel(
 		            new Object [][] {
-		            	{"Welcome"}
 		            },
 		            new String [] {
-		            		friend_name
-		            		"message", "num"
+		            		friend_name,"num"
 		            }
 		        ));
 		 
@@ -130,7 +128,6 @@ public class ChatFrame {
 		table.getColumnModel().getColumn(1).setMaxWidth(0);
 		table.getColumnModel().getColumn(1).setWidth(0);
 		
-		sp.setBounds(10,79,465,346);
 		frmChatter.getContentPane().add(sp);
 		txtNhn = new JTextField();
 		txtNhn.addFocusListener(new FocusAdapter() {
@@ -171,15 +168,15 @@ public class ChatFrame {
 		id_dialogue=dcdb.GetDRChatID(friend_name);
 		dcdb.GetMessage(id_dialogue,chat);
 		
-		JButton btn_del = new JButton("delete");
-		btn_del.setBounds(10, 10, 89, 23);
+		JButton btn_del = new JButton("Xóa");
+		btn_del.setBounds(10, 25, 85, 21);
 		btn_del.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int pos=table.getSelectedRow();
+				System.out.print("POS"+pos);
 				if (pos != -1) {
 					ChatMessage cm = null;
-					cm = dcdb.getChooseMessage(pos-1);
-					cm.printChatMessage();
+					cm = dcdb.getChooseMessage(pos);
 					dcdb.DeleteMessage(cm);
 					
 					dcdb.changeNumRow(pos);
@@ -197,13 +194,6 @@ public class ChatFrame {
 		
 		
 		
-		JButton btnDelete = new JButton("Xóa");
-		btnDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnDelete.setBounds(10, 25, 85, 21);
-		frmChatter.getContentPane().add(btnDelete);
 		
 		
 		frmChatter.setVisible(true);

@@ -83,6 +83,7 @@ public class DirectChatDB {
 		Statement stmt=null;
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
+		System.out.print("NUM"+num);
 		ChatMessage result = new ChatMessage(num, id, dtf.format(now), u.getID(), msg, u.getName());
 		num+=1;
 		try {
@@ -95,7 +96,6 @@ public class DirectChatDB {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(num);
 		messagehis.add(result);
 	}
 	
@@ -107,7 +107,7 @@ public class DirectChatDB {
 			messagehis.get(i).setNum(i);
 		}
 		
-		messagehis.remove(pos-2);
+		messagehis.remove(pos);
 	}
 	
 	public ChatMessage getChooseMessage(int num) {
@@ -146,10 +146,11 @@ public class DirectChatDB {
 			String sql = "select * from ChatHistorydr('"+id+"',"+ u.getID()+")";
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {
-				num+=1;
+				
 				ChatMessage chathis = new ChatMessage(num,rs.getString(1), rs.getString(2), Integer.parseInt(rs.getString(3)), rs.getString(4), rs.getString(5));
 				chat.addRow(new Object[] {chathis.name+":"+chathis.message_inf});
 				messagehis.add(chathis);
+				num+=1;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

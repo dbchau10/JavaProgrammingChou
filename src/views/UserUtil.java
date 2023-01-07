@@ -136,7 +136,7 @@ public class UserUtil {
 		
 		frmChatter.getContentPane().setBackground(new Color(206,157,217));
 		
-		frmChatter.addWindowListener(new WindowEventHandler());
+		//frmChatter.addWindowListener(new WindowEventHandler());
 	    
 	    JPanel UserPanel = new JPanel();
 	    
@@ -527,7 +527,7 @@ public class UserUtil {
 		btnResetPassword.setFont(new Font("Arial", Font.BOLD, 13));
 		btnResetPassword.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame changepass = new JFrame("Change pass");
+				JFrame changepass = new JFrame("Change Password");
 				JPanel change = new JPanel();
 				
 				JLabel jold=new JLabel("Nhập mật khẩu cũ:");
@@ -644,8 +644,8 @@ public class UserUtil {
 		//OnlinePanel.add(listOnline);
 		
 		//Label GroupTab = new Label("Label 4");
-		//GroupTab.setBackground(new Color(255, 255, 255));
-		//tabbedPane.addTab("Nhóm", GroupTab);
+		GroupTab GroupPanel =  new GroupTab(conn,you);
+		tabbedPane.addTab("Nhóm", GroupPanel.createPanel());
 		frmChatter.getContentPane().add(tabbedPane);
 		frmChatter.setVisible(true);
 		frmChatter.addWindowListener(new WindowAdapter() {
