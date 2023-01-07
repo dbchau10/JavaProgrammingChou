@@ -69,13 +69,14 @@ class Client_Thread implements Runnable {
 	    			String[] result_message=parse_message(mess);
 					if (result_message[0].equals("MD")) { // Me message
 						String message_rv="MD`"+my_name+":"+result_message[2];
-						PrintWriter sender_User=new PrintWriter(
-								Server.Name2Socket.get(result_message[1]).getOutputStream());
-						if (sender_User!=null) {
-						sender_User.println(message_rv);
-						sender_User.flush();
-						System.out.println("send from "+my_name+" to "+result_message[1]+" message "+result_message[2]);
-					
+						Socket scSend=Server.Name2Socket.get(result_message[1]);
+						if (scSend!=null) {
+							PrintWriter sender_User=new PrintWriter(scSend.getOutputStream());
+							if (sender_User!=null) {
+							sender_User.println(message_rv);
+							sender_User.flush();
+							System.out.println("send from "+my_name+" to "+result_message[1]+" message "+result_message[2]);
+							}
 						}
 					}
 					else if (result_message[0].equals("MG")) { // Qi Quit
