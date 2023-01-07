@@ -45,18 +45,12 @@ public class DirectChatDB {
 		System.out.println(friendid);
 		try {
 			stmt = cnt.createStatement();
-			String sql1 = "SELECT drchat_id from direct_chat where user_id1=" + u.getID() +" and user_id2=" +friendid;
-			String sql2 = "SELECT drchat_id from direct_chat where user_id2=" + u.getID() +" and user_id1=" +friendid;	
-			ResultSet rs1 = stmt.executeQuery(sql1);
+			String sql = "SELECT drchat_id from direct_chat where user_id=" + u.getID() +" and user_id2 ='"+friendid+"'" ;
+			sql+= "UNION SELECT drchat_id from direct_chat where user_id2=" + u.getID() +" and user_id1 ='"+friendid+"'" ;
+			ResultSet rs = stmt.executeQuery(sql);
 			cnt.commit();
-			if(rs1.next()) {
-				DRChatID = rs1.getString(1);
-				return DRChatID;
-			}
-			ResultSet rs2 = stmt.executeQuery(sql2);
-			cnt.commit();
-			if(rs2.next()) {
-				DRChatID = rs2.getString(1);
+			if(rs.next()) {
+				DRChatID = rs.getString(1);
 				return DRChatID;
 			}
 			else {
@@ -160,9 +154,9 @@ public class DirectChatDB {
 		
 		User test = new User(2);
 		DirectChatDB add = new DirectChatDB(conn, test);
-		String id = add.GetDRChatID(7);
+		//String id = add.GetDRChatID(7);
 		//add.SaveMessage("pp", id);
 		
-		add.GetMessage(id);
+		//add.GetMessage(id);
 	}
 }

@@ -55,7 +55,7 @@ public class ChatFrame {
 	public ChatFrame(Connection cnt, User u,String friend_name) throws IOException {
 		you = u;
 		conn = cnt;
-		this.my_name=u.getName();
+		this.my_name=u.getUsername();
 		this.friend_name=friend_name;
 		initialize();
 	}
@@ -90,7 +90,7 @@ public class ChatFrame {
 		//frmChatter.setFocusable(true);
 				
 		tfSearch = new JTextField();
-		tfSearch.setBounds(221, 19, 144, 19);
+		tfSearch.setBounds(221, 26, 144, 19);
 		frmChatter.getContentPane().add(tfSearch);
 		tfSearch.setColumns(10);
 		
@@ -99,27 +99,17 @@ public class ChatFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnSearch.setBounds(376, 18, 85, 21);
+		btnSearch.setBounds(376, 25, 85, 21);
 		frmChatter.getContentPane().add(btnSearch);
-		
-		JSeparator separator = new JSeparator();
-		separator.setBounds(10, 68, 471, 1);
-		frmChatter.getContentPane().add(separator);
-		
-		JLabel chatter = new JLabel(friend_name);
-		chatter.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		chatter.setHorizontalAlignment(SwingConstants.CENTER);
-		chatter.setBounds(211, 44, 58, 19);
-		frmChatter.getContentPane().add(chatter);
-		
+
 		JTable table = new JTable();
 		
 		 table.setModel(new javax.swing.table.DefaultTableModel(
 		            new Object [][] {
-		            	{"hello"},{"hi"}
+		            	{"Welcome"}
 		            },
 		            new String [] {
-		            		"message"
+		            		friend_name
 		            }
 		        ));
 		 
@@ -129,7 +119,7 @@ public class ChatFrame {
 		
 		JScrollPane sp = new JScrollPane(table);
 		//sp.setPreferredSize(new Dimension(500,500));
-		sp.setBounds(10,79,465,346);
+		sp.setBounds(10,72,465,353);
 		frmChatter.getContentPane().add(sp);
 		txtNhn = new JTextField();
 		txtNhn.addFocusListener(new FocusAdapter() {
@@ -173,6 +163,14 @@ public class ChatFrame {
 		
 		new Client(my_name).chat_direct(friend_name, txtNhn, sendBtn, chat);
 		
+		JButton btnDelete = new JButton("Xóa");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnDelete.setBounds(10, 25, 85, 21);
+		frmChatter.getContentPane().add(btnDelete);
+		
 		
 		frmChatter.setVisible(true);
 		frmChatter.setFocusable(true);
@@ -181,9 +179,9 @@ public class ChatFrame {
 	public static void main(String[] args) {
 		
 		Connection conn = null;
-		final String DB_URL = "jdbc:postgresql://localhost:5432/test";
+		final String DB_URL = "jdbc:postgresql://localhost:5432/ChatDatabase";
 		final String USER = "postgres";
-		final String PASS = "192002";
+		final String PASS = "Baochau14102002";
 		final String JBDC_DRIVER = "org.postgresql.Driver";
 		try {
 			Class.forName(JBDC_DRIVER);
