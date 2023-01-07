@@ -29,15 +29,7 @@ public class Thread_PendingTab implements Runnable {
 	public void run()
     {
 		while (true) {
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-			
+
 			System.out.println("cc sau 5 giay");
 			Statement stm =null;
 			ResultSet res = null;
@@ -89,6 +81,12 @@ public class Thread_PendingTab implements Runnable {
 					listPending.add(separator);
 				}
 
+			}
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}}
 	

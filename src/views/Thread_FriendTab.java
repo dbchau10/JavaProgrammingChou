@@ -29,12 +29,7 @@ public class Thread_FriendTab implements Runnable {
 	public void run()
     {
 		while (true) {
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 			
 			
 			
@@ -71,7 +66,7 @@ public class Thread_FriendTab implements Runnable {
 				e.printStackTrace();
 			}
 			
-			System.out.println(FriendList.size());
+			
 			if (!oldFriend.equals(newFriend))
 			{
 				
@@ -89,6 +84,12 @@ public class Thread_FriendTab implements Runnable {
 					listFriend.add(separator);
 				}
 
+			}
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}}
 	
