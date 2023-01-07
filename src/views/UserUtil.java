@@ -648,5 +648,25 @@ public class UserUtil {
 		//tabbedPane.addTab("Nhóm", GroupTab);
 		frmChatter.getContentPane().add(tabbedPane);
 		frmChatter.setVisible(true);
+		frmChatter.addWindowListener(new WindowAdapter() {
+		    public void windowClosing(WindowEvent e) {
+		        // call terminate
+		    	try
+		    	{ String sql ="UPDATE users SET user_online='false' where user_id="+you.getID();
+		    	conn.setAutoCommit(false);
+		    	Statement stm = conn.createStatement();
+		    	stm.executeUpdate(sql);
+		    	conn.commit();
+		    	}catch(SQLException ex)
+		    	{
+		    		try{
+		    			conn.rollback();
+		    		}catch(SQLException exc)
+		    		{
+		    			exc.printStackTrace();
+		    		}
+		    	}
+		    }
+		});
 	}
 }

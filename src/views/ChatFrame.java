@@ -26,12 +26,16 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.swing.JSeparator;
 import javax.swing.JLabel;
@@ -174,6 +178,26 @@ public class ChatFrame {
 		
 		frmChatter.setVisible(true);
 		frmChatter.setFocusable(true);
+		frmChatter.addWindowListener(new WindowAdapter() {
+		    public void windowClosing(WindowEvent e) {
+		        // call terminate
+		    	try
+		    	{ String sql ="UPDATE users SET user_online='false' where user_id="+you.getID();
+		    	conn.setAutoCommit(false);
+		    	Statement stm = conn.createStatement();
+		    	stm.executeUpdate(sql);
+		    	conn.commit();
+		    	}catch(SQLException ex)
+		    	{
+		    		try{
+		    			conn.rollback();
+		    		}catch(SQLException exc)
+		    		{
+		    			exc.printStackTrace();
+		    		}
+		    	}
+		    }
+		});
 	}
 	
 	public static void main(String[] args) {
