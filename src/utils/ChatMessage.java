@@ -48,7 +48,9 @@ public class ChatMessage {
 	public int getUser_id() {
 		return user_id;
 	}
-	
+	public String getName() {
+		return name;
+	}
 	public void printChatMessage() {
 		System.out.println(name + " :" + message_inf);
 	}

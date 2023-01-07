@@ -13,6 +13,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import components.FriendCom;
 import network.Client;
 import utils.ChatMessage;
 import utils.DirectChatDB;
@@ -35,8 +36,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Vector;
 
 import javax.swing.JSeparator;
 import javax.swing.JLabel;
@@ -99,11 +102,11 @@ public class ChatFrame {
 		frmChatter.getContentPane().add(tfSearch);
 		tfSearch.setColumns(10);
 		
+		
+					
+		
 		JButton btnSearch = new JButton("Tìm kiếm");
-		btnSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		
 		btnSearch.setBounds(376, 25, 85, 21);
 		frmChatter.getContentPane().add(btnSearch);
 
@@ -173,7 +176,6 @@ public class ChatFrame {
 		btn_del.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int pos=table.getSelectedRow();
-				System.out.print("POS"+pos);
 				if (pos != -1) {
 					ChatMessage cm = null;
 					cm = dcdb.getChooseMessage(pos);
@@ -185,40 +187,76 @@ public class ChatFrame {
 				}
 			}
 		});
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					conn.setAutoCommit(false);
+					Statement stm =conn.createStatement();
+					//Vector<ChatMessage> messagehis = new Vector<ChatMessage>();
+					String mes = "SELECT * FROM (SELECT * FROM direct_chatmessage where drchat_id='"+id_dialogue+"'and message_inf like '%"+tfSearch.getText()+"%' except select drchat_id,message_date,user_id,message_inf from  erased_direct_chatmessage where deleted_user_id='"+you.getID()+"'and drchat_id='"+id_dialogue+"')as foo left join users on foo.user_id = users.user_id order by foo.message_date asc";
+					
+						
+						ResultSet rs = stm.executeQuery(mes);
+						chat.setRowCount(0);
+						int num = 0;
+						while(rs.next()) {
+							
+							ChatMessage chathis = new ChatMessage(num,rs.getString("drchat_id"), rs.getString("message_date"), Integer.parseInt(rs.getString("user_id")), rs.getString("message_inf"), rs.getString("user_name"));
+							chat.addRow(new Object[] {chathis.getName()+":"+chathis.getMessage_info()});
+							//messagehis.add(chathis);
+							num+=1;
+						}
+							
+
+						}
+						
+					catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			}
+		});
+		
+		tfSearch.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent event) {
+				if (event.getKeyCode()==KeyEvent.VK_ENTER)
+				{
+					try {
+						conn.setAutoCommit(false);
+						Statement stm =conn.createStatement();
+						//Vector<ChatMessage> messagehis = new Vector<ChatMessage>();
+						String mes = "SELECT * FROM (SELECT * FROM direct_chatmessage where drchat_id='"+id_dialogue+"'and message_inf like '%"+tfSearch.getText()+"%' except select drchat_id,message_date,user_id,message_inf from  erased_direct_chatmessage where deleted_user_id='"+you.getID()+"'and drchat_id='"+id_dialogue+"')as foo left join users on foo.user_id = users.user_id order by foo.message_date asc";
+						
+							
+							ResultSet rs = stm.executeQuery(mes);
+							chat.setRowCount(0);
+							int num = 0;
+							while(rs.next()) {
+								
+								ChatMessage chathis = new ChatMessage(num,rs.getString("drchat_id"), rs.getString("message_date"), Integer.parseInt(rs.getString("user_id")), rs.getString("message_inf"), rs.getString("user_name"));
+								chat.addRow(new Object[] {chathis.getName()+":"+chathis.getMessage_info()});
+								//messagehis.add(chathis);
+								num+=1;
+							}
+								
+
+							}
+							
+						catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+				}
+			
+			}
+		});
 		frmChatter.add(btn_del);
 		frmChatter.setVisible(true);
 		frmChatter.setFocusable(true);
 		
+		
 		new Client(my_name).chat_direct(friend_name, txtNhn, sendBtn, chat,id_dialogue,dcdb);
-		
-		
-		
-		
-		
-		
-		frmChatter.setVisible(true);
-		frmChatter.setFocusable(true);
-		frmChatter.addWindowListener(new WindowAdapter() {
-		    public void windowClosing(WindowEvent e) {
-		        // call terminate
-		    	try
-		    	{ String sql ="UPDATE users SET user_online='false' where user_id="+you.getID();
-		    	conn.setAutoCommit(false);
-		    	Statement stm = conn.createStatement();
-		    	stm.executeUpdate(sql);
-		    	conn.commit();
-		    	}catch(SQLException ex)
-		    	{
-		    		try{
-		    			conn.rollback();
-		    		}catch(SQLException exc)
-		    		{
-		    			exc.printStackTrace();
-		    		}
-		    	}
-		    }
-		});
-	}
+			}
 	
 	public static void main(String[] args) {
 		
