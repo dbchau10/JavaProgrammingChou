@@ -49,10 +49,11 @@ public class ChatFrame {
 	 * @throws IOException 
 	 */
 	
-	public ChatFrame(Connection cnt, User u) throws IOException {
+	public ChatFrame(Connection cnt, User u,String friend_name) throws IOException {
 		you = u;
 		conn = cnt;
-
+		this.my_name=u.getName();
+		this.friend_name=friend_name;
 		initialize();
 	}
 	public ChatFrame(String my_name,String friend_name) throws IOException {
@@ -167,10 +168,6 @@ public class ChatFrame {
 		
 		frmChatter.setVisible(true);
 		frmChatter.setFocusable(true);
-
-		
-		
-		
 	}
 	
 	
