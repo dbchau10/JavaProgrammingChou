@@ -40,7 +40,7 @@ public class FriendCom {
 	private User you;
 	private Connection conn = null;
 	private User other;
-
+	JButton btn = new JButton();
 	public FriendCom(Connection conn, User you, User other) {
 		friend = new JPanel();
 		friend.setVisible(true);
@@ -49,7 +49,11 @@ public class FriendCom {
 		this.other = other;
 
 	}
-
+	
+	public void changeButtonContent(String content)
+	{
+		btn.setText(content);
+	}
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -68,7 +72,7 @@ public class FriendCom {
 		btnMess.setBounds(286, 20, 71, 17);
 		friend.add(btnMess);
 
-		JButton btn = new JButton(button);
+		changeButtonContent(button);
 		btn.setForeground(new Color(255, 255, 255));
 		btn.setBackground(new Color(241, 84, 7));
 		btn.setFont(new Font("Arial", Font.PLAIN, 10));
@@ -155,6 +159,11 @@ public class FriendCom {
 					
 					btn.setText("Pending");
 				}
+				else if (btn.getText()=="Chấp nhận") {
+					FriendFunction accept = new FriendFunction(conn, you);
+					accept.AcceptRequest(other.getUsername());
+					
+				}
 			}
 		});
 		
@@ -162,7 +171,7 @@ public class FriendCom {
 		btnMess.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 	             try {
-					ChatFrame ch = new ChatFrame(conn,you);
+					ChatFrame ch = new ChatFrame(conn,you,username);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

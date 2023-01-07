@@ -624,8 +624,8 @@ public class UserUtil {
 		PendingTab PendingPanel = new PendingTab(conn,you);
 		tabbedPane.addTab("Pending", PendingPanel.createPanel());
 		
-		GroupTab GroupPanel = new GroupTab(conn, you);
-		tabbedPane.addTab("Nhóm", GroupPanel.createPanel());
+		//GroupTab GroupPanel = new GroupTab(conn, you);
+		//tabbedPane.addTab("Nhóm", GroupPanel.createPanel());
 		//listOnline.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		//JPanel listOnline = new JPanel();
@@ -647,5 +647,6 @@ public class UserUtil {
 		//GroupTab.setBackground(new Color(255, 255, 255));
 		//tabbedPane.addTab("Nhóm", GroupTab);
 		frmChatter.getContentPane().add(tabbedPane);
+		frmChatter.setVisible(true);
 	}
 }

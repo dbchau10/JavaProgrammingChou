@@ -15,17 +15,17 @@ import javax.swing.JTabbedPane;
 
 import components.FriendCom;
 
-public class Thread_PendingTab implements Runnable {
+public class Thread_FriendTab implements Runnable {
 	private User you;
 	private Connection conn;
-	JPanel listPending;
-	Thread_PendingTab(Connection cnt, User you,JPanel listPending){	
+	JPanel listFriend;
+	Thread_FriendTab(Connection cnt, User you,JPanel listFriend){	
 		this.you = you;
 		this.conn = cnt;
-		this.listPending = listPending;
+		this.listFriend = listFriend;
 	}
 	
-	private List<Integer>oldPending = new ArrayList<>();
+	private List<Integer>oldFriend = new ArrayList<>();
 	public void run()
     {
 		while (true) {
@@ -42,10 +42,10 @@ public class Thread_PendingTab implements Runnable {
 			Statement stm =null;
 			ResultSet res = null;
 			List<User>FriendList = new ArrayList<>();
-			List<Integer>newPending = new ArrayList<>();
+			List<Integer>newFriend = new ArrayList<>();
 			try {
-				String sql = "SELECT * FROM USERS US LEFT JOIN FRIEND_WAITLINE FR ON US.USER_ID = FR.USER_ID2 WHERE FR.USER_ID1 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME='"+you.getUsername()+"')";
-				
+				String sql = "SELECT * FROM USERS US LEFT JOIN FRIENDLIST FR ON US.USER_ID = FR.USER_ID1 WHERE FR.USER_ID2 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME='"+you.getUsername()+"')";
+				sql+="UNION SELECT * FROM USERS US LEFT JOIN FRIENDLIST FR ON US.USER_ID = FR.USER_ID2 WHERE FR.USER_ID1 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME='"+you.getUsername()+"')";
 				stm = conn.createStatement();
 				res = stm.executeQuery(sql);
 				conn.commit();
@@ -53,7 +53,7 @@ public class Thread_PendingTab implements Runnable {
 					System.out.print("hello");
 					Integer id = res.getInt("user_id");
 					
-					newPending.add(id);
+					newFriend.add(id);
 					String username = res.getString("user_name");
 					String hoten = res.getString("user_hoten");
 					String dob = res.getString("user_ngaysinh");
@@ -72,21 +72,21 @@ public class Thread_PendingTab implements Runnable {
 			}
 			
 			System.out.println(FriendList.size());
-			if (!oldPending.equals(newPending))
+			if (!oldFriend.equals(newFriend))
 			{
 				
-				listPending.removeAll();
-				listPending.revalidate();
-				listPending.repaint();
-				oldPending=newPending;
+				listFriend.removeAll();
+				listFriend.revalidate();
+				listFriend.repaint();
+				oldFriend=newFriend;
 				for (int i = 0 ; i<FriendList.size(); i++)
 				{
 					FriendCom fr = new FriendCom(conn,you,FriendList.get(i));
-					listPending.add(fr.initialize(FriendList.get(i).getUsername(),"Chấp nhận"));
+					listFriend.add(fr.initialize(FriendList.get(i).getUsername(),"Hủy"));
 					JSeparator separator = new JSeparator();
 					separator.setBounds(10, 33, 353, 2);
 					
-					listPending.add(separator);
+					listFriend.add(separator);
 				}
 
 			}
