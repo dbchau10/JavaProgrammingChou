@@ -69,12 +69,15 @@ public class Client  {
 	private PrintWriter sender=null;
 	private boolean Run=true;
 	private String my_name,friend_name;
+	private DefaultTableModel chat_direct;
+	private DefaultTableModel chat_group;
 //
 //	private JTextField txtNhn;
 //	private DefaultTableModel chat;
 //	private JButton sendBtn;
 	public void chat_direct(String friend_name,JTextField txtNhn,
 			JButton sendBtn,DefaultTableModel chat) throws IOException {
+		this.chat_direct=chat;
 		sendBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 					send_message(friend_name,txtNhn,chat);
@@ -90,6 +93,9 @@ public class Client  {
 			}
 		});
 		// Thread read from server
+		
+	}
+	public void read_and_show() throws IOException {
 		while (true) {
 
 			if (!Run) return;
@@ -97,10 +103,13 @@ public class Client  {
 			String message=null;
 			while(reader.ready()) {
 				message=reader.readLine();
-				//String[] result_message=parse_message(message);
+				String[] result_message=parse_message(message);
 				//if (result_message[0].equals("MD")) {
 					//String message_rv=result_message[1]+":"+result_message[2];
-				chat.addRow(new Object[] {message});
+				if (result_message[0].equals("MD")) {
+					this.chat_direct.addRow(new Object[] {result_message[1]});
+				}
+				else this.chat_group.addRow(new Object[] {result_message[1]});
 				//}
 				
 //				textArea.append(message+"\n");
@@ -138,6 +147,19 @@ public class Client  {
 			//user_name and password instead of name				
 			sender.println(my_name);
 			sender.flush();
+			
+			
+			Thread t1 = new Thread(new Runnable() {
+			    public void run()
+			    {
+			    	try {
+						read_and_show();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			    }});  
+		    t1.start();
 			//end
 			// thread read from jframe and send to server
 			//new Thread(new Thread_Read(sender,jfrm,my_name,textArea)).start();
