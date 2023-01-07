@@ -88,13 +88,13 @@ public class AllTab {
 				{
 					
 					if(!tfSearch.getText().trim().equals("") && !tfSearch.getText().trim().equals("Nhập tên"))
-						try {
+					{	try {
 							conn.setAutoCommit(false);
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-					{
+					
 						boolean exist = false;
 						PreparedStatement stm =null;
 						ResultSet res = null;
@@ -233,94 +233,30 @@ public class AllTab {
 			public void actionPerformed(ActionEvent e) {
 				if(!tfSearch.getText().trim().equals("") && !tfSearch.getText().trim().equals("Nhập tên"))
 				{
-					boolean exist = false;
-					PreparedStatement stm =null;
-					ResultSet res = null;
-					List<User>FriendList = new ArrayList<>();
-					try {
-						String sql = "SELECT * FROM USERS US LEFT JOIN FRIENDLIST FR ON US.USER_ID = FR.USER_ID1 WHERE FR.USER_ID2=? AND US.USER_NAME LIKE ?";
-						sql+= "UNION SELECT * FROM USERS US LEFT JOIN FRIENDLIST FR ON US.USER_ID = FR.USER_ID2 WHERE FR.USER_ID1=? AND US.USER_NAME LIKE ?";
-						stm = conn.prepareStatement(sql);
-						stm.setInt(1, you.getID());
-						stm.setString(2,'%'+tfSearch.getText()+'%');
-						stm.setInt(3, you.getID());
-						stm.setString(4,'%'+tfSearch.getText()+'%');
-						res = stm.executeQuery();
-						while(res.next()) {								
-							exist=true;
-							Integer id = res.getInt("user_id");
-							String username = res.getString("user_name");
-							String hoten = res.getString("user_hoten");
-							String dob = res.getString("user_ngaysinh");
-							String email = res.getString("user_email");
-							String address = res.getString("user_diachi");
-							User user = new User(id,username,hoten,dob,email,address);
-							System.out.print(user.getUsername());
-							FriendList.add(user);
-							
+					if(!tfSearch.getText().trim().equals("") && !tfSearch.getText().trim().equals("Nhập tên"))
+					{	try {
+							conn.setAutoCommit(false);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
-						listAll.removeAll();
-						listAll.revalidate();
-						listAll.repaint();
-						FriendCom fr;
-						if (exist==true) {
-							for (int i = 0 ; i<FriendList.size(); i++)
-							{
-								fr = new FriendCom(conn,you,FriendList.get(i));
-								listAll.add(fr.initialize(FriendList.get(i).getUsername(),"Hủy"));
-								JSeparator separator = new JSeparator();
-								separator.setBounds(10, 33, 353, 2);
-								
-								listAll.add(separator);
-							}
-						}
-						else {
-							
-							sql = "SELECT * FROM USERS US LEFT JOIN FRIEND_WAITLINE FR ON US.USER_ID = FR.USER_ID1 WHERE FR.USER_ID2=? AND US.USER_NAME = ?";
-							sql+="UNION SELECT * FROM USERS US LEFT JOIN FRIEND_WAITLINE FR ON US.USER_ID = FR.USER_ID2 WHERE FR.USER_ID1=? AND US.USER_NAME = ?";
+					
+						boolean exist = false;
+						PreparedStatement stm =null;
+						ResultSet res = null;
+						List<User>FriendList = new ArrayList<>();
+						
+						try {
+							String sql = "SELECT * FROM USERS US LEFT JOIN FRIENDLIST FR ON US.USER_ID = FR.USER_ID1 WHERE FR.USER_ID2 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME=?) AND US.USER_NAME LIKE ?";
+							sql+= "UNION SELECT * FROM USERS US LEFT JOIN FRIENDLIST FR ON US.USER_ID = FR.USER_ID2 WHERE FR.USER_ID1 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME=?) AND US.USER_NAME LIKE ?";
 							stm = conn.prepareStatement(sql);
-							stm.setInt(1, you.getID());
-							stm.setString(2,tfSearch.getText());
-							stm.setInt(3, you.getID());
-							stm.setString(4,tfSearch.getText());
+							stm.setString(1, you.getUsername());
+							stm.setString(2,'%'+tfSearch.getText()+'%');
+							stm.setString(3, you.getUsername());
+							stm.setString(4,'%'+tfSearch.getText()+'%');
 							res = stm.executeQuery();
-							boolean check=false;
-							while(res.next()) {
-								check=true;
-								Integer id = res.getInt("user_id");
-								String username = res.getString("user_name");
-								String hoten = res.getString("user_hoten");
-								String dob = res.getString("user_ngaysinh");
-								String email = res.getString("user_email");
-								String address = res.getString("user_diachi");
-								User user = new User(id,username,hoten,dob,email,address);
-								System.out.print(user.getUsername());
-								FriendList.add(user);
-								
-							}
 							
-							if (check==true)
-							{
-							for (int i = 0 ; i<FriendList.size(); i++)
-							{
-								fr = new FriendCom(conn,you,FriendList.get(i));
-								listAll.add(fr.initialize(FriendList.get(i).getUsername(),"Pending"));
-								JSeparator separator = new JSeparator();
-								separator.setBounds(10, 33, 353, 2);
-								
-								listAll.add(separator);
-							}
-							
-							} 
-							else
-							{
-							
-							
-							sql = "SELECT * FROM USERS US WHERE US.USER_NAME LIKE ?";
-							stm = conn.prepareStatement(sql);
-							stm.setString(1,'%'+tfSearch.getText()+'%');
-							res = stm.executeQuery();
-							while(res.next()) {
+							while(res.next()) {								
 								exist=true;
 								Integer id = res.getInt("user_id");
 								String username = res.getString("user_name");
@@ -332,24 +268,113 @@ public class AllTab {
 								System.out.print(user.getUsername());
 								FriendList.add(user);
 								
+								}
+						
+							listAll.removeAll();
+							listAll.revalidate();
+							listAll.repaint();
+							
+							if (exist==true) {
+								for (int i = 0 ; i<FriendList.size(); i++)
+								{
+									FriendCom fr = new FriendCom(conn,you,FriendList.get(i));
+									listAll.add(fr.initialize(FriendList.get(i).getUsername(),"Hủy"));
+									JSeparator separator = new JSeparator();
+									separator.setBounds(10, 33, 353, 2);
+									
+									listAll.add(separator);
+								}
 							}
-							for (int i = 0 ; i<FriendList.size(); i++)
-							{
-								fr = new FriendCom(conn,you,FriendList.get(i));
-								listAll.add(fr.initialize(FriendList.get(i).getUsername(),"Kết bạn"));
-								JSeparator separator = new JSeparator();
-								separator.setBounds(10, 33, 353, 2);
+					
+							else {		
+								boolean check=false;
+							
+								sql = "SELECT * FROM USERS US LEFT JOIN FRIEND_WAITLINE FR ON US.USER_ID = FR.USER_ID1 WHERE FR.USER_ID2 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME=?) AND US.USER_NAME = ?";
+								sql+="UNION SELECT * FROM USERS US LEFT JOIN FRIEND_WAITLINE FR ON US.USER_ID = FR.USER_ID2 WHERE FR.USER_ID1 IN (SELECT U.USER_ID FROM USERS U WHERE U.USER_NAME=?) AND US.USER_NAME = ?";
+								stm = conn.prepareStatement(sql);
+								stm.setString(1, you.getUsername());
+								stm.setString(2,tfSearch.getText());
+								stm.setString(3, you.getUsername());
+								stm.setString(4,tfSearch.getText());
+								res = stm.executeQuery();
 								
-								listAll.add(separator);
+								while(res.next()) {
+									check=true;
+									Integer id = res.getInt("user_id");
+									String username = res.getString("user_name");
+									String hoten = res.getString("user_hoten");
+									String dob = res.getString("user_ngaysinh");
+									String email = res.getString("user_email");
+									String address = res.getString("user_diachi");
+									User user = new User(id,username,hoten,dob,email,address);
+									System.out.print(user.getUsername());
+									FriendList.add(user);
+									
+								}
+								
+								listAll.removeAll();
+								listAll.revalidate();
+								listAll.repaint();
+								
+								if (check==true)
+								{
+								for (int i = 0 ; i<FriendList.size(); i++)
+								{
+									FriendCom fr = new FriendCom(conn,you,FriendList.get(i));
+									listAll.add(fr.initialize(FriendList.get(i).getUsername(),"Pending"));
+									JSeparator separator = new JSeparator();
+									separator.setBounds(10, 33, 353, 2);
+									
+									listAll.add(separator);
+								}
+								
+								} 
+								else
+								{
+								
+								sql = "SELECT * FROM USERS US WHERE US.USER_NAME LIKE ?";
+								stm = conn.prepareStatement(sql);
+								stm.setString(1,'%'+tfSearch.getText()+'%');
+								res = stm.executeQuery();
+								while(res.next()) {
+									Integer id = res.getInt("user_id");
+									String username = res.getString("user_name");
+									String hoten = res.getString("user_hoten");
+									String dob = res.getString("user_ngaysinh");
+									String email = res.getString("user_email");
+									String address = res.getString("user_diachi");
+									User user = new User(id,username,hoten,dob,email,address);
+									System.out.print(user.getUsername());
+									FriendList.add(user);
+									
+								}
+									
+									
+								for (int i = 0 ; i<FriendList.size(); i++)
+								{
+									FriendCom fr = new FriendCom(conn,you,FriendList.get(i));
+									listAll.add(fr.initialize(FriendList.get(i).getUsername(),"Kết bạn"));
+									JSeparator separator = new JSeparator();
+									separator.setBounds(10, 33, 353, 2);
+									
+									listAll.add(separator);
+								}
+								}
+					
 							}
-							}
+				}catch (SQLException se)
+						{
+								try {
+									conn.rollback();
+								}catch(SQLException ex)
+								{
+									ex.printStackTrace();
+								}
 						}
-					} catch(SQLException ex)
-					{
-						ex.printStackTrace();
 					}
 					
 				}
+		
 			}
 		});
 		
