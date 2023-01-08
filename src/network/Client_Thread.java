@@ -81,7 +81,8 @@ class Client_Thread implements Runnable {
 						}
 					}
 					else if (result_message[0].equals("MG")) { // Qi Quit
-						String message_rv="MG`"+my_name+":"+result_message[2];
+						String group_name=result_message[1];
+						String message_rv="MG`"+"MG"+group_name+"`"+my_name+":"+result_message[2];
 						for (Map.Entry me : Server.Name2Socket.entrySet()) {
 							if (!(my_name.equals(me.getKey()))){
 								System.out.println("send from "+my_name+" to "+me.getKey());

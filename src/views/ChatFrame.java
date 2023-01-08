@@ -290,76 +290,76 @@ public class ChatFrame {
 //			e.printStackTrace();
 //		}
 		//new ChatFrame("khoi","thao");
-		Client cl=new Client("chau");
-		Thread t1 = new Thread(new Runnable() {
-		    public void run()
-		    {
-		    	try {
-		    		new ChatFrame("chau","tai",cl);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		    }});  
-	    t1.start();
-	    Thread t2 = new Thread(new Runnable() {
-		    public void run()
-		    {
-		    	try {
-		    		new ChatFrame("chau","khoi",cl);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		    }});  
-	    t2.start();
-	    
-	     Client cl2=new Client("tai");
-		 t1 = new Thread(new Runnable() {
-		    public void run()
-		    {
-		    	try {
-		    		new ChatFrame("tai","chau",cl2);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		    }});  
-	    t1.start();
-	     t2 = new Thread(new Runnable() {
-		    public void run()
-		    {
-		    	try {
-		    		new ChatFrame("tai","khoi",cl2);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		    }});  
-	    t2.start();
-	    
-	    Client cl3=new Client("khoi");
-		 t1 = new Thread(new Runnable() {
-		    public void run()
-		    {
-		    	try {
-		    		new ChatFrame("khoi","chau",cl3);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		    }});  
-	    t1.start();
-	     t2 = new Thread(new Runnable() {
-		    public void run()
-		    {
-		    	try {
-		    		new ChatFrame("khoi","tai",cl3);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		    }});  
-	    t2.start();
+//		Client cl=new Client("chau");
+//		Thread t1 = new Thread(new Runnable() {
+//		    public void run()
+//		    {
+//		    	try {
+//		    		new ChatFrame("chau","tai",cl);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//		    }});  
+//	    t1.start();
+//	    Thread t2 = new Thread(new Runnable() {
+//		    public void run()
+//		    {
+//		    	try {
+//		    		new ChatFrame("chau","khoi",cl);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//		    }});  
+//	    t2.start();
+//	    
+//	     Client cl2=new Client("tai");
+//		 t1 = new Thread(new Runnable() {
+//		    public void run()
+//		    {
+//		    	try {
+//		    		new ChatFrame("tai","chau",cl2);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//		    }});  
+//	    t1.start();
+//	     t2 = new Thread(new Runnable() {
+//		    public void run()
+//		    {
+//		    	try {
+//		    		new ChatFrame("tai","khoi",cl2);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//		    }});  
+//	    t2.start();
+//	    
+//	    Client cl3=new Client("khoi");
+//		 t1 = new Thread(new Runnable() {
+//		    public void run()
+//		    {
+//		    	try {
+//		    		new ChatFrame("khoi","chau",cl3);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//		    }});  
+//	    t1.start();
+//	     t2 = new Thread(new Runnable() {
+//		    public void run()
+//		    {
+//		    	try {
+//		    		new ChatFrame("khoi","tai",cl3);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//		    }});  
+//	    t2.start();
 	}
 }
