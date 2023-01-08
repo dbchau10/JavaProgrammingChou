@@ -190,12 +190,24 @@ public class GroupChatFrame {
 		btnAdd.setFont(new Font("Arial", Font.PLAIN, 10));
 		btnAdd.setBounds(29, 41, 97, 21);
 		panel.add(btnAdd);
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				NewMemberAdd nm = new NewMemberAdd(conn,you,gn);
+			}
+		});
+		
 		
 		JButton btnDelete = new JButton("Xóa mem");
 		btnDelete.setBackground(new Color(32, 223, 128));
 		btnDelete.setFont(new Font("Arial", Font.PLAIN, 10));
 		
 		btnDelete.setBounds(29, 107, 97, 21);
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DeleteMemberPopUp pu = new DeleteMemberPopUp(conn,you,gn);
+			}
+		});
+		
 		panel.add(btnDelete);
 		
 		JButton btnAdmin = new JButton("Trao quyền");
@@ -203,20 +215,28 @@ public class GroupChatFrame {
 		btnAdmin.setBackground(new Color(129, 158, 248));
 		btnAdmin.setFont(new Font("Arial", Font.PLAIN, 10));
 		btnAdmin.setBounds(29, 173, 97, 21);
+		btnAdmin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GiveAdminPos ad = new GiveAdminPos(conn,you,gn);
+			}
+		});
 		panel.add(btnAdmin);
+		
 		
 		JButton btnRename = new JButton("Đổi tên");
 		btnRename.setFont(new Font("Arial", Font.PLAIN, 10));
 		btnRename.setBounds(29, 239, 97, 21);
 		btnRename.setBackground(new Color(235, 209, 105));
+		
 		panel.add(btnRename);
 		
-		JButton btnDeleteGroup = new JButton("Xóa nhóm");
-		btnDeleteGroup.setFont(new Font("Arial", Font.PLAIN, 10));
-		btnDeleteGroup.setBounds(29, 305, 97, 21);
-		btnDeleteGroup.setForeground(new Color(255, 255, 255));
-		btnDeleteGroup.setBackground(new Color(241, 84, 7));
-		panel.add(btnDeleteGroup);
+		btnRename.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RenameGroupPopUp re = new RenameGroupPopUp(conn,you,gn);
+			}
+		});
+		
+		
 		cl.chat_group(gn, group_name, txtNhn, sendBtn, chat, id_dialogue, dcdb);
 		frmChatter.setVisible(true);
 		frmChatter.setFocusable(true);

@@ -291,7 +291,7 @@ public class Client  {
 	public void send_message_group(String group_name,JTextField txtNhn,DefaultTableModel chat) {
 //		chat.addRow(new Object[] {my_name+":"+txtNhn.getText()});
 		//sender.println("MD`"+my_name+"`"+friend_name+"`"+txtNhn.getText());
-		String id_table="MD"+group_name;
+		String id_table="MG"+group_name;
 		if (Name2TableChatGroup.get(id_table)!=null) {
 			Name2TableChatGroup.get(id_table).addRow(new Object[] {my_name+":"+txtNhn.getText()});
 		}
