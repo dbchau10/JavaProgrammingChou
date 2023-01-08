@@ -52,7 +52,8 @@ public class GroupChatFrame {
 	private JFrame frmChatter;
 	private JTextField txtNhn;
 	public DefaultTableModel chat;
-	private String my_name, group_name;
+	private String my_name;
+	String group_name;
 	GroupChat gn;
 	private User you;
 	Connection conn = null;
@@ -232,7 +233,8 @@ public class GroupChatFrame {
 		
 		btnRename.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RenameGroupPopUp re = new RenameGroupPopUp(conn,you,gn);
+				RenameGroupPopUp re = new RenameGroupPopUp(conn,you,gn,table);
+				
 			}
 		});
 		

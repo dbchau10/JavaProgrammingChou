@@ -305,6 +305,9 @@ public class CreateGroupChat {
 				
 				GroupChatDB gc = new GroupChatDB(conn,you);
 				gc.createGroupChat(member, groupname);
+				
+				createGroup.dispose();
+				
 			}
 			
 		});

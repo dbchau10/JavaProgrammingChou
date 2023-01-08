@@ -80,8 +80,10 @@ public class GroupTab {
 			            }
 						else 
 							{
-							
+							newgroup.dispose();
 							CreateGroupChat cr = new CreateGroupChat(you,conn,name);
+						
+
 							}
 					}
 				});

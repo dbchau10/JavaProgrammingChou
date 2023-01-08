@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
@@ -20,16 +21,16 @@ public class RenameGroupPopUp extends JFrame implements ActionListener{
 	Connection cnt;
 	User user;
 	GroupChat gr = null;
-	
+	JTable table;
 	JTextField newName;
 	JPanel panel;
 	JFrame jfchange;
 	
-	public RenameGroupPopUp(Connection conn, User u, GroupChat groupChat) {
+	public RenameGroupPopUp(Connection conn, User u, GroupChat groupChat, JTable table) {
 		cnt = conn;
 		user = u;
 		gr = groupChat;
-		
+		this.table = table;
 		JLabel jgroupNameLabel = new JLabel("New group name: ");
 		newName = new JTextField(25);
 	    
@@ -63,6 +64,8 @@ public class RenameGroupPopUp extends JFrame implements ActionListener{
 			if (!getNewName.equals(null)) {
 				GroupChatDB group = new GroupChatDB(cnt, user);
 				group.changeGroupName(getNewName, gr);
+				table.getTableHeader().repaint();
+				table.getColumnModel().getColumn(0).setHeaderValue(getNewName);
 				jfchange.dispose();
 			}
 		}
