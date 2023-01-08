@@ -213,7 +213,8 @@ public class ChatFrame {
 						ChatMessage chathis = new ChatMessage(num, rs.getString("drchat_id"),
 								rs.getString("message_date"), Integer.parseInt(rs.getString("user_id")),
 								rs.getString("message_inf"), rs.getString("user_name"));
-						chat.addRow(new Object[] { chathis.getName() + ":" + chathis.getMessage_info() });
+						chat.addRow(new Object[] { chathis.getMessage_date() + "-" + chathis.getName() + ":"
+								+ chathis.getMessage_info() });
 						// messagehis.add(chathis);
 						num += 1;
 					}
@@ -248,7 +249,8 @@ public class ChatFrame {
 							ChatMessage chathis = new ChatMessage(num, rs.getString("drchat_id"),
 									rs.getString("message_date"), Integer.parseInt(rs.getString("user_id")),
 									rs.getString("message_inf"), rs.getString("user_name"));
-							chat.addRow(new Object[] { chathis.getName() + ":" + chathis.getMessage_info() });
+							chat.addRow(new Object[] { chathis.getMessage_date() + "-" + chathis.getName() + ":"
+									+ chathis.getMessage_info() });
 							// messagehis.add(chathis);
 							num += 1;
 						}
@@ -267,8 +269,8 @@ public class ChatFrame {
 		frmChatter.setVisible(true);
 		frmChatter.setFocusable(true);
 
-		 cl.chat_direct(friend_name, txtNhn, sendBtn, chat,id_dialogue,dcdb);
-		//cl.chat_direct_test(friend_name, txtNhn, sendBtn, chat, id_dialogue);
+		cl.chat_direct(friend_name, txtNhn, sendBtn, chat, id_dialogue, dcdb);
+		// cl.chat_direct_test(friend_name, txtNhn, sendBtn, chat, id_dialogue);
 	}
 
 	public static void main(String[] args) {

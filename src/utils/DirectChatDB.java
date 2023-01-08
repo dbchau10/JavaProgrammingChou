@@ -17,18 +17,19 @@ import utils.ChatMessage;
 public class DirectChatDB {
 	Connection cnt;
 	User u;
-	int num=0;
+	int num = 0;
 	static Vector<ChatMessage> messagehis = new Vector<ChatMessage>();
-	public DirectChatDB(Connection conn, User you){
+
+	public DirectChatDB(Connection conn, User you) {
 		cnt = conn;
 		u = you;
 	}
-	
-	public String GetDRChatID(String friendname) {
-		String DRChatID="";
-		String friendid="";
 
-		Statement stmt=null;
+	public String GetDRChatID(String friendname) {
+		String DRChatID = "";
+		String friendid = "";
+
+		Statement stmt = null;
 		try {
 			cnt.setAutoCommit(false);
 			String sqlfindid = "SELECT * from users where user_name='" + friendname + "'";
@@ -36,8 +37,8 @@ public class DirectChatDB {
 			stmt = cnt.createStatement();
 			ResultSet rsid = stmt.executeQuery(sqlfindid);
 			cnt.commit();
-			if(rsid.next()) {
-				friendid=rsid.getString(1);
+			if (rsid.next()) {
+				friendid = rsid.getString(1);
 			}
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
@@ -46,49 +47,52 @@ public class DirectChatDB {
 		System.out.println(friendid);
 		try {
 			stmt = cnt.createStatement();
-			String sql = "SELECT drchat_id from direct_chat where user_id1=" + u.getID() +" and user_id2 ='"+friendid+"'" ;
-			sql+= "UNION SELECT drchat_id from direct_chat where user_id2=" + u.getID() +" and user_id1 ='"+friendid+"'" ;
+			String sql = "SELECT drchat_id from direct_chat where user_id1=" + u.getID() + " and user_id2 ='" + friendid
+					+ "'";
+			sql += "UNION SELECT drchat_id from direct_chat where user_id2=" + u.getID() + " and user_id1 ='" + friendid
+					+ "'";
 			ResultSet rs = stmt.executeQuery(sql);
 			cnt.commit();
-			if(rs.next()) {
+			if (rs.next()) {
 				DRChatID = rs.getString(1);
 				return DRChatID;
-			}
-			else {
+			} else {
 				RandomPasswordGenerator gn = new RandomPasswordGenerator();
 				DRChatID = gn.getNewDRChatID();
-				String check = "SELECT * from direct_chat where drchat_id ='" + DRChatID +"'";
+				String check = "SELECT * from direct_chat where drchat_id ='" + DRChatID + "'";
 				ResultSet rscheck = stmt.executeQuery(check);
 				cnt.commit();
-				while(rscheck.next()) {
+				while (rscheck.next()) {
 					rscheck.close();
 					DRChatID = gn.getNewDRChatID();
-					check = "SELECT * from direct_chat where drchat_id ='" + DRChatID +"'";
+					check = "SELECT * from direct_chat where drchat_id ='" + DRChatID + "'";
 					rscheck = stmt.executeQuery(check);
 					cnt.commit();
 				}
-				String sqlcreate = "INSERT INTO direct_chat VALUES('" + DRChatID + "'," + u.getID() + "," + friendid + ")";
+				String sqlcreate = "INSERT INTO direct_chat VALUES('" + DRChatID + "'," + u.getID() + "," + friendid
+						+ ")";
 				System.out.print(sqlcreate);
 				stmt.executeUpdate(sqlcreate);
 				cnt.commit();
 			}
 		} catch (SQLException e) {
-			
+
 		}
-		
+
 		return DRChatID;
 	}
-	
+
 	public void SaveMessage(String msg, String id) {
-		Statement stmt=null;
+		Statement stmt = null;
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
 		ChatMessage result = new ChatMessage(num, id, dtf.format(now), u.getID(), msg, u.getName());
-		num+=1;
+		num += 1;
 		try {
 			cnt.setAutoCommit(false);
 			stmt = cnt.createStatement();
-			String sql = "INSERT INTO direct_chatmessage VALUES('" + id+ "','"+dtf.format(now)+"',"+u.getID()+",'"+msg+"')" ;
+			String sql = "INSERT INTO direct_chatmessage VALUES('" + id + "','" + dtf.format(now) + "'," + u.getID()
+					+ ",'" + msg + "')";
 			stmt.executeUpdate(sql);
 			cnt.commit();
 		} catch (SQLException e) {
@@ -97,39 +101,39 @@ public class DirectChatDB {
 		}
 		messagehis.add(result);
 	}
-	
+
 	public void changeNumRow(int pos) {
-		System.out.println("before:"+num);
+		System.out.println("before:" + num);
 		System.out.println("before:" + messagehis.size());
-		num=num-1;
+		num = num - 1;
 		messagehis.remove(pos);
 		System.out.println(num);
 		System.out.println(messagehis.size());
-		for(int i=pos; i<num; i++) {
+		for (int i = pos; i < num; i++) {
 			messagehis.get(i).setNum(i);
 		}
-		
-		
+
 	}
-	
+
 	public ChatMessage getChooseMessage(int num) {
 		System.out.println(num);
 		ChatMessage choosen = null;
-		for(int i=0; i<messagehis.size(); i++) {
-			if(num == messagehis.get(i).getNum()) {
+		for (int i = 0; i < messagehis.size(); i++) {
+			if (num == messagehis.get(i).getNum()) {
 				choosen = messagehis.get(i);
 				return choosen;
 			}
 		}
 		return choosen;
 	}
-	
+
 	public void DeleteMessage(ChatMessage del) {
-		Statement stmt=null;
+		Statement stmt = null;
 		try {
 			cnt.setAutoCommit(false);
 			stmt = cnt.createStatement();
-			String sql = "INSERT INTO erased_direct_chatmessage VALUES('" + del.getID() + "','" + del.getMessage_date() +"','" + del.getUser_id() +"','" + del.message_inf +"','" + u.getID() +"')";
+			String sql = "INSERT INTO erased_direct_chatmessage VALUES('" + del.getID() + "','" + del.getMessage_date()
+					+ "','" + del.getUser_id() + "','" + del.message_inf + "','" + u.getID() + "')";
 			System.out.println(sql);
 			stmt.executeUpdate(sql);
 			cnt.commit();
@@ -137,35 +141,36 @@ public class DirectChatDB {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	public void GetMessage(String id,DefaultTableModel chat) {
-		Statement stmt=null;
+
+	public void GetMessage(String id, DefaultTableModel chat) {
+		Statement stmt = null;
 		try {
 			cnt.setAutoCommit(false);
 			stmt = cnt.createStatement();
-			String sql = "select * from ChatHistorydr('"+id+"',"+ u.getID()+")";
+			String sql = "select * from ChatHistorydr('" + id + "'," + u.getID() + ")";
 			ResultSet rs = stmt.executeQuery(sql);
-			while(rs.next()) {
-				
-				ChatMessage chathis = new ChatMessage(num,rs.getString(1), rs.getString(2), Integer.parseInt(rs.getString(3)), rs.getString(4), rs.getString(5));
-				chat.addRow(new Object[] {chathis.name+":"+chathis.message_inf});
+			while (rs.next()) {
+
+				ChatMessage chathis = new ChatMessage(num, rs.getString(1), rs.getString(2),
+						Integer.parseInt(rs.getString(3)), rs.getString(4), rs.getString(5));
+				chat.addRow(new Object[] { chathis.message_date + "-" + chathis.name + ":" + chathis.message_inf });
 				messagehis.add(chathis);
-				num+=1;
+				num += 1;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		for (int i =0; i<messagehis.size(); i++) {
+
+		for (int i = 0; i < messagehis.size(); i++) {
 			messagehis.elementAt(i).printChatMessage();
 		}
 	}
-	
-		public static void main(String[] args) {
-		
+
+	public static void main(String[] args) {
+
 		Connection conn = null;
 		final String DB_URL = "jdbc:postgresql://localhost:5432/test";
 		final String USER = "postgres";
@@ -176,13 +181,11 @@ public class DirectChatDB {
 			System.out.println("Connecting to database...");
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			System.out.println("Success");
-		}
-		catch (Exception se) {
+		} catch (Exception se) {
 			se.printStackTrace();
 			System.out.print("Cannot connect");
 			System.exit(1);
 		}
-		
-		
+
 	}
 }
