@@ -210,9 +210,9 @@ public class ChatFrame {
 
 						}
 						
-					catch (SQLException e) {
+					catch (SQLException exc) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						exc.printStackTrace();
 					}
 			}
 		});
@@ -242,9 +242,9 @@ public class ChatFrame {
 
 							}
 							
-						catch (SQLException e) {
+						catch (SQLException exc) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+							exc.printStackTrace();
 						}
 				}
 			
