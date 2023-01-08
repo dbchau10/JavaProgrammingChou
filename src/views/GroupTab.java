@@ -15,15 +15,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -56,10 +59,42 @@ public class GroupTab {
 		
 		create.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				JFrame newgroup = new JFrame("Create Group");
+				JPanel groupname = new JPanel();
 				
-			}
+				JLabel lblGroupName=new JLabel("Nhập tên:");
+				JTextField tfGroupName = new JTextField(10);
+				
+				JButton btnSave = new JButton("OK");
+				btnSave.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						String name = tfGroupName.getText();
+						
+						if(name.equals("")) {
+			            	 lblGroupName.setForeground(Color.red);
+			            }
+						else 
+							{
+							
+							CreateGroupChat cr = new CreateGroupChat(you,conn,name);
+							}
+					}
+				});
+				
+				groupname.add(lblGroupName);
+				groupname.add(tfGroupName);
+				groupname.add(btnSave);
+				newgroup.add(groupname);
+				
+				newgroup.setSize(300,100);
+				newgroup.setLocationRelativeTo(null);
+				newgroup.setVisible(true);
+				}
 		});
-		
+				
+			
 		listGroup.setBounds(35, 81, 404, 257);
 		listGroup.setLayout(new BoxLayout(listGroup,BoxLayout.Y_AXIS));
 		joined = gr.getGroupJoin();
