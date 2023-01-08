@@ -71,10 +71,10 @@ public class Client  {
 	private BufferedReader reader=null;
 	private PrintWriter sender=null;
 	private boolean Run=true;
-	private String my_name,friend_name;
+	private String my_name;
 	private DefaultTableModel chat_direct;
 	public HashMap<String, DefaultTableModel> Name2TableChatDirect=new HashMap<String, DefaultTableModel>();
-	private DefaultTableModel chat_group;
+	public HashMap<String, DefaultTableModel> Name2TableChatGroup=new HashMap<String, DefaultTableModel>();
 //	private Connection conn = null;
 //	private String id_DC;
 //
@@ -91,10 +91,10 @@ public class Client  {
 			public void actionPerformed(ActionEvent e) {
 					if (!txtNhn.getText().equals(""))
 					{
-					send_message(friend_name,txtNhn,chat);
+						send_message_direct(friend_name,txtNhn,chat);
 					
-					dcdb.SaveMessage(txtNhn.getText(), id_dialogue);
-					txtNhn.setText("");
+						dcdb.SaveMessage(txtNhn.getText(), id_dialogue);
+						txtNhn.setText("");
 					}
 					
 			}
@@ -107,9 +107,45 @@ public class Client  {
 				{
 					if (!txtNhn.getText().equals(""))
 					{
-					send_message(friend_name,txtNhn,chat);
-					dcdb.SaveMessage(txtNhn.getText(), id_dialogue);
-					txtNhn.setText("");
+						send_message_direct(friend_name,txtNhn,chat);
+						dcdb.SaveMessage(txtNhn.getText(), id_dialogue);
+						txtNhn.setText("");
+					}
+					
+				}
+			}
+		});
+		// Thread read from server
+		
+	}
+	public void chat_group(String group_name,JTextField txtNhn,
+			JButton sendBtn,DefaultTableModel chat,String id_dialogue,GroupChatDB dcdb) throws IOException {
+		//this.conn=conn;
+		//this.id_DC=id_dialogue;
+		this.Name2TableChatGroup.put("MG"+group_name, chat);
+		//this.chat_direct=chat;
+		sendBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					if (!txtNhn.getText().equals(""))
+					{
+						send_message_group(group_name,txtNhn,chat);
+						dcdb.SaveMessage(txtNhn.getText(), id_dialogue);
+						txtNhn.setText("");
+					}
+					
+			}
+		});
+		
+		txtNhn.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent event) {
+				
+				if (event.getKeyCode()==KeyEvent.VK_ENTER)
+				{
+					if (!txtNhn.getText().equals(""))
+					{
+						send_message_group(group_name,txtNhn,chat);
+						dcdb.SaveMessage(txtNhn.getText(), id_dialogue);
+						txtNhn.setText("");
 					}
 					
 				}
@@ -128,9 +164,8 @@ public class Client  {
 			public void actionPerformed(ActionEvent e) {
 					if (!txtNhn.getText().equals(""))
 					{
-					send_message(friend_name,txtNhn,chat);
-				
-					txtNhn.setText("");
+						send_message_direct(friend_name,txtNhn,chat);
+						txtNhn.setText("");
 					}
 					
 			}
@@ -143,9 +178,8 @@ public class Client  {
 				{
 					if (!txtNhn.getText().equals(""))
 					{
-					send_message(friend_name,txtNhn,chat);
-		
-					txtNhn.setText("");
+						send_message_direct(friend_name,txtNhn,chat);
+						txtNhn.setText("");
 					}
 					
 				}
@@ -174,7 +208,12 @@ public class Client  {
 						Name2TableChatDirect.get(id_table).addRow(new Object[] {result_message[2]});
 					}
 				}
-				else this.chat_group.addRow(new Object[] {result_message[1]});
+				else if (result_message[0].equals("MG")){
+					String id_table=result_message[1];
+					if (Name2TableChatGroup.get(id_table)!=null) {
+						Name2TableChatGroup.get(id_table).addRow(new Object[] {result_message[2]});
+					}
+				}
 				//}
 				
 //				textArea.append(message+"\n");
@@ -247,7 +286,17 @@ public class Client  {
 //			sender.close();
 //		}
 	}
-	public void send_message(String friend_name,JTextField txtNhn,DefaultTableModel chat) {
+	public void send_message_group(String group_name,JTextField txtNhn,DefaultTableModel chat) {
+//		chat.addRow(new Object[] {my_name+":"+txtNhn.getText()});
+		//sender.println("MD`"+my_name+"`"+friend_name+"`"+txtNhn.getText());
+		String id_table="MD"+group_name;
+		if (Name2TableChatGroup.get(id_table)!=null) {
+			Name2TableChatGroup.get(id_table).addRow(new Object[] {my_name+":"+txtNhn.getText()});
+		}
+		sender.println("MG`"+group_name+"`"+txtNhn.getText());
+		sender.flush();
+	}
+	public void send_message_direct(String friend_name,JTextField txtNhn,DefaultTableModel chat) {
 //		chat.addRow(new Object[] {my_name+":"+txtNhn.getText()});
 		//sender.println("MD`"+my_name+"`"+friend_name+"`"+txtNhn.getText());
 		String id_table="MD"+friend_name;
