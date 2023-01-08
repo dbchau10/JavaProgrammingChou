@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import utils.DirectChatDB;
+import utils.GroupChat;
+import utils.GroupChatDB;
 import views.ChatFrame;
 import views.User;
 
@@ -118,7 +120,7 @@ public class Client  {
 		// Thread read from server
 		
 	}
-	public void chat_group(String group_name,JTextField txtNhn,
+	public void chat_group(GroupChat gn, String group_name,JTextField txtNhn,
 			JButton sendBtn,DefaultTableModel chat,String id_dialogue,GroupChatDB dcdb) throws IOException {
 		//this.conn=conn;
 		//this.id_DC=id_dialogue;
@@ -129,7 +131,7 @@ public class Client  {
 					if (!txtNhn.getText().equals(""))
 					{
 						send_message_group(group_name,txtNhn,chat);
-						dcdb.SaveMessage(txtNhn.getText(), id_dialogue);
+						dcdb.SaveMessage(txtNhn.getText(), gn);
 						txtNhn.setText("");
 					}
 					
@@ -144,7 +146,7 @@ public class Client  {
 					if (!txtNhn.getText().equals(""))
 					{
 						send_message_group(group_name,txtNhn,chat);
-						dcdb.SaveMessage(txtNhn.getText(), id_dialogue);
+						dcdb.SaveMessage(txtNhn.getText(), gn);
 						txtNhn.setText("");
 					}
 					

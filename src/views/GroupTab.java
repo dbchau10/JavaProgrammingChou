@@ -34,6 +34,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import components.GroupCom;
+import network.Client;
 import utils.GroupChatDB;
 import utils.GroupChat;
 
@@ -41,11 +42,13 @@ public class GroupTab {
 	private JPanel GroupPanel;
 	private User you;
 	private Connection conn = null;
+	Client cl;
 	public static JPanel listGroup = new JPanel();
-	GroupTab(Connection cnt, User you){
+	GroupTab(Connection cnt, User you, Client cl){
 		GroupPanel = new JPanel();
 		this.you = you;
 		this.conn = cnt;
+		this.cl = cl;
 	}
 	
 	JPanel createPanel() {
@@ -98,7 +101,7 @@ public class GroupTab {
 		listGroup.setBounds(35, 81, 404, 257);
 		listGroup.setLayout(new BoxLayout(listGroup,BoxLayout.Y_AXIS));
 		
-		new Thread(new Thread_GroupTab(conn, you,listGroup)).start();
+		new Thread(new Thread_GroupTab(conn, you,listGroup,cl)).start();
 		
 		JScrollPane js = new JScrollPane(listGroup, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		js.setBounds(25, 81, 430, 257);

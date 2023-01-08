@@ -5,14 +5,17 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.Connection;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import network.Client;
 import utils.GroupChat;
 import utils.GroupChatDB;
+import views.GroupChatFrame;
 import views.User;
 
 public class GroupCom {
@@ -22,13 +25,15 @@ public class GroupCom {
 	private User you;
 	private Connection conn = null;
 	private GroupChat grp;
+	Client cl;
 	
-	public GroupCom(Connection conn, User you, GroupChat gr) {
+	public GroupCom(Connection conn, User you, GroupChat gr, Client cl) {
 		group = new JPanel();
 		group.setVisible(true);
 		this.conn = conn;
 		this.you = you;
 		this.grp = gr;
+		this.cl = cl;
 	}
 	
 	public JPanel initialize(String groupname) {
@@ -47,7 +52,13 @@ public class GroupCom {
 		btnMess.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				
+				try {
+					GroupChatFrame gcf = new GroupChatFrame(conn,you,grp,cl);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
 			}
 			

@@ -14,15 +14,18 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 
 import components.FriendCom;
+import network.Client;
 
 public class Thread_OnlineTab implements Runnable {
 	private User you;
 	private Connection conn;
 	JPanel listOnline;
-	Thread_OnlineTab(Connection cnt, User you,JPanel listOnline){	
+	Client cl;
+	Thread_OnlineTab(Connection cnt, User you,JPanel listOnline, Client cl){	
 		this.you = you;
 		this.conn = cnt;
 		this.listOnline = listOnline;
+		this.cl = cl;
 	}
 	
 	private List<Integer>oldOnline = new ArrayList<>();
@@ -74,7 +77,7 @@ public class Thread_OnlineTab implements Runnable {
 				oldOnline=newOnline;
 				for (int i = 0 ; i<FriendList.size(); i++)
 				{
-					FriendCom fr = new FriendCom(conn,you,FriendList.get(i));
+					FriendCom fr = new FriendCom(conn,you,FriendList.get(i),cl);
 					listOnline.add(fr.initialize(FriendList.get(i).getUsername(),"Hủy"));
 					JSeparator separator = new JSeparator();
 					separator.setBounds(10, 33, 353, 2);

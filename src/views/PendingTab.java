@@ -32,15 +32,18 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import components.FriendCom;
+import network.Client;
 
 public class PendingTab {
 	private JPanel OnlinePanel;
 	private User you;
 	private Connection conn = null;
-	PendingTab(Connection cnt, User you){
+	Client cl;
+	PendingTab(Connection cnt, User you, Client cl){
 		OnlinePanel = new JPanel();
 		this.you = you;
 		this.conn = cnt;
+		this.cl = cl;
 	}
 	
 	JPanel createPanel() {
@@ -88,7 +91,7 @@ public class PendingTab {
 		//js.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		//JPanel friend = new JPanel();
 		//JPanel friend [] = new JPanel[10];
-		new Thread(new Thread_PendingTab(conn, you,listPending)).start();
+		new Thread(new Thread_PendingTab(conn, you,listPending,cl)).start();
 		
 		// list online
 		
@@ -157,7 +160,7 @@ public class PendingTab {
 									res = stm.executeQuery(friendsql);
 									conn.commit();
 									if(res.next()) {
-										FriendCom fr = new FriendCom(conn,you,fid.get(i));
+										FriendCom fr = new FriendCom(conn,you,fid.get(i),cl);
 										listPending.add(fr.initialize(fid.get(i).getUsername(),"Hủy"));
 										JSeparator separator = new JSeparator();
 										separator.setBounds(10, 33, 353, 2);
@@ -174,7 +177,7 @@ public class PendingTab {
 											conn.commit();
 											if(res.next()) {
 												System.out.println("hello" + res.getString(1));
-												FriendCom fr = new FriendCom(conn,you,fid.get(i));
+												FriendCom fr = new FriendCom(conn,you,fid.get(i),cl);
 												listPending.add(fr.initialize(fid.get(i).getUsername(),"Pending"));
 												JSeparator separator = new JSeparator();
 												separator.setBounds(10, 33, 353, 2);
@@ -184,7 +187,7 @@ public class PendingTab {
 											else
 											{
 												System.out.println("hel");
-												FriendCom fr = new FriendCom(conn,you,fid.get(i));
+												FriendCom fr = new FriendCom(conn,you,fid.get(i),cl);
 												listPending.add(fr.initialize(fid.get(i).getUsername(),"Kết bạn"));
 												JSeparator separator = new JSeparator();
 												separator.setBounds(10, 33, 353, 2);
@@ -272,7 +275,7 @@ public class PendingTab {
 									res = stm.executeQuery(friendsql);
 									conn.commit();
 									if(res.next()) {
-										FriendCom fr = new FriendCom(conn,you,fid.get(i));
+										FriendCom fr = new FriendCom(conn,you,fid.get(i),cl);
 										listPending.add(fr.initialize(fid.get(i).getUsername(),"Hủy"));
 										JSeparator separator = new JSeparator();
 										separator.setBounds(10, 33, 353, 2);
@@ -289,7 +292,7 @@ public class PendingTab {
 											conn.commit();
 											if(res.next()) {
 												System.out.println("hello" + res.getString(1));
-												FriendCom fr = new FriendCom(conn,you,fid.get(i));
+												FriendCom fr = new FriendCom(conn,you,fid.get(i),cl);
 												listPending.add(fr.initialize(fid.get(i).getUsername(),"Pending"));
 												JSeparator separator = new JSeparator();
 												separator.setBounds(10, 33, 353, 2);
@@ -299,7 +302,7 @@ public class PendingTab {
 											else
 											{
 												System.out.println("hel");
-												FriendCom fr = new FriendCom(conn,you,fid.get(i));
+												FriendCom fr = new FriendCom(conn,you,fid.get(i),cl);
 												listPending.add(fr.initialize(fid.get(i).getUsername(),"Kết bạn"));
 												JSeparator separator = new JSeparator();
 												separator.setBounds(10, 33, 353, 2);

@@ -11,7 +11,7 @@ import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-
+import network.Client;
 import views.AllTab;
 import views.ChatFrame;
 import views.FriendFunction;
@@ -41,12 +41,14 @@ public class FriendCom {
 	private Connection conn = null;
 	private User other;
 	JButton btn = new JButton();
-	public FriendCom(Connection conn, User you, User other) {
+	Client cl;
+	public FriendCom(Connection conn, User you, User other, Client cl) {
 		friend = new JPanel();
 		friend.setVisible(true);
 		this.conn = conn;
 		this.you = you;
 		this.other = other;
+		this.cl = cl;
 
 	}
 	
@@ -145,7 +147,7 @@ public class FriendCom {
 					AllTab.listAll.repaint();
 
 					for (int i = 0; i < FriendList.size(); i++) {
-						FriendCom fr = new FriendCom(conn, you, FriendList.get(i));
+						FriendCom fr = new FriendCom(conn, you, FriendList.get(i),cl);
 						AllTab.listAll.add(fr.initialize(FriendList.get(i).getUsername(), "Hủy"));
 						JSeparator separator = new JSeparator();
 						separator.setBounds(10, 33, 353, 2);
@@ -171,7 +173,9 @@ public class FriendCom {
 		btnMess.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 	             try {
-					ChatFrame ch = new ChatFrame(conn,you,username);
+	            	
+					ChatFrame ch = new ChatFrame(conn,you,username,cl);
+					
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

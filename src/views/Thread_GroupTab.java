@@ -15,16 +15,19 @@ import javax.swing.JTabbedPane;
 
 import components.FriendCom;
 import components.GroupCom;
+import network.Client;
 import utils.GroupChat;
 
 public class Thread_GroupTab implements Runnable {
 	private User you;
 	private Connection conn;
 	JPanel listGroup;
-	Thread_GroupTab(Connection cnt, User you,JPanel listGroup){	
+	Client cl;
+	Thread_GroupTab(Connection cnt, User you,JPanel listGroup,Client cl){	
 		this.you = you;
 		this.conn = cnt;
 		this.listGroup = listGroup;
+		this.cl = cl;
 		
 	}
 	
@@ -54,7 +57,7 @@ public class Thread_GroupTab implements Runnable {
 				for(int i=0; i<groups.size(); i++) {
 					System.out.print(groups.get(i).getGroupname());
 					
-					GroupCom eachgroup = new GroupCom(conn,you, groups.get(i));
+					GroupCom eachgroup = new GroupCom(conn,you, groups.get(i),cl);
 					listGroup.add(eachgroup.initialize(groups.get(i).getGroupname()));
 					JSeparator separator = new JSeparator();
 					separator.setBounds(10, 33, 353, 2);

@@ -267,8 +267,8 @@ public class ChatFrame {
 		frmChatter.setVisible(true);
 		frmChatter.setFocusable(true);
 
-		// cl.chat_direct(friend_name, txtNhn, sendBtn, chat,id_dialogue,dcdb);
-		cl.chat_direct_test(friend_name, txtNhn, sendBtn, chat, id_dialogue);
+		 cl.chat_direct(friend_name, txtNhn, sendBtn, chat,id_dialogue,dcdb);
+		//cl.chat_direct_test(friend_name, txtNhn, sendBtn, chat, id_dialogue);
 	}
 
 	public static void main(String[] args) {

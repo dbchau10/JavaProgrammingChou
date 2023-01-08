@@ -14,15 +14,18 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 
 import components.FriendCom;
+import network.Client;
 
 public class Thread_FriendTab implements Runnable {
 	private User you;
 	private Connection conn;
 	JPanel listFriend;
-	Thread_FriendTab(Connection cnt, User you,JPanel listFriend){	
+	Client cl;
+	Thread_FriendTab(Connection cnt, User you,JPanel listFriend, Client cl){	
 		this.you = you;
 		this.conn = cnt;
 		this.listFriend = listFriend;
+		this.cl = cl;
 	}
 	
 	private List<Integer>oldFriend = new ArrayList<>();
@@ -76,7 +79,7 @@ public class Thread_FriendTab implements Runnable {
 				oldFriend=newFriend;
 				for (int i = 0 ; i<FriendList.size(); i++)
 				{
-					FriendCom fr = new FriendCom(conn,you,FriendList.get(i));
+					FriendCom fr = new FriendCom(conn,you,FriendList.get(i),cl);
 					listFriend.add(fr.initialize(FriendList.get(i).getUsername(),"Hủy"));
 					JSeparator separator = new JSeparator();
 					separator.setBounds(10, 33, 353, 2);

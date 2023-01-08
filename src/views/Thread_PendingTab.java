@@ -14,15 +14,18 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 
 import components.FriendCom;
+import network.Client;
 
 public class Thread_PendingTab implements Runnable {
 	private User you;
 	private Connection conn;
 	JPanel listPending;
-	Thread_PendingTab(Connection cnt, User you,JPanel listPending){	
+	Client cl;
+	Thread_PendingTab(Connection cnt, User you,JPanel listPending, Client cl){	
 		this.you = you;
 		this.conn = cnt;
 		this.listPending = listPending;
+		this.cl = cl;
 	}
 	
 	private List<Integer>oldPending = new ArrayList<>();
@@ -73,7 +76,7 @@ public class Thread_PendingTab implements Runnable {
 				oldPending=newPending;
 				for (int i = 0 ; i<FriendList.size(); i++)
 				{
-					FriendCom fr = new FriendCom(conn,you,FriendList.get(i));
+					FriendCom fr = new FriendCom(conn,you,FriendList.get(i),cl);
 					listPending.add(fr.initialize(FriendList.get(i).getUsername(),"Chấp nhận"));
 					JSeparator separator = new JSeparator();
 					separator.setBounds(10, 33, 353, 2);

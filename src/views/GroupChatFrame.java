@@ -18,6 +18,7 @@ import network.Client;
 import utils.ChatMessage;
 import utils.DirectChatDB;
 import utils.GroupChat;
+import utils.GroupChatDB;
 
 import javax.swing.JButton;
 import java.awt.Font;
@@ -51,31 +52,29 @@ public class GroupChatFrame {
 	private JFrame frmChatter;
 	private JTextField txtNhn;
 	public DefaultTableModel chat;
-	private String group_name, my_name;
+	private String my_name, group_name;
+	GroupChat gn;
 	private User you;
 	Connection conn = null;
 	private JTextField tfSearch;
 	private String id_dialogue;
+	Client cl;
 	/**
 	 * Launch the application.
 	 * @throws IOException 
 	 */
 	
-	public GroupChatFrame(Connection cnt, User u,String groupname) throws IOException {
+	public GroupChatFrame(Connection cnt, User u,GroupChat groupname, Client cl) throws IOException {
 		you = u;
 		conn = cnt;
 	//	this.my_name=u.getUsername();
 		this.my_name="abc";
-		this.group_name=groupname;
+		this.gn=groupname;
+		this.group_name=gn.getGroupname();
+		this.cl = cl;
 		initialize();
 	}
 	
-	public GroupChatFrame() throws IOException {
-	
-		this.my_name="abc";
-		this.group_name="def";
-		initialize();
-	}
 	
 	/**
 	 * Create the application.
@@ -175,12 +174,10 @@ public class GroupChatFrame {
 		frmChatter.getContentPane().add(sendBtn);
 		
 		
-		JButton btn_del = new JButton("Xóa");
-		btn_del.setFont(new Font("Arial", Font.PLAIN, 10));
-		btn_del.setBounds(10, 25, 85, 21);
-		
-		
-		frmChatter.getContentPane().add(btn_del);
+		GroupChatDB dcdb = new GroupChatDB(conn, you);
+		id_dialogue = gn.getID();
+		dcdb.GetMessage(gn,chat);
+
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(487, 72, 168, 365);
@@ -220,19 +217,8 @@ public class GroupChatFrame {
 		btnDeleteGroup.setForeground(new Color(255, 255, 255));
 		btnDeleteGroup.setBackground(new Color(241, 84, 7));
 		panel.add(btnDeleteGroup);
+		cl.chat_group(gn, group_name, txtNhn, sendBtn, chat, id_dialogue, dcdb);
 		frmChatter.setVisible(true);
 		frmChatter.setFocusable(true);
 			}
-	
-	public static void main(String[] args) {
-	//	Connection conn = null;
-	//	User u = new User(1);
-		try {
-			//new GroupChatFrame(conn,u,"chacha");
-			new GroupChatFrame();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }

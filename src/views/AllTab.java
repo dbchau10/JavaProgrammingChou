@@ -32,17 +32,20 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import components.FriendCom;
+import network.Client;
 
 
 public class AllTab {
 	private JPanel AllPanel;
 	private User you;
 	private Connection conn = null;
+	Client cl;
 	public static JPanel listAll = new JPanel();
-	AllTab(Connection cnt, User you){
+	AllTab(Connection cnt, User you, Client cl){
 		AllPanel = new JPanel();
 		this.you = you;
 		this.conn = cnt;
+		this.cl = cl;
 	}
 	
 	JPanel createPanel() {
@@ -143,7 +146,7 @@ public class AllTab {
 									res = stm.executeQuery(friendsql);
 									conn.commit();
 									if(res.next()) {
-										FriendCom fr = new FriendCom(conn,you,fid.get(i));
+										FriendCom fr = new FriendCom(conn,you,fid.get(i),cl);
 										listAll.add(fr.initialize(fid.get(i).getUsername(),"Hủy"));
 										JSeparator separator = new JSeparator();
 										separator.setBounds(10, 33, 353, 2);
@@ -160,7 +163,7 @@ public class AllTab {
 											conn.commit();
 											if(res.next()) {
 												System.out.println("hello" + res.getString(1));
-												FriendCom fr = new FriendCom(conn,you,fid.get(i));
+												FriendCom fr = new FriendCom(conn,you,fid.get(i),cl);
 												listAll.add(fr.initialize(fid.get(i).getUsername(),"Pending"));
 												JSeparator separator = new JSeparator();
 												separator.setBounds(10, 33, 353, 2);
@@ -170,7 +173,7 @@ public class AllTab {
 											else
 											{
 												System.out.println("hel");
-												FriendCom fr = new FriendCom(conn,you,fid.get(i));
+												FriendCom fr = new FriendCom(conn,you,fid.get(i),cl);
 												listAll.add(fr.initialize(fid.get(i).getUsername(),"Kết bạn"));
 												JSeparator separator = new JSeparator();
 												separator.setBounds(10, 33, 353, 2);
@@ -257,7 +260,7 @@ public class AllTab {
 									res = stm.executeQuery(friendsql);
 									conn.commit();
 									if(res.next()) {
-										FriendCom fr = new FriendCom(conn,you,fid.get(i));
+										FriendCom fr = new FriendCom(conn,you,fid.get(i),cl);
 										listAll.add(fr.initialize(fid.get(i).getUsername(),"Hủy"));
 										JSeparator separator = new JSeparator();
 										separator.setBounds(10, 33, 353, 2);
@@ -274,7 +277,7 @@ public class AllTab {
 											conn.commit();
 											if(res.next()) {
 												System.out.println("hello" + res.getString(1));
-												FriendCom fr = new FriendCom(conn,you,fid.get(i));
+												FriendCom fr = new FriendCom(conn,you,fid.get(i),cl);
 												listAll.add(fr.initialize(fid.get(i).getUsername(),"Pending"));
 												JSeparator separator = new JSeparator();
 												separator.setBounds(10, 33, 353, 2);
@@ -284,7 +287,7 @@ public class AllTab {
 											else
 											{
 												System.out.println("hel");
-												FriendCom fr = new FriendCom(conn,you,fid.get(i));
+												FriendCom fr = new FriendCom(conn,you,fid.get(i),cl);
 												listAll.add(fr.initialize(fid.get(i).getUsername(),"Kết bạn"));
 												JSeparator separator = new JSeparator();
 												separator.setBounds(10, 33, 353, 2);
@@ -314,7 +317,7 @@ public class AllTab {
 		
 		//listOnline.setLayout(null);
 		
-		new Thread(new Thread_FriendTab(conn, you,listAll)).start();		
+		new Thread(new Thread_FriendTab(conn, you,listAll,cl)).start();		
 		JScrollPane js = new JScrollPane(listAll, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		//js.setPreferredSize(new Dimension(404,257));
 		js.setBounds(25, 81, 430, 257);

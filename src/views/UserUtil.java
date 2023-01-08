@@ -51,6 +51,8 @@ import javax.swing.JSeparator;
 import javax.swing.JScrollBar;
 import com.toedter.calendar.JDateChooser;
 
+import network.Client;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -64,6 +66,7 @@ public class UserUtil {
 	private JTextField tfEmail;
 	private JTextField tfAddress;
 	private JTextField tfSearch;
+	Client client;
 
 
 	/**
@@ -88,6 +91,7 @@ public class UserUtil {
 	public UserUtil(Connection cnt, User u) {
 		you = u;
 		conn = cnt;
+		client = new Client(u.getUsername());
 
 		initialize();
 	}
@@ -615,18 +619,16 @@ public class UserUtil {
 		
 		
 //		new Thread(new Thread_OnlineTab(conn, you,tabbedPane)).start();
-		OnlineTab OnlinePanel = new OnlineTab(conn, you);
+		OnlineTab OnlinePanel = new OnlineTab(conn, you,client);
 		tabbedPane.addTab("Online", OnlinePanel.createPanel());
 		
-		AllTab AllPanel = new AllTab(conn,you);
+		AllTab AllPanel = new AllTab(conn,you,client);
 		tabbedPane.addTab("Tất cả", AllPanel.createPanel());
 		
-		PendingTab PendingPanel = new PendingTab(conn,you);
+		PendingTab PendingPanel = new PendingTab(conn,you,client);
 		tabbedPane.addTab("Pending", PendingPanel.createPanel());
 		
-		//GroupTab GroupPanel = new GroupTab(conn, you);
-		//tabbedPane.addTab("Nhóm", GroupPanel.createPanel());
-		//listOnline.setLayout(new GridLayout(1, 0, 0, 0));
+		
 		
 		//JPanel listOnline = new JPanel();
 		
@@ -644,7 +646,7 @@ public class UserUtil {
 		//OnlinePanel.add(listOnline);
 		
 		//Label GroupTab = new Label("Label 4");
-		GroupTab GroupPanel =  new GroupTab(conn,you);
+		GroupTab GroupPanel =  new GroupTab(conn,you,client);
 		tabbedPane.addTab("Nhóm", GroupPanel.createPanel());
 		frmChatter.getContentPane().add(tabbedPane);
 		frmChatter.setVisible(true);

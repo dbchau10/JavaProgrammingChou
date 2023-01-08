@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 
+import javax.swing.table.DefaultTableModel;
+
 import views.User;
 
 public class GroupChatDB {
@@ -278,7 +280,7 @@ public class GroupChatDB {
 		
 	}
 	
-	public void GetMessage(GroupChat gr) {
+	public void GetMessage(GroupChat gr, DefaultTableModel chat) {
 		Statement stmt=null;
 		try {
 			cnt.setAutoCommit(false);
@@ -287,6 +289,7 @@ public class GroupChatDB {
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {
 				ChatMessage chathis = new ChatMessage(rs.getString(1), rs.getString(2), Integer.parseInt(rs.getString(3)), rs.getString(4), rs.getString(5));
+				chat.addRow(new Object[] {chathis.name+":"+chathis.message_inf});
 				messagehis.add(chathis);
 			}
 		} catch (SQLException e) {
