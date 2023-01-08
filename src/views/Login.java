@@ -26,6 +26,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Login {
 
@@ -198,6 +200,11 @@ public class Login {
 			 							User you = new User(Integer.parseInt(rs.getString(1)), rs.getString(2), rs.getString(4), rs.getString(6),rs.getString(8),rs.getString(5));
 			 							String setstatus = "UPDATE users SET user_online=true WHERE user_name='"+ username + "'";
 			 							stmt.executeUpdate(setstatus);
+			 							conn.commit();
+			 							DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"); 
+			 							LocalDateTime now = LocalDateTime.now();
+			 							String uplsdn = "INSERT INTO users_dangnhap VALUES(" + you.getID() +",'" + dtf.format(now) + "')";
+			 							stmt.executeUpdate(uplsdn);
 			 							conn.commit();
 			 							frmChatter.dispose();
 			 							UserUtil u = new UserUtil(conn, you);

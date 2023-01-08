@@ -255,3 +255,16 @@ left join users on foo.user_id = users.user_id;
 end; $$
 
 LANGUAGE 'plpgsql';	
+
+CREATE TABLE users_dangnhap(
+	USER_ID INT,
+	USER_THOIGIANDANGNHAP TIMESTAMP,
+	
+	PRIMARY KEY(USER_ID, USER_THOIGIANDANGNHAP)
+);
+
+ALTER TABLE users_dangnhap
+ADD
+	CONSTRAINT USERSDN_USER
+	FOREIGN KEY(USER_ID)
+	REFERENCES USERS(USER_ID);
