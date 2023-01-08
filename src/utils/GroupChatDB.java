@@ -15,6 +15,8 @@ public class GroupChatDB {
 	Connection cnt;
 	User u;
 	Vector<ChatMessage> messagehis = new Vector<ChatMessage>();
+	Vector<Integer> memid = new Vector<Integer>();
+	Vector<String> memusername = new Vector<String>();
 	public GroupChatDB(Connection conn, User you){
 		cnt = conn;
 		u = you;
@@ -43,23 +45,30 @@ public class GroupChatDB {
 		return group;
 	}
 	
-	public Vector<Integer> getMember(GroupChat gr){
-		Vector<Integer> mem = new Vector<Integer>();
+	public void getMember(GroupChat gr){
 		Statement stmt = null;
-		String sql = "SELECT user_id from group_member where grchat_id='" + gr.getID() + "'";
+		String sql = "SELECT group_member.user_id, users.user_name from "
+				+ "group_member join users on group_member.user_id = users.user_id "
+				+ "where grchat_id='" + gr.getID()+"'";
+		//String sql = "SELECT user_id from group_member where grchat_id='" + gr.getID() + "'";
 		try {
 			cnt.setAutoCommit(false);
 			stmt = cnt.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			cnt.commit();
 			while(rs.next()) {
-				mem.add(Integer.parseInt(rs.getString(1)));
+				memid.add(Integer.parseInt(rs.getString(1)));
+				memusername.add(rs.getString(2));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return mem;
+		
+		for(int i=0; i<memid.size(); i++) {
+			System.out.print(memid.get(i));
+			System.out.println(memusername.get(i));
+		}
 	}
 	
 	public void addMember(GroupChat gr, String username) {
@@ -293,6 +302,13 @@ public class GroupChatDB {
 			se.printStackTrace();
 			System.out.print("Cannot connect");
 			System.exit(1);
+		}
+		User test = new User(2,"abc");
+		GroupChatDB gr = new GroupChatDB(conn, test);
+		Vector<GroupChat> allgroup = new Vector<GroupChat>();
+		allgroup = gr.getGroupJoin();
+		for(int i=0; i<allgroup.size(); i++) {
+			gr.getMember(allgroup.get(i));
 		}
 		
 		/*Statement stmt=null;
