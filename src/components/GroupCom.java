@@ -63,7 +63,7 @@ public class GroupCom {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				GroupChatDB datahandle = new GroupChatDB(conn, you);
-				datahandle.deleteMember(grp, you.getUsername());
+				datahandle.leaveGroup(grp);
 			}
 		});
 		

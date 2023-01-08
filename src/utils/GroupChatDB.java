@@ -157,6 +157,20 @@ public class GroupChatDB {
 		}
 	}
 	
+	public void leaveGroup(GroupChat gr) {
+		Statement stmt=null;
+		try {
+			cnt.setAutoCommit(false);
+			stmt = cnt.createStatement();
+			String delsql = "DELETE from group_member where user_id=" + u.getID() + " and grchat_id='" + gr.getID() +"'";
+			stmt.executeUpdate(delsql);
+			cnt.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void deleteMember(GroupChat gr, String username) {
 		Statement stmt=null;
 		if (!adminStatus(gr)) {
