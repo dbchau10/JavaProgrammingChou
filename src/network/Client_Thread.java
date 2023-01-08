@@ -68,7 +68,8 @@ class Client_Thread implements Runnable {
 	    			String mess=reader.readLine();
 	    			String[] result_message=parse_message(mess);
 					if (result_message[0].equals("MD")) { // Me message
-						String message_rv="MD`"+my_name+":"+result_message[2];
+						String message_rv="MD`"+"MD"+my_name+"`"+my_name+":"+result_message[2];
+						
 						Socket scSend=Server.Name2Socket.get(result_message[1]);
 						if (scSend!=null) {
 							PrintWriter sender_User=new PrintWriter(scSend.getOutputStream());

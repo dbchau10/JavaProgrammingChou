@@ -73,6 +73,7 @@ public class Client  {
 	private boolean Run=true;
 	private String my_name,friend_name;
 	private DefaultTableModel chat_direct;
+	public HashMap<String, DefaultTableModel> Name2TableChatDirect=new HashMap<String, DefaultTableModel>();
 	private DefaultTableModel chat_group;
 //	private Connection conn = null;
 //	private String id_DC;
@@ -84,7 +85,8 @@ public class Client  {
 			JButton sendBtn,DefaultTableModel chat,String id_dialogue,DirectChatDB dcdb) throws IOException {
 		//this.conn=conn;
 		//this.id_DC=id_dialogue;
-		this.chat_direct=chat;
+		this.Name2TableChatDirect.put("MD"+friend_name, chat);
+		//this.chat_direct=chat;
 		sendBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 					if (!txtNhn.getText().equals(""))
@@ -116,6 +118,42 @@ public class Client  {
 		// Thread read from server
 		
 	}
+	public void chat_direct_test(String friend_name,JTextField txtNhn,
+			JButton sendBtn,DefaultTableModel chat,String id_dialogue) throws IOException {
+		//this.conn=conn;
+		//this.id_DC=id_dialogue;
+		this.Name2TableChatDirect.put("MD"+friend_name, chat);
+		//this.chat_direct=chat;
+		sendBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					if (!txtNhn.getText().equals(""))
+					{
+					send_message(friend_name,txtNhn,chat);
+				
+					txtNhn.setText("");
+					}
+					
+			}
+		});
+		
+		txtNhn.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent event) {
+				
+				if (event.getKeyCode()==KeyEvent.VK_ENTER)
+				{
+					if (!txtNhn.getText().equals(""))
+					{
+					send_message(friend_name,txtNhn,chat);
+		
+					txtNhn.setText("");
+					}
+					
+				}
+			}
+		});
+		// Thread read from server
+		
+	}
 	public void read_and_show() throws IOException {
 		while (true) {
 
@@ -129,8 +167,12 @@ public class Client  {
 				//if (result_message[0].equals("MD")) {
 					//String message_rv=result_message[1]+":"+result_message[2];
 				if (result_message[0].equals("MD")) {
-					this.chat_direct.addRow(new Object[] {result_message[1]});
 					
+					//this.chat_direct.addRow(new Object[] {result_message[1]});
+					String id_table=result_message[1];
+					if (Name2TableChatDirect.get(id_table)!=null) {
+						Name2TableChatDirect.get(id_table).addRow(new Object[] {result_message[2]});
+					}
 				}
 				else this.chat_group.addRow(new Object[] {result_message[1]});
 				//}
@@ -172,7 +214,7 @@ public class Client  {
 			sender.flush();
 			
 			
-			Thread t1 = new Thread(new Runnable() {
+			Thread t3 = new Thread(new Runnable() {
 			    public void run()
 			    {
 			    	try {
@@ -182,7 +224,7 @@ public class Client  {
 						e.printStackTrace();
 					}
 			    }});  
-		    t1.start();
+		    t3.start();
 			//end
 			// thread read from jframe and send to server
 			//new Thread(new Thread_Read(sender,jfrm,my_name,textArea)).start();
@@ -206,7 +248,12 @@ public class Client  {
 //		}
 	}
 	public void send_message(String friend_name,JTextField txtNhn,DefaultTableModel chat) {
-		chat.addRow(new Object[] {my_name+":"+txtNhn.getText()});
+//		chat.addRow(new Object[] {my_name+":"+txtNhn.getText()});
+		//sender.println("MD`"+my_name+"`"+friend_name+"`"+txtNhn.getText());
+		String id_table="MD"+friend_name;
+		if (Name2TableChatDirect.get(id_table)!=null) {
+			Name2TableChatDirect.get(id_table).addRow(new Object[] {my_name+":"+txtNhn.getText()});
+		}
 		sender.println("MD`"+friend_name+"`"+txtNhn.getText());
 		sender.flush();
 	}
