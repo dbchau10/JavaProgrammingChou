@@ -164,7 +164,6 @@ public class GroupChatDB {
 			return;
 		}
 		String sql = "SELECT user_id from users where user_name='" + username +"'";
-		System.out.println(sql);
 		try {
 			cnt.setAutoCommit(false);
 			stmt = cnt.createStatement();

@@ -23,6 +23,7 @@ public class DeleteMemberPopUp extends JFrame implements ActionListener{
 	
 	JTextField userName;
 	JPanel panel;
+	JFrame jfxoa;
 	
 	public DeleteMemberPopUp(Connection conn, User u, GroupChat groupChat) {
 		cnt = conn;
@@ -36,21 +37,20 @@ public class DeleteMemberPopUp extends JFrame implements ActionListener{
 	    panel.add(jUsernameLabel);
 	    panel.add(userName);
 	    
-	    JFrame jfxoa = new JFrame("Xóa thành viên");
+	    jfxoa = new JFrame("Xóa thành viên");
 	    
 	    JButton btn_deleteButton = new JButton("Ok");
 	    
 	    panel.add(btn_deleteButton);
 	    
-	    btn_deleteButton.addActionListener(null);
+	    btn_deleteButton.addActionListener(this);
 	    
 	    jfxoa.setLocationRelativeTo(null);
-	    jfxoa.setSize(300, 300);
+	    jfxoa.setSize(300, 150);
 	    jfxoa.add(panel);
 	    
 
 	    panel.setVisible(true);
-
 	    jfxoa.setVisible(true);
 	}
 	
@@ -63,6 +63,7 @@ public class DeleteMemberPopUp extends JFrame implements ActionListener{
 			if (!getUserName.equals(null)) {
 				GroupChatDB group = new GroupChatDB(cnt, user);
 				group.deleteMember(gr, getUserName);
+				jfxoa.dispose();
 			}
 		}
 	}

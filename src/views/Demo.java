@@ -10,9 +10,9 @@ import utils.GroupChat;
 public class Demo {
 	public static void main(String[] args) {
 		Connection conn = null;
-		final String DB_URL = "jdbc:postgresql://localhost:5432/chatsystem";
+		final String DB_URL = "jdbc:postgresql://localhost:5432/test";
 		final String USER = "postgres";
-		final String PASS = "Hotai382";
+		final String PASS = "192002";
 		final String JBDC_DRIVER = "org.postgresql.Driver";
 		try {
 			Class.forName(JBDC_DRIVER);
@@ -26,7 +26,7 @@ public class Demo {
 			System.exit(1);
 		}
 		
-		User test = new User(1,"joseph");
+		User test = new User(2,"abc");
 		GroupChatDB gr = new GroupChatDB(conn, test);
 		Vector<GroupChat> allgroup = new Vector<GroupChat>();
 		allgroup = gr.getGroupJoin();

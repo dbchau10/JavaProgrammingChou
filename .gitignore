@@ -106,3 +106,5 @@ nbdist/
 # End of https://www.toptal.com/developers/gitignore/api/netbeans,java,eclipse
 
 .classpath
+src/.project
+p2p/.project
