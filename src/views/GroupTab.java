@@ -51,8 +51,8 @@ public class GroupTab {
 	JPanel createPanel() {
 		GroupPanel.setBackground(new Color(240, 240, 240));
 		GroupPanel.setLayout(null);
-		GroupChatDB gr = new GroupChatDB(conn, you);
-		Vector<GroupChat> joined = new Vector<GroupChat>();
+		
+		
 		JButton create = new JButton("Create new group");
 		create.setBounds(25,30,425,20);
 		GroupPanel.add(create);
@@ -97,18 +97,8 @@ public class GroupTab {
 			
 		listGroup.setBounds(35, 81, 404, 257);
 		listGroup.setLayout(new BoxLayout(listGroup,BoxLayout.Y_AXIS));
-		joined = gr.getGroupJoin();
 		
-		for(int i=0; i<joined.size(); i++) {
-			System.out.print(joined.get(i).getGroupname());
-			
-			GroupCom eachgroup = new GroupCom(conn,you, joined.get(i));
-			listGroup.add(eachgroup.initialize(joined.get(i).getGroupname()));
-			JSeparator separator = new JSeparator();
-			separator.setBounds(10, 33, 353, 2);
-			
-			listGroup.add(separator);
-		}
+		new Thread(new Thread_GroupTab(conn, you,listGroup)).start();
 		
 		JScrollPane js = new JScrollPane(listGroup, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		js.setBounds(25, 81, 430, 257);

@@ -37,7 +37,7 @@ public class CreateGroupChat {
 	private JFrame createGroup;
 	private User you;
 	private Connection conn = null;
-	Vector<Integer> member;
+	Vector<Integer> member ;
 	String groupname;
 
 	/**
