@@ -83,7 +83,6 @@ public class DirectChatDB {
 		Statement stmt=null;
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
-		System.out.print("NUM"+num);
 		ChatMessage result = new ChatMessage(num, id, dtf.format(now), u.getID(), msg, u.getName());
 		num+=1;
 		try {
@@ -100,14 +99,17 @@ public class DirectChatDB {
 	}
 	
 	public void changeNumRow(int pos) {
+		System.out.println("before:"+num);
+		System.out.println("before:" + messagehis.size());
 		num=num-1;
-		System.out.println(pos);
+		messagehis.remove(pos);
+		System.out.println(num);
 		System.out.println(messagehis.size());
-		for(int i=pos; i<=num; i++) {
+		for(int i=pos; i<num; i++) {
 			messagehis.get(i).setNum(i);
 		}
 		
-		messagehis.remove(pos);
+		
 	}
 	
 	public ChatMessage getChooseMessage(int num) {
